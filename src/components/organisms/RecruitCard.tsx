@@ -1,74 +1,66 @@
-import Image from "next/image";
+import { ProgramingSkill } from "@/types/programingSkill";
 import { useState } from "react";
-import { recruitCard } from "../../types/recruitCard";
 import { CreateDetailModal } from "./CreateDetailModal";
+import { format } from 'date-fns'
 
 type RecruitCardProps = {
-  recruit: recruitCard;
-  allRecruits?: any;
-  children?: any;
-  cardHeight?: string;
-  cardWidth?: string;
-  index?: any;
+  id: string;
+  createdAt: Date;
+  headline: string;
+  programingSkills: string[];
+  hackthonName?: string
 };
 
 export const RecruitCard = ({
-  recruit,
-  allRecruits,
-  index,
+  id,
+  createdAt,
+  headline,
+  programingSkills,
+  hackthonName
 }: RecruitCardProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [keptIndex, setKeptIndex] = useState<number>(0);
-
   return (
     <div
-      className={`group relative mb-2 h-96 border overflow-hidden rounded-xl  lg:mb-3 shadow-md`}
+      className={`group relative mb-2 h-96 border overflow-hidden rounded-xl  sm:mb-3 shadow-md`}
     >
       <div className="flex justify-center items-center h-2/5 bg-gradient-to-r from-recruite-card-bg to-pink-200">
-        <p className="text-4xl font-bold text-white">Hack U</p>
+        <p className="text-2xl sm:text-4xl font-bold text-white">{hackthonName ? hackthonName : headline}</p>
       </div>
       <div className="flex col">
-        {recruit.programing_skills?.map((skill: any, index: number) => (
+        {programingSkills?.map((skill) => (
             <div
-              key={index}
-              className="flex justify-start line-clamp-1"
+              className="flex flex-wrap justify-start line-clamp-1"
             >
-              <span className="text-gray-500 inline-flex items-center gap-1.5 py-1 px-3 mx-3 mt-5 text-xs rounded-full border-2 border-gray-400 ">
-                {skill.value}
+              <span className="text-gray-500 inline-flex items-center gap-1.5 py-1 px-2  mx-1 my-3  text-xs rounded-full border-2 border-gray-400 ">
+                {skill}
               </span>
             </div>
           ))}
       </div>
       <div className="flex justify-center items-center h-1/3">
         <div className="flex flex-col">
-          <h3 className="font-zen font-regular text-2xl mx-10 line-clamp-1 text-gray-500">
-            {recruit.headline}
+          <h3 className="font-zen font-regular text-lg sm:text-2xl mx-3 sm:mx-10 line-clamp-1 text-gray-500">
+            {headline}
           </h3>
         </div>
       </div>
-      {/* <div className="flex justify-center mt-5">
-        <div className="flex flex-col">
-          <p className="font-zen font-light mx-10 line-clamp-1">
-            {recruit.recruitment_details}
-          </p>
+      <div className="flex justify-between mb-3 ">
+        <div className="w-2/3 flex col items-center">
+        <p className="text-sm pl-8">{new Date(createdAt).toISOString().slice(0, 10)}</p>
         </div>
-      </div> */}
-      <div className="flex justify-end mb-3 mr-3 object-cover object-center transition duration-200 group-hover:scale-95">
+        <div className="w-1/3 flex flex-col justify-center items-center">
         <button
-          className="font-zen font-black text-green-800 px-2 py-2 rounded-lg focus:outline-none focus:border-transparent text-center bg-transparent"
-          onClick={() => {
-            setIsOpen(true);
-            setKeptIndex(index);
-          }}
+          className=" text-green-800  rounded-lg focus:outline-none focus:border-transparent text-center bg-transparent text-sm sm:text-lg hover:bg-pink-300 hover:text-white p-3"
         >
           詳細を見る
         </button>
-        <CreateDetailModal
+        </div>
+        {/* <CreateDetailModal
           isOpen={isOpen}
           closeModal={() => setIsOpen(false)}
           recruit={recruit}
           index={keptIndex}
-        />
+        /> */}
       </div>
     </div>
   );

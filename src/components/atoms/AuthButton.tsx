@@ -10,9 +10,9 @@ type Props = {
 export const AuthButton: React.FC<Props> = ({onClick, children, src}): JSX.Element => {
 
   return (
-    <div className="w-80 h-14 p-4 bg-white rounded-xl font-bold mb-5 text-center">
+    <div className="flex items-center justify-center h-12 sm:h-14 mt-1 rounded-xl font-bold mb-5 text-center border border-gray-400">
       <img src={src} className="w-6 h-6 inline-block"/>
-      <button onClick={onClick} className="bg-white ml-3">{children}</button>
+      <button onClick={onClick} className="ml-3">{children}</button>
     </div>
   )
 }

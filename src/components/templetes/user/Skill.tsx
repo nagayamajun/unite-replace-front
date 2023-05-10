@@ -6,6 +6,8 @@ import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import { useRecoilState } from "recoil";
 import { SubmitButton } from "../../atoms/SubmitButton";
+import { ProgramingSkill } from "@/types/programingSkill";
+import { UserRepository } from "@/modules/user/user.repository";
 
 export type Option = {
   label: string;
@@ -16,20 +18,26 @@ export const SkillPage = (): JSX.Element => {
   const { handleSubmit, control } = useForm();
   const [userState, setUserState] = useRecoilState(UserState);
   const router = useRouter();
-  const { programingSkills } = useProgramingSkills();
+  // const { programingSkills } = useProgramingSkills();
   const [selectedSkills, setSelectedSkills] = useState<Option[]>([]);
 
-  const options = programingSkills.map((skill) => {
-    return { label: skill.name, value: skill.name };
-  });
+  //enum型からスキルオブジェクト作成
+  const options = Object.values(ProgramingSkill).map((skill) => ({
+    value: skill,
+    label: skill,
+  }))
 
-  const onSubmit = (submitData: any) => {
+  const onSubmit = async (submitData: any) => {
     setUserState({ ...userState, ...submitData });
-    router.push("/profiles/githubInfo");
+    //※デプロイまでには↓エラーはスローしないようにしたい
+    if (!userState?.uid) throw new Error("userState.uidがないです！");
+    //Nextに接続する。
+    await UserRepository.update(userState.uid, { ...userState, ...submitData });
+    router.push("/homeScreen");
   };
 
   return (
-    <div className="flex flex-col justify-center px-80 h-screen bg-red-50 text-lg">
+    <div className="flex flex-col justify-center px-80 h-screen text-lg">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="container flex flex-col gap-12 max-w-500"
@@ -53,7 +61,7 @@ export const SkillPage = (): JSX.Element => {
           {selectedSkills.map((selectedSkill) => (
             <div
               key={selectedSkill.label}
-              className="px-8 py-2 rounded-3xl bg-white text-base"
+              className="px-8 py-2 rounded-3xl bg-green-400 text-white text-base"
             >
               {selectedSkill.value ?? " "}
             </div>

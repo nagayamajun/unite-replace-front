@@ -19,15 +19,15 @@ type Props = {
 export const AuthInput: React.FC<Props> = ({ labelText, placeholder, buttonType, register, registerLabel, rules, errors}): JSX.Element => {
 
   return (
-    <div className="mt-10 text-xl ">
-      <label className="">{labelText}</label><br />
+    <div className="mt-5 text-xl ">
+      <label className="text-sm">{labelText}</label><br />
       <input
         type={buttonType}
         placeholder={placeholder}
         {...(register && register(registerLabel ?? "",
           rules
         ))}
-        className="bg-background-color border-b border-black  w-full mt-3"
+        className="border outline-green-500  border-gray-300 rounded-md p-2 text-sm sm:text-base  w-full mt-1"
       />
       {errors[registerLabel] && <p className="text-xs font-ligh text-red-500">{errors[registerLabel]?.message as ReactNode}</p>}
     </div>

@@ -12,16 +12,18 @@ export const authRepository = {
     }
   },
 
-  async signInWithGoogle(): Promise<void> {
+  async signInWithGoogle(): Promise<{success: boolean, message: string}> {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider)
+      console.log("成功しました")
+      return { success: true, message: "ログインに成功しました。"}
     } catch (error) {
-      alert("google認証に失敗しました")
-      window.location.reload();
+      return {success: false, message: "ログインに成功しました。"}
     }
   },
 
+  //その内使えるようにする予定
   async signWithGithub() {
     const provider = new GithubAuthProvider();
     try {
@@ -33,13 +35,12 @@ export const authRepository = {
   },
 
   //メールでのユーザー登録
-  async signUpWithEmail(email:string, password: string): Promise<void>  {
+  async signUpWithEmail(email: string, password: string): Promise<{success: boolean, message: string} | undefined> {
     try {
-      console.log(email, password)
       await createUserWithEmailAndPassword(auth, email, password);
+      return { success: true, message: "新規登録に成功しました。"}
     } catch (error) {
-      alert('ユーザー登録に失敗しました。')
-      window.location.reload();
+      return {success: false, message: "失敗しました。再度お試しください。"}
     }
   },
 

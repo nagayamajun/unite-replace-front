@@ -11,17 +11,20 @@ export const GraduationYearRadio = ({
   control,
   defaultChipColor = "bg-white",
 }: GraduationYearRadioProps): JSX.Element => {
-  const { graduationYears } = useGraduationYears();
+  // const { graduationYears } = useGraduationYears();
+  // const years = [...graduationYears]
+  //   .filter((year) => year.year !== "other")
+  //   .sort((a, b) => (a.year as number) - (b.year as number))
+  //   .map((year) => `${year.year}年度`);
+  // years.push("その他");
 
-  const years = [...graduationYears]
-    .filter((year) => year.year !== "other")
-    .sort((a, b) => (a.year as number) - (b.year as number))
-    .map((year) => `${year.year}年度`);
-  years.push("その他");
+  //ここは切り離して別ファイルで管理する。
+  //そもそも企業がフィルターかけるようにした方がいいからサーバーサイドでテーブルとして持たせる？
+  const years = ["23卒", "24卒", "25卒", "26卒", "27卒", "その他" ]
 
   return (
     <div className="flex flex-col gap-6">
-      <label htmlFor="radio">卒業予定年度</label>
+      <label htmlFor="radio" className="text-xs sm:text-sm">卒業予定年度</label>
       <Controller
         name="graduateYear"
         control={control}
@@ -39,8 +42,8 @@ export const GraduationYearRadio = ({
                       return (
                         <span
                           className={`${
-                            checked ? "bg-gray-400" : defaultChipColor
-                          } px-8 py-2 rounded-3xl`}
+                            checked ? "bg-green-400 border-none text-white" : defaultChipColor
+                          } sm:px-8 sm:py-2 py-1 px-6 rounded-3xl border border-gray-300 text-gray-500`}
                         >
                           {graduateYear}
                         </span>

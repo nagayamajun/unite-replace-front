@@ -9,8 +9,9 @@ export const EmailAndPasswordForm: React.FC<Props> = ({ onSubmit, buttonText }):
 
   const { handleSubmit, register, formState: {errors}} = useForm()
   return (
+
     <>
-      <form className="flex-col" onSubmit={handleSubmit(onSubmit)}>
+      <form className="flex-col sm:w-1/2 w-3/5" onSubmit={handleSubmit(onSubmit)}>
         <AuthInput
           labelText="メールアドレス"
           placeholder="example@gmail.com"
@@ -31,10 +32,10 @@ export const EmailAndPasswordForm: React.FC<Props> = ({ onSubmit, buttonText }):
           errors={errors}
         />
 
-        <div className="flex justify-center mt-10">
+        <div className="flex justify-center mt-8">
           <button
             type="submit"
-            className="w-80 h-14 p-3 bg-white rounded-xl font-bold mb-3 text-center"
+            className="w-full h-10 sm:h-14 p-1 rounded-md font-bold mb-3 text-center sm:text-base text-sm bg-green-500 text-white"
           >
             {buttonText}
           </button>
@@ -43,3 +44,4 @@ export const EmailAndPasswordForm: React.FC<Props> = ({ onSubmit, buttonText }):
     </>
   )
 }
+

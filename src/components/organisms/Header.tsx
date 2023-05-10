@@ -22,10 +22,10 @@ export const Header = (): JSX.Element => {
 
   return (
     <div className="border-b border-gray-300 w-full">
-      <div className="my-3 flex justify-between">
+      <div className="my-1 sm:my-3 flex justify-between">
         <div className="ml-4 flex justify-center items-center">
-          <Link href={"/homeScreen"} className="">
-            <p className="text-2xl font-bold"><span className="text-green-700">T</span>S<span className="text-pink-400">U</span>NAGU</p>
+          <Link href={"/homeScreen"}>
+            <p className="text-xl sm:text-2xl font-bold"><span className="text-green-700">T</span>S<span className="text-pink-400">U</span>NAGU</p>
           </Link>
         </div>
         <div className="flex col">
@@ -38,7 +38,7 @@ export const Header = (): JSX.Element => {
             <div className="border h-3/5 mr-2"></div>
           </div>
           <div className="flex col mr-4">
-            <p className="font-semibold mr-4 flex items-center">山田太郎</p>
+            <p className="font-semibold text-sm sm:text-base mr-4 flex items-center">山田太郎</p>
             <Menu>
               <Menu.Button>
                 <Image src="/avatar.gif" alt="Logo" width={50} height={50} className="border rounded-full"/>
@@ -76,3 +76,4 @@ export const Header = (): JSX.Element => {
     </div>
   );
 };
+

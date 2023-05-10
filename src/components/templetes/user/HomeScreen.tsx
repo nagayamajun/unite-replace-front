@@ -1,11 +1,7 @@
-import { AddCardButton } from "@/components/atoms/AddCardButton";
+import { Header } from "@/components/organisms/Header";
 import { NarrowSearch } from "@/components/organisms/NarrowSerch";
 import { useAuth } from "@/hooks/useAuth";
-import { authRepository } from "@/modules/auth/auth.repository";
-import Link from "next/link";
 import { ReactElement, useEffect, useState } from "react";
-import { NewOrder } from "../../atoms/NewOrder";
-import { Search } from "../../atoms/Search";
 import { RecruitList } from "../../organisms/RecruitList";
 import { UploadProductModal } from "../../organisms/UploadProductModal";
 import { Loading } from "../common/Loading";
@@ -33,6 +29,7 @@ export const HomeScreen = () => {
 
   return (
     <>
+      <Header />
       <NarrowSearch />
       <div className="border-b w-full p-1"></div>
       <RecruitList />
