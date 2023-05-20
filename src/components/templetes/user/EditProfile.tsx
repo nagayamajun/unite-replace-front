@@ -15,10 +15,14 @@ import { EditProfileModal } from "../../organisms/EditProfileModal";
 import { FormField } from "../../atoms/FormField";
 import { GraduationYearRadio } from "../../atoms/GraduationYearRadio";
 import { Loading } from "../common/Loading";
+import { ProgramingSkill } from "@/types/programingSkill";
+import { User } from "@/types/user";
+import { userAgent } from "next/server";
+
 
 export const EditProfile = (): JSX.Element => {
-  useAuth(); //レンダリング時にuserCollectionから再fetchするため (もうちょっと良さそうな方法に書き換えたい)
   const userStateVal = useRecoilValue<UserStateType>(UserState);
+
   const [user, setUser] = useState<UserStateType>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isUserNameOpen, setIsUserNameOpen] = useState(false);
@@ -28,27 +32,34 @@ export const EditProfile = (): JSX.Element => {
   const [isSkillOpen, setIsSkillOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const { register, handleSubmit, control } = useForm();
-  const { programingSkills } = useProgramingSkills();
-  const { ownRecruits } = useSpecificRecruits(userStateVal?.uid);
-  const options = programingSkills.map((skill) => {
-    return { label: skill.name, value: skill.name };
-  });
+  // const { ownRecruits } = useSpecificRecruits(firebaseUID);
 
+  //リファクタ
+  //他の場所でも使用しているので一つにまとめる
+  const options = Object.values(ProgramingSkill).map((skill) => ({
+    value: skill,
+    label: skill,
+  }))
+
+  useEffect(() => {
+    setUser(userStateVal);
+  }, [])
   useEffect(() => {
     if (!userStateVal) {
       setIsLoading(true);
     } else {
-      setUser(userStateVal);
+      // setUser(userStateVal);
       setIsLoading(false);
     }
-  }, [userStateVal?.uid]);
+  }, [userStateVal]);
 
-  if (!user || isLoading) return <Loading />;
+  // if (!user || isLoading) return <Loading />;
+  if (isLoading || !userStateVal?.firebaseUID) return <Loading />
 
   const deleteRecruit = async (recruit: any) => {
     await recruitRepository.delete(recruit.id);
     setIsConfirmOpen(false);
-    location.reload();
+    // location.reload();
   };
 
   return (
@@ -76,7 +87,7 @@ export const EditProfile = (): JSX.Element => {
       <EditProfileModal
         isOpen={isUserNameOpen}
         setIsOpen={setIsUserNameOpen}
-        userStateVal={userStateVal}
+        userId={userStateVal?.firebaseUID}
         handleSubmit={handleSubmit}
       >
         <PlainInput
@@ -91,12 +102,12 @@ export const EditProfile = (): JSX.Element => {
         labelText="大学・専門"
         onCLick={() => setIsUniversityOpen(true)}
       >
-        <div className="border-b border-black">{userStateVal?.university}</div>
+        <div className="border rounded-md p-2 border-black">{userStateVal?.university}</div>
       </FormField>
       <EditProfileModal
         isOpen={isUniversityOpen}
         setIsOpen={setIsUniversityOpen}
-        userStateVal={userStateVal}
+        userId={userStateVal?.firebaseUID}
         handleSubmit={handleSubmit}
       >
         <PlainInput
@@ -107,6 +118,7 @@ export const EditProfile = (): JSX.Element => {
         />
       </EditProfileModal>
       {/* 卒業予定年度 */}
+      {/* Nest.jsにculumnがそもそもない */}
       <FormField
         labelText="卒業予定年度"
         onCLick={() => setIsGraduationYearOpen(true)}
@@ -118,7 +130,7 @@ export const EditProfile = (): JSX.Element => {
       <EditProfileModal
         isOpen={isGraduationYearOpen}
         setIsOpen={setIsGraduationYearOpen}
-        userStateVal={userStateVal}
+        userId={userStateVal?.firebaseUID}
         handleSubmit={handleSubmit}
       >
         <GraduationYearRadio
@@ -136,7 +148,7 @@ export const EditProfile = (): JSX.Element => {
       <EditProfileModal
         isOpen={isGithubInfoOpen}
         setIsOpen={setIsGithubInfoOpen}
-        userStateVal={userStateVal}
+        userId={userStateVal?.firebaseUID}
         handleSubmit={handleSubmit}
       >
         <PlainInput
@@ -165,7 +177,7 @@ export const EditProfile = (): JSX.Element => {
       <EditProfileModal
         isOpen={isSkillOpen}
         setIsOpen={setIsSkillOpen}
-        userStateVal={userStateVal}
+        userId={userStateVal?.firebaseUID}
         handleSubmit={handleSubmit}
       >
         <div className="flex flex-col gap-6 text-lg">
@@ -187,7 +199,7 @@ export const EditProfile = (): JSX.Element => {
         </div>
       </EditProfileModal>
       {/* userが作成している募集 */}
-      <div className="flex flex-col gap-6 text-lg w-2/5">
+      {/* <div className="flex flex-col gap-6 text-lg w-2/5">
         <div>募集中のカード</div>
         <div className="flex flex-wrap justify-center gap-16">
           {ownRecruits && ownRecruits.length > 0 ? (
@@ -221,7 +233,7 @@ export const EditProfile = (): JSX.Element => {
             <></>
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

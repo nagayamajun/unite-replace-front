@@ -3,6 +3,7 @@ import { PlainTextArea } from "@/components/atoms/PlainTextarea";
 import { SkillSelect } from "@/components/atoms/SkillSelect";
 import { SubmitButton } from "@/components/atoms/SubmitButton";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
+import { useAuth } from "@/hooks/useAuth";
 import { createRecuit } from "@/modules/recruit/recruit.repository";
 import { ProgramingSkill } from "@/types/programingSkill";
 import { useRouter } from "next/router";
@@ -21,6 +22,7 @@ export type FormRecruitData = {
 }
 
 export const AddRecruit = () => {
+  useAuth();
   const router = useRouter();
   const { handleSubmit, register, formState: {errors}, control } = useForm();
 

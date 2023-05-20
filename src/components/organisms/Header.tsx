@@ -9,7 +9,7 @@ export const Header = (): JSX.Element => {
   const userStateVal = useRecoilValue(UserState);
   const [arbitraryRoomId, setArbitraryRoomId] = useState<string>();
   const menuLinks = [
-    {href: '/', label: 'マイページへ'},
+    {href: '/profiles/editProfile', label: 'マイページへ'},
     {href: '/', label: 'お問合せ'},
     {href: '/', label: 'ログアウト'},
   ]
@@ -18,7 +18,7 @@ export const Header = (): JSX.Element => {
     if (userStateVal?.room_ids) {
       setArbitraryRoomId(userStateVal.room_ids[0]);
     }
-  }, [userStateVal?.uid]);
+  }, [userStateVal?.firebaseUID]);
 
   return (
     <div className="border-b border-gray-300 w-full">
@@ -38,7 +38,7 @@ export const Header = (): JSX.Element => {
             <div className="border h-3/5 mr-2"></div>
           </div>
           <div className="flex col mr-4">
-            <p className="font-semibold text-sm sm:text-base mr-4 flex items-center">山田太郎</p>
+            <p className="font-semibold text-sm sm:text-base mr-4 flex items-center">{userStateVal?.name ? userStateVal?.name : "No Name.."}</p>
             <Menu>
               <Menu.Button>
                 <Image src="/avatar.gif" alt="Logo" width={50} height={50} className="border rounded-full"/>

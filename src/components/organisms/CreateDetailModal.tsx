@@ -29,18 +29,18 @@ export const CreateDetailModal: React.FC<Props> = ({
   const router = useRouter();
 
   const applyFor = async () => {
-    if (!userStateVal?.uid || !userStateVal?.name)
+    if (!userStateVal?.firebaseUID || !userStateVal?.name)
       throw new Error("UserStateのuidかnameが空");
-    const roomId = `${userStateVal?.uid}*${recruit.user_id}`;
+    const roomId = `${userStateVal?.firebaseUID}*${recruit.user_id}`;
 
     // この辺の処理はrepositoryとかserviceに切り出したい
     await ChatRepository.post(
-      userStateVal.uid,
+      userStateVal.firebaseUID,
       userStateVal.name,
       roomId,
       APPLY_FIRST_MESSAGE
     );
-    await UserRepository.update(userStateVal?.uid, {
+    await UserRepository.update(userStateVal?.firebaseUID, {
       ...userStateVal,
       room_ids: userStateVal.room_ids
         ? [...userStateVal.room_ids, roomId]
@@ -158,3 +158,6 @@ export const CreateDetailModal: React.FC<Props> = ({
     </>
   );
 };
+
+
+//ModalからPageに変更する

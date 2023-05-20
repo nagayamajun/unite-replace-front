@@ -2,8 +2,10 @@ import { ProgramingSkill } from "@/types/programingSkill";
 import { useState } from "react";
 import { CreateDetailModal } from "./CreateDetailModal";
 import { format } from 'date-fns'
+import Link from "next/link";
 
 type RecruitCardProps = {
+  //userのidと企業側のid両方必要
   id: string;
   createdAt: Date;
   headline: string;
@@ -49,11 +51,11 @@ export const RecruitCard = ({
         <p className="text-sm pl-8">{new Date(createdAt).toISOString().slice(0, 10)}</p>
         </div>
         <div className="w-1/3 flex flex-col justify-center items-center">
-        <button
+        <Link href={`recruit/${id}`}
           className=" text-green-800  rounded-lg focus:outline-none focus:border-transparent text-center bg-transparent text-sm sm:text-lg hover:bg-pink-300 hover:text-white p-3"
         >
           詳細を見る
-        </button>
+        </Link>
         </div>
         {/* <CreateDetailModal
           isOpen={isOpen}

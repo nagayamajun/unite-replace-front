@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import { useRecoilValue } from "recoil";
 import { recruitCard } from "../../types/recruitCard";
+import { axiosInstance } from "@/libs/axios";
 
 export const recruitRepository = {
   //募集の一覧取得
@@ -53,20 +54,43 @@ export const recruitRepository = {
 //Nest.js
 //募集の一覧取得
 export const getRecruits = async (): Promise<Recruit[]> => {
-  const result = await axios.get('http://localhost:3000/recruit');
-  return result.data;
+  const recruits = (await axiosInstance.get('/user-recruit').catch((err) => {
+    throw new Error(`recruits is not found | ${err}`)
+  })).data();
+  return recruits;
 }
 
+//特定の募集を取得
+export const getRecruitById = async (recruitId: string): Promise<Recruit> => {
+  console.log("りクルーター",recruitId);
+  const recruit = (await axiosInstance.get(`/user-recruit/${recruitId}`).catch((err) => {
+    throw new Error(`recruit is not by Id | error: ${err}`)
+  })).data
+
+  return recruit
+}
 //募集作成
 export const createRecuit = async (recruitData: FormRecruitData, userId: any): Promise<{ message: string; success: boolean; }> => {
+
   try {
     //userIdはstring型？
-    const res = await axios.post("http://localhost:3000/recruit/create-user-recruit", recruitData, {
-      //最終的にはサーバーサイドのcontextから取得できるようにする・
-      headers: { "recruiter-id":  userId}
-    })
+    const req = (await axiosInstance.post('/user-recruit', recruitData));
+    console.log(req)
     return {message: "募集作成に成功しました。", success: true}
   } catch(error) {
     return {message: "募集作成に失敗しました。", success: false}
   }
 }
+
+// export const createRecuit = async (recruitData: FormRecruitData, userId: any): Promise<{ message: string; success: boolean; }> => {
+//   try {
+//     //userIdはstring型？
+//     const res = await axios.post("http://localhost:8080/recruit/user-recruit", recruitData, {
+//       //最終的にはサーバーサイドのcontextから取得できるようにする・
+//       headers: { "recruiter-id":  userId}
+//     })
+//     return {message: "募集作成に成功しました。", success: true}
+//   } catch(error) {
+//     return {message: "募集作成に失敗しました。", success: false}
+//   }
+// }

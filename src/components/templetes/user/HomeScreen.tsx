@@ -13,8 +13,8 @@ export const HomeScreen = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setUid(user?.uid);
-  }, [user?.uid]);
+    setUid(user?.firebaseUID);
+  }, [user?.firebaseUID]);
 
   if (!uid) return <Loading />;
 

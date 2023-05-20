@@ -33,7 +33,7 @@ export const SignUp = () => {
             setTimeout(() => {
               setIsOpen(false)
               if (!result.success) return window.location.reload();
-              router.push("/profiles/otherThanTech")
+              router.push("/homeScreen")
             }, 2000)
           }
         })

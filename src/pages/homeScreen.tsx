@@ -1,7 +1,6 @@
 import { HomeScreen } from "@/components/templetes/user/HomeScreen";
 import { filteredRecruitAtomState } from "@/global-states/filteredRecruits";
 import { recruitAtomState } from "@/global-states/recruitAtom";
-import { useRecruits } from "@/hooks/useRecruits";
 import { getRecruits } from "@/modules/recruit/recruit.repository";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { useEffect } from "react";

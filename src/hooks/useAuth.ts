@@ -8,6 +8,8 @@ import { UserStateType } from "@/global-states/atoms";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/libs/firebase";
 import { User } from "../types/user";
+import { findOneUser } from "@/modules/user/user.repository";
+import { setAuthToken } from "@/libs/axios";
 
 
 export const useAuth = (): UserStateType => {
@@ -19,24 +21,14 @@ export const useAuth = (): UserStateType => {
     const unsub = onAuthStateChanged(auth, async (authUser) => {
       console.log(authUser?.uid)
       if (authUser) {
-        const ref = doc(db, `users/${authUser.uid}`);
-        const snap = await getDoc(ref);
+        const token = await authUser.getIdToken();
+        setAuthToken(token);
+        const user = await findOneUser()
 
-        if(snap.exists()) {
-          const appUser = (await getDoc(ref)).data() as User;
-          setUser(appUser);
-        } else {
-          const appUser: User = {
-            uid: authUser.uid,
-          }
-
-          setDoc(ref, appUser).then(() => {
-            setUser(appUser)
-          })
+        if (user) {
+          setUser(user)
         }
       } else {
-        // resetStatus();
-        //Authコンポーネントにpush
         router.push('/signIn');
       }
     });

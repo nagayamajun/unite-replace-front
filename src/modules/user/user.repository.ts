@@ -7,6 +7,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { User } from "../../types/user";
+import { axiosInstance } from "@/libs/axios";
 
 export const UserRepository = {
   async findOneByUid(uid: string): Promise<User> {
@@ -33,3 +34,20 @@ export const UserRepository = {
     await updateDoc(ref, data);
   },
 };
+
+
+//nest.js
+//一意のユーザーを取得する
+export const findOneUser = async() => {
+  const user = ( await axiosInstance.get('/user/find-by-firebase-uid').catch((err) => {
+    throw new Error(`user not found | error: ${err}`)
+  })).data
+  return user
+}
+//user情報をアップデートする
+export const updateUserInfo = async(submitDate: any) => {
+  const user = ( await axiosInstance.put('/user/update-by-firebase-uid', submitDate).catch((err) => {
+    throw new Error(`user not update | ${err}`)
+  })).data
+  return user
+}
