@@ -12,7 +12,23 @@ export const authRepository = {
         throw new Error(err);
       })
     ).data.token;
-    console.log(customToken)
+    //userCredentialはサーバーサイドのtokenを利用してfirebaseにログイン
+    const userCredential = await signInWithCustomToken(auth, customToken).catch((err) => {
+      throw new Error(err)
+    });
+    //firebaseのIDtokenを取得
+    const idToken = await  userCredential.user.getIdToken();
+    setAuthToken(idToken)
+    return {success: true, message: "一旦成功"}
+  },
+
+  async employeeSignUpWithEmail(email: string, password: string, sharedPassword: string): Promise<any> {
+    //customTokenはサーバーサイドで発行されたトークンを返す。
+    const customToken = (
+      await axiosInstance.post("/employee", { email, password, sharedPassword }).catch((err) => {
+        throw new Error(err);
+      })
+    ).data.token;
     //userCredentialはサーバーサイドのtokenを利用してfirebaseにログイン
     const userCredential = await signInWithCustomToken(auth, customToken).catch((err) => {
       throw new Error(err)
@@ -27,7 +43,6 @@ export const authRepository = {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider)
-      console.log("成功しました")
       return { success: true, message: "ログインに成功しました。"}
     } catch (error) {
       return {success: false, message: "ログインに成功しました。"}
@@ -62,7 +77,6 @@ export const authRepository = {
   async logOut(): Promise<void> {
     try {
       await signOut(auth);
-      console.log("成功")
     } catch (error) {
       alert('サインアウトに失敗しました。');
       window.location.reload();

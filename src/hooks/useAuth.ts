@@ -5,9 +5,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/libs/firebase";
 import { useRouter } from "next/router";
 import { UserStateType } from "@/global-states/atoms";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/libs/firebase";
-import { User } from "../types/user";
 import { findOneUser } from "@/modules/user/user.repository";
 import { setAuthToken } from "@/libs/axios";
 
@@ -39,4 +36,4 @@ export const useAuth = (): UserStateType => {
 };
 
 //リファクタ
-//今はmainでしか認証ができていないが認証に関連するコンポーネント単位でできるようにする。
+//contextの形で認証が必要なページを囲う

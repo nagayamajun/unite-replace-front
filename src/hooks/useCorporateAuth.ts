@@ -17,7 +17,6 @@ export const useCorporateAuth = (): UserStateType => {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (authCorporation) => {
-      console.log(authCorporation?.uid)
       if (authCorporation) {
         const ref = doc(db, `corporations/${authCorporation.uid}`);
         const snap = await getDoc(ref);

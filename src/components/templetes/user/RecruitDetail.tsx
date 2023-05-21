@@ -4,24 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/router"
 import React from "react";
 
-
-
-//recruitの中身
-//   id: string;
-//   createdAt: Date;
-//   updatedAt?: Date;
-  //   headline: string;
-  //   details: string;
-  //   programingSkills: ProgramingSkill[];
-  //   developmentPeriod: string;
-  //   hackathonUrl: string;
-//   numberOfApplicants: number;
-  //   hackthonName?: string;
   type Props = {
     recruit: Recruit
   }
-
-  // const programingSkills = ["Flutter", "JavaScript", "TypeScript", "Next.js", "ruby", "rails"]
 
 export const RecruitDetail: React.FC<Props> = ({ recruit })  => {
   let  { id, createdAt, updatedAt, headline, details, programingSkills ,hackthonName, developmentPeriod, hackathonUrl, numberOfApplicants } = recruit;

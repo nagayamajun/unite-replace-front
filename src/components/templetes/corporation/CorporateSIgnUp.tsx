@@ -3,41 +3,97 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { EmailAndPasswordForm } from "@/components/organisms/EmailAndPasswordForm";
+import { AuthInput } from "@/components/atoms/AuthInput";
+import { useState } from "react";
+import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
+
+type FormData = {
+  email: string;
+  password: string;
+  sharedPassword: string;
+}
 
 export const CorporateSignUp = () => {
+  //モーダル関係
+  const [isOpen, setIsOpen] = useState(false);
+  const [modalMessage ,setModalMessage] = useState("");
+  const [color, setColor] = useState<boolean>();
+  const closeModal = () => setIsOpen(false)
   const router = useRouter();
+  const { handleSubmit, register, formState: {errors}} = useForm();
 
-  const onClick = (data: any) => {
-    //ここは
-    authRepository.signUpWithEmail(data.email, data.password)
-      .then(() => router.push('/corporation/inputInfo'));
-  };
+  const onSubmit = ({email, password, sharedPassword}: FormData) => {
+    authRepository.employeeSignUpWithEmail(email, password, sharedPassword).then(result => {
+      if(result) {
+      setIsOpen(true)
+      setModalMessage(result.success)
+      setColor(result.success)
+
+      setTimeout(() => {
+        setIsOpen(false)
+        if(!result.success) return router.reload()
+        router.push('/corporation')
+      })
+      }
+    })
+  }
 
   return (
-    <div className="flex justify-center h-screen content-center">
-      <div className="flex flex-col justify-center w-3/5 ">
-        <div className="flex justify-center p-5">
-          <p className="font-bold text-5xl font-caveat">UNITE(Corporate)</p>
-        </div>
+     <div className="w-full h-screen">
+      <div className="flex flex-col h-full items-center justify-center">
+        <div className="flex flex-col w-2/3 bg-gray-50 rounded-lg p-10">
+          <div className="font-bold text-center">企業様従業員アカウント作成</div>
+          <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+            <AuthInput
+              labelText="メールアドレス"
+              placeholder="example@gmail.com"
+              buttonType="email"
+              register={register}
+              registerLabel="email"
+              rules={{required: "*必須項目です"}}
+              errors={errors}
+            />
 
-        <div className="flex justify-end">
-          <Image src="/cat.gif" width={90} height={90} alt="logo"/>
-        </div>
-        <div className="flex justify-center">
-          <div className="border-t w-full border-black"></div>
-        </div>
-        <EmailAndPasswordForm
-          onSubmit={onClick}
-          buttonText="アカウントを作る"
-        />
-        <div className="flex justify-center">
-          <p>アカウントをお持ちの企業様　</p>
-          <Link href="/corporation/corporateSignIn" className="font-bold">
-            ログイン
-          </Link>
+            <AuthInput
+              labelText="パスワード"
+              placeholder="More than 10 letters"
+              buttonType="password"
+              register={register}
+              registerLabel="password"
+              rules={{ required: "*必須項目です。", minLength: {value: 8, message: "*8文字以上で入力ください。"}}}
+              errors={errors}
+            />
+            <AuthInput
+              labelText="企業パスワード"
+              buttonType="sharedPxassword"
+              placeholder="企業パスワードをご入力ください"
+              register={register}
+              registerLabel="sharedPassword"
+              rules={{required: "必須項目です。"}}
+              errors={errors}
+            />
+            <div className="flex justify-center mt-8">
+              <button
+                type="submit"
+                className="w-full h-10 sm:h-14 p-1 rounded-md font-bold mb-3 text-center sm:text-base text-sm bg-green-500 text-white"
+              >
+                新規登録
+              </button>
+            </div>
+          </form>
+          <div className="flex flex-col text-center text-sm mt-2">
+            <p>企業アカウントをお作りの方は{<Link href={'/corporation/createCorporation'} className="font-bold hover:text-red-500">こちら</Link>}</p>
+            <p className="mt-1">アカウントお持ちの方はこちらから{<Link href={'/corporation/corporateSignIn'} className="font-bold hover:text-red-500">ログイン</Link>}</p>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+
+      <SuccessOrFailureModal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        modalMessage={modalMessage}
+        modalBgColor={color!}
+      />
+     </div>
+  )
+}
