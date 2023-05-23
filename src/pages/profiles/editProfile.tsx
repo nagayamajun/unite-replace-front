@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 const EditProfilePage = (): JSX.Element => {
   return (
     <>
-      <EditProfile />
+      <EditProfile/>
     </>
   );
 };

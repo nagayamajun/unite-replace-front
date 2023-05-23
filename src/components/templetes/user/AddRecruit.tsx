@@ -4,7 +4,7 @@ import { SkillSelect } from "@/components/atoms/SkillSelect";
 import { SubmitButton } from "@/components/atoms/SubmitButton";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
 import { useAuth } from "@/hooks/useAuth";
-import { createRecuit } from "@/modules/recruit/recruit.repository";
+import { recruitRepository } from "@/modules/recruit/recruit.repository";
 import { ProgramingSkill } from "@/types/programingSkill";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -34,12 +34,6 @@ export const AddRecruit = () => {
     setIsOpen(false);
   }
 
-  //enum型からスキルオブジェクト作成
-  const options = Object.values(ProgramingSkill).map((skill) => ({
-    value: skill,
-    label: skill,
-  }))
-
   const onSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
     let userState = localStorage.getItem("UserState");
     if (!userState) return
@@ -55,7 +49,7 @@ export const AddRecruit = () => {
       numberOfApplicants: data.numberOfApplicants
     }
 
-    createRecuit(recruitData, userId)
+    recruitRepository.createRecuit(recruitData, userId)
       .then(result => {
         if(result) {
           setIsOpen(true)
@@ -64,7 +58,7 @@ export const AddRecruit = () => {
 
           setTimeout(() => {
             setIsOpen(false)
-            if (!result.success) return window.location.reload();
+            if (!result.success) return router.reload();
             router.push("/homeScreen")
           }, 2000)
         }

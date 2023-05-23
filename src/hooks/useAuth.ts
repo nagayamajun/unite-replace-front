@@ -5,8 +5,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/libs/firebase";
 import { useRouter } from "next/router";
 import { UserStateType } from "@/global-states/atoms";
-import { findOneUser } from "@/modules/user/user.repository";
-import { setAuthToken } from "@/libs/axios";
+import { UserRepository } from "@/modules/user/user.repository";
+import { axiosInstance, setAuthToken } from "@/libs/axios";
 
 
 export const useAuth = (): UserStateType => {
@@ -19,8 +19,11 @@ export const useAuth = (): UserStateType => {
       console.log(authUser?.uid)
       if (authUser) {
         const token = await authUser.getIdToken();
+        console.log(`token ${token}`)
         setAuthToken(token);
-        const user = await findOneUser()
+        // console.log(`settoken${axiosInstance.defaults.headers.common["Authorization"]}`)
+        const user = await UserRepository.findUserByFirebaseUID();
+        user ? console.log(user) : console.log("undefind")
 
         if (user) {
           setUser(user)
@@ -32,6 +35,7 @@ export const useAuth = (): UserStateType => {
     return () => unsub();
   }, []);
 
+  console.log(user)
   return user;
 };
 

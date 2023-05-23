@@ -1,5 +1,5 @@
 import { UserState, UserStateType } from "@/global-states/atoms";
-import { UserRepository, updateUserInfo } from "@/modules/user/user.repository";
+import { UserRepository } from "@/modules/user/user.repository";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import { Dispatch, Fragment, SetStateAction, useEffect } from "react";
@@ -29,7 +29,7 @@ export const EditProfileModal = ({
   const onEditSubmit = async (submitData: any) => {
     console.log(submitData)
     if (!userId) throw new Error("userStateのRecoilValueが空");
-    let updateUser = await updateUserInfo(submitData);
+    let updateUser = await UserRepository.updateUserInfo(submitData);
     setUser(updateUser);
     setIsOpen(false);
   };

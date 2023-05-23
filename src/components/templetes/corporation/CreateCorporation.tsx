@@ -1,14 +1,35 @@
 import { PlainInput } from "@/components/atoms/PlainInput"
 import { PlainTextArea } from "@/components/atoms/PlainTextarea";
-import { createCorporation } from "@/modules/corporation/corporation.repository";
+import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
+import { CorporationRepositry } from "@/modules/corporation/corporation.repository";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { useForm } from "react-hook-form"
 
+
 export const CreateCorporation = () => {
+  const router = useRouter();
+  //モーダル関係
+  const [isOpen, setIsOpen] = useState(false);
+  const [modalMessage ,setModalMessage] = useState("");
+  const [color, setColor] = useState<boolean>();
+  const closeModal = () => setIsOpen(false)
   const { register, handleSubmit ,formState: {errors}} = useForm();
 
-  const onSubmit = async (submitData: any) => {
-    await createCorporation(submitData)
-    console.log("成功しました。")
+  const onSubmit = (submitData: any) => {
+    CorporationRepositry.create(submitData).then(result => {
+      if(result) {
+        setIsOpen(true)
+        setModalMessage(result.message)
+        setColor(result.success);
+
+        setTimeout(() => {
+          setIsOpen(false)
+          if (!result.success) return router.reload();
+          router.push("/corporation/corporateSignUp")
+        }, 2000)
+      }
+    })
   }
   return (
     <div className="flex flex-col items-center justify-center">
@@ -85,6 +106,13 @@ export const CreateCorporation = () => {
           </button>
         </div>
       </form>
+
+      <SuccessOrFailureModal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        modalMessage={modalMessage}
+        modalBgColor={color!}
+      />
     </div>
   )
 }

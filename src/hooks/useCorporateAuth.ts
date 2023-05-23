@@ -9,6 +9,9 @@ import { db } from "@/libs/firebase";
 import { User } from "../types/user";
 import { CorporationState, CorporationStateType } from "@/global-states/corporateAtom";
 import { Corporation } from "../types/corporation";
+import { setAuthToken } from "@/libs/axios";
+import { CorporationRepositry } from "@/modules/corporation/corporation.repository";
+import { employeeRepository } from "@/modules/employee/employee.repository";
 
 
 export const useCorporateAuth = (): UserStateType => {
@@ -18,6 +21,13 @@ export const useCorporateAuth = (): UserStateType => {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (authCorporation) => {
       if (authCorporation) {
+        // const token = await authCorporation.getIdToken();
+        // setAuthToken(token);
+        // const employee = await employeeRepository.findEmployeeByFirebaseUID()
+
+        // if (employee) {
+        //   setCorporation(employee)
+        // }
         const ref = doc(db, `corporations/${authCorporation.uid}`);
         const snap = await getDoc(ref);
 

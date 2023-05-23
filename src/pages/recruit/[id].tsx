@@ -1,6 +1,6 @@
 import { UserLayout } from "@/components/templetes/layouts/UserLayout";
 import { RecruitDetail } from "@/components/templetes/user/RecruitDetail";
-import { getRecruitById } from "@/modules/recruit/recruit.repository";
+import { recruitRepository } from "@/modules/recruit/recruit.repository";
 import { Recruit } from "@/types/recruit";
 import { GetServerSideProps } from "next";
 import { ParsedUrlQuery } from "querystring";
@@ -17,8 +17,7 @@ interface Params extends ParsedUrlQuery {
  //SSRでサーバー側でデータ取得をする。
  export const getServerSideProps: GetServerSideProps<Props, Params> = async ({ params }) => {
   const { id } = params as Params;
-  const recruit = await getRecruitById(id);
-
+  const recruit = await recruitRepository.getRecruitById(id);
   return {
     props: {
       recruit

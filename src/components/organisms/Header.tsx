@@ -9,7 +9,7 @@ export const Header = (): JSX.Element => {
   const userStateVal = useRecoilValue(UserState);
   const [arbitraryRoomId, setArbitraryRoomId] = useState<string>();
   const menuLinks = [
-    {href: '/profiles/editProfile', label: 'マイページへ'},
+    {href: `/profiles/${userStateVal?.firebaseUID}`, label: 'マイページへ'},
     {href: '/', label: 'お問合せ'},
     {href: '/', label: 'ログアウト'},
   ]
