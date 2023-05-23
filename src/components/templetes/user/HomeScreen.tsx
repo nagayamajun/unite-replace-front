@@ -13,19 +13,18 @@ export const HomeScreen = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setUid(user?.uid);
-  }, [user?.uid]);
+    setUid(user?.firebaseUID);
+  }, [user?.firebaseUID]);
 
   if (!uid) return <Loading />;
 
-
   const openModal = () => {
     setIsOpen(true);
-  }
+  };
 
   const closeModal = () => {
     setIsOpen(false);
-  }
+  };
 
   return (
     <>
@@ -57,16 +56,11 @@ export const HomeScreen = () => {
         </button>
       </div> */}
 
-
-      <UploadProductModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-      />
+      <UploadProductModal isOpen={isOpen} closeModal={closeModal} />
     </>
   );
 };
 
 HomeScreen.getLayout = function getLayout(page: ReactElement) {
-  return <UserLayout>{page}</UserLayout>
-}
-
+  return <UserLayout>{page}</UserLayout>;
+};

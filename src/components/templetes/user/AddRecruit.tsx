@@ -1,14 +1,14 @@
-import { PlainInput } from "@/components/atoms/PlainInput"
+import { PlainInput } from "@/components/atoms/PlainInput";
 import { PlainTextArea } from "@/components/atoms/PlainTextarea";
 import { SkillSelect } from "@/components/atoms/SkillSelect";
 import { SubmitButton } from "@/components/atoms/SubmitButton";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
+import { useAuth } from "@/hooks/useAuth";
 import { createRecuit } from "@/modules/recruit/recruit.repository";
 import { ProgramingSkill } from "@/types/programingSkill";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-
 
 export type FormRecruitData = {
   hackthonName: string;
@@ -18,29 +18,35 @@ export type FormRecruitData = {
   developmentPeriod: string;
   hackthonUrl: String;
   numberOfApplicants: number; //募集人数
-}
+};
 
 export const AddRecruit = () => {
+  useAuth();
   const router = useRouter();
-  const { handleSubmit, register, formState: {errors}, control } = useForm();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    control,
+  } = useForm();
 
   //モーダル関係
   const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage ,setModalMessage] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
   const [color, setColor] = useState<boolean>();
   const closeModal = () => {
     setIsOpen(false);
-  }
+  };
 
   //enum型からスキルオブジェクト作成
   const options = Object.values(ProgramingSkill).map((skill) => ({
     value: skill,
     label: skill,
-  }))
+  }));
 
   const onSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
     let userState = localStorage.getItem("UserState");
-    if (!userState) return
+    if (!userState) return;
     let userId = JSON.parse(userState)["UserState"].uid;
 
     const recruitData: FormRecruitData = {
@@ -50,24 +56,23 @@ export const AddRecruit = () => {
       programingSkills: data.programingSkills,
       developmentPeriod: data.developmentPeriod,
       hackthonUrl: data.hackthonUrl,
-      numberOfApplicants: data.numberOfApplicants
-    }
+      numberOfApplicants: data.numberOfApplicants,
+    };
 
-    createRecuit(recruitData, userId)
-      .then(result => {
-        if(result) {
-          setIsOpen(true)
-          setModalMessage(result.message)
-          setColor(result.success);
+    createRecuit(recruitData, userId).then((result) => {
+      if (result) {
+        setIsOpen(true);
+        setModalMessage(result.message);
+        setColor(result.success);
 
-          setTimeout(() => {
-            setIsOpen(false)
-            if (!result.success) return window.location.reload();
-            router.push("/homeScreen")
-          }, 2000)
-        }
-      })
-  }
+        setTimeout(() => {
+          setIsOpen(false);
+          if (!result.success) return window.location.reload();
+          router.push("/homeScreen");
+        }, 2000);
+      }
+    });
+  };
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -83,7 +88,7 @@ export const AddRecruit = () => {
               placeholder="ハッカソン名をご記入ください"
               register={register}
               errors={errors}
-              rules={{required: "必須項目です。"}}
+              rules={{ required: "必須項目です。" }}
             />
             <PlainInput
               registerLabel="headline"
@@ -91,7 +96,7 @@ export const AddRecruit = () => {
               placeholder="見出しをご記入ください"
               register={register}
               errors={errors}
-              rules={{required: "必須項目です。"}}
+              rules={{ required: "必須項目です。" }}
             />
             <PlainTextArea
               registerLabel="details"
@@ -99,7 +104,7 @@ export const AddRecruit = () => {
               placeholder="募集内容について細かくご記入ください"
               register={register}
               errors={errors}
-              rules={{required: "必須項目です"}}
+              rules={{ required: "必須項目です" }}
             />
             <SkillSelect
               registerLabel="programingSkills"
@@ -107,12 +112,19 @@ export const AddRecruit = () => {
               control={control}
               placepholder="スキルを選択してください(複数選択可)"
               errors={errors}
-              rules={{required: "必須項目です"}}
+              rules={{ required: "必須項目です" }}
             />
 
             {/* プルダウンの背景色を白にしたい */}
-            <label htmlFor="numberOfApplicants" className="text-sm">募集人数</label>
-            <select id="numberOfApplicants" placeholder="募集人数を選択" {...register("numberOfApplicants", {required: "必須項目です"})} className=" text-gray-400 border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full outline-green-500 mb-6 tex-sm ">
+            <label htmlFor="numberOfApplicants" className="text-sm">
+              募集人数
+            </label>
+            <select
+              id="numberOfApplicants"
+              placeholder="募集人数を選択"
+              {...register("numberOfApplicants", { required: "必須項目です" })}
+              className=" text-gray-400 border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full outline-green-500 mb-6 tex-sm "
+            >
               <option value="1">1人</option>
               <option value="2">2人</option>
               <option value="3">3人</option>
@@ -138,9 +150,7 @@ export const AddRecruit = () => {
               errors={errors}
             />
 
-            <SubmitButton
-              innerText="募集を作成する"
-            />
+            <SubmitButton innerText="募集を作成する" />
           </form>
         </div>
 
@@ -152,5 +162,5 @@ export const AddRecruit = () => {
         />
       </div>
     </div>
-  )
-}
+  );
+};

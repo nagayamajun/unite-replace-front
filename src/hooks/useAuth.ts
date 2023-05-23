@@ -1,43 +1,33 @@
+import { UserState, UserStateType } from "@/global-states/atoms";
+import { axiosInstance, setAuthToken } from "@/libs/axios";
+import { auth } from "@/libs/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { UserState } from "@/global-states/atoms";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/libs/firebase";
-import { useRouter } from "next/router";
-import { UserStateType } from "@/global-states/atoms";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/libs/firebase";
-import { User } from "../types/user";
-
 
 export const useAuth = (): UserStateType => {
   const router = useRouter();
-  const [user, setUser ] = useRecoilState<UserStateType>(UserState);
-
+  const [user, setUser] = useRecoilState<UserStateType>(UserState);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (authUser) => {
-      console.log(authUser?.uid)
+      console.log(authUser?.uid);
       if (authUser) {
-        const ref = doc(db, `users/${authUser.uid}`);
-        const snap = await getDoc(ref);
-
-        if(snap.exists()) {
-          const appUser = (await getDoc(ref)).data() as User;
-          setUser(appUser);
-        } else {
-          const appUser: User = {
-            uid: authUser.uid,
-          }
-
-          setDoc(ref, appUser).then(() => {
-            setUser(appUser)
+        const token = await authUser.getIdToken();
+        setAuthToken(token);
+        const user = (
+          await axiosInstance.get("/user/find-by-firebase-uid").catch((err) => {
+            throw new Error(`user not found. error: ${err}`);
           })
+        ).data;
+        if (user) {
+          setUser(user);
         }
       } else {
         // resetStatus();
         //Authコンポーネントにpush
-        router.push('/signIn');
+        router.push("/signIn");
       }
     });
     return () => unsub();

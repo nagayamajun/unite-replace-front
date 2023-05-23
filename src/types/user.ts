@@ -1,5 +1,6 @@
 export type User = {
-  uid: string;
+  id: string;
+  firebaseUID: string;
   name?: string;
   image_url?: string;
   age?: string;
