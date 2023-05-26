@@ -14,7 +14,6 @@ export const UserRepository = {
 
   //一意のユーザーを取得
   async findUserByFirebaseUID(): Promise<User> {
-    console.log(`settoken${axiosInstance.defaults.headers.common["Authorization"]}`)
     const user = ( await axiosInstance.get('/user/find-by-firebase-uid').catch((err) => {
       throw new Error(`user not found | error: ${err}`)
     })).data

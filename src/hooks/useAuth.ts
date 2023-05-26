@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { startTransition, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { UserState } from "@/global-states/atoms";
 import { onAuthStateChanged } from "firebase/auth";
@@ -15,7 +15,6 @@ export const useAuth = (): UserStateType => {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (authUser) => {
-      console.log(`firebaseUID: ${authUser?.uid}`)
       if (authUser) {
         const token = await authUser.getIdToken();
         console.log(`token ${token}`)

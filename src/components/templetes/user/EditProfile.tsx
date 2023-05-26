@@ -20,6 +20,8 @@ import { User } from "@/types/user";
 import { userAgent } from "next/server";
 import { ProgramingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
 import { useRouter } from "next/router";
+import { axiosInstance } from "@/libs/axios";
+import { Header } from "@/components/organisms/Header";
 
 // type EditProfileProps = {
 //   userStateVal: User;
@@ -42,14 +44,14 @@ export const EditProfile = (): JSX.Element => {
   // const { ownRecruits } = useSpecificRecruits(firebaseUID);
 
   useEffect(() => {
-    if (!userStateVal) {
-      router.push("/signIn")
+    if (!userStateVal || !axiosInstance.defaults.headers.common["Authorization"]) {
+      router.push('/signIn')
+    } else {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }, [])
 
-
-  if(isLoading) return <Loading />
+  if (isLoading) return <Loading />
 
   // const deleteRecruit = async (recruit: any) => {
   //   await recruitRepository.delete(recruit.id);
@@ -58,7 +60,8 @@ export const EditProfile = (): JSX.Element => {
   // };
 
  return (
-    <div className="flex flex-col items-center gap-20 my-8">
+    <div className="flex flex-col items-center gap-20">
+      <Header />
       {/* 名前とアイコン */}
       <div className="flex flex-col gap-8 items-end">
         <Image

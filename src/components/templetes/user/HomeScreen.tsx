@@ -1,7 +1,7 @@
 import { Header } from "@/components/organisms/Header";
 import { NarrowSearch } from "@/components/organisms/NarrowSerch";
 import { useAuth } from "@/hooks/useAuth";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, Suspense, useEffect, useState } from "react";
 import { RecruitList } from "../../organisms/RecruitList";
 import { UploadProductModal } from "../../organisms/UploadProductModal";
 import { Loading } from "../common/Loading";
@@ -9,17 +9,24 @@ import { UserLayout } from "../layouts/UserLayout";
 import { useRouter } from "next/router";
 import { UserState } from "@/global-states/atoms";
 import { useRecoilValue } from "recoil";
+import { axiosInstance } from "@/libs/axios";
 
 export const HomeScreen = () => {
   const router = useRouter()
   const user = useRecoilValue(UserState)
   const [uid, setUid] = useState<string>();
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsloading ] = useState(true);
 
   useEffect(() => {
-    if (!user) { router.push('/signIn') }
+    if (!user || !axiosInstance.defaults.headers.common["Authorization"]) {
+      router.push('/signIn')
+    } else {
+      setIsloading(false)
+    }
   }, [])
 
+  if (isLoading) return <Loading />
   const openModal = () => {
     setIsOpen(true);
   }

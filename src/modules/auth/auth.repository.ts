@@ -41,7 +41,6 @@ export const authRepository = {
         throw new Error(err);
       })
     ).data.token;
-    console.log(customToken ? customToken : "ないです")
     //userCredentialはサーバーサイドのtokenを利用してfirebaseにログイン
     const userCredential = await signInWithCustomToken(auth, customToken).catch((err) => {
       throw new Error(err)

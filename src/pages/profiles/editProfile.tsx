@@ -10,7 +10,7 @@ const EditProfilePage = (): JSX.Element => {
   );
 };
 
-EditProfilePage.getLayout = function getLayout(page: ReactNode) {
-  return <UserLayout>{page}</UserLayout>
-}
+// EditProfilePage.getLayout = function getLayout(page: ReactNode) {
+//   return <UserLayout>{page}</UserLayout>
+// }
 export default EditProfilePage;

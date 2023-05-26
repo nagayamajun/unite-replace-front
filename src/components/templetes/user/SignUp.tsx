@@ -22,7 +22,6 @@ export const SignUp = () => {
   const closeModal = () => setIsOpen(false)
 
   const onSubmit = ({email, password}: FormData) => {
-    console.log("提")
     authRepository
       .signUpWithEmail(email, password)
         .then(result => {

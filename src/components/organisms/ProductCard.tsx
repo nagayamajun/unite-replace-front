@@ -16,7 +16,6 @@ export const ProductCard = ({
   user_id,
   createDate,
 }: Props) => {
-  console.log(filePath);
 
   return (
     <>
