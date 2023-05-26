@@ -14,8 +14,6 @@ import {
   storageKey,
 } from "../constants/env";
 
-console.log(apiKey, databaseURL);
-
 const firebaseConfig = {
   apiKey: apiKey,
   authDomain: authDomain,

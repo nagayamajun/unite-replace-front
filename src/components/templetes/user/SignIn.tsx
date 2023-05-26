@@ -3,8 +3,10 @@ import { useRouter } from "next/router";
 import { AuthButton } from "../../atoms/AuthButton";
 import Link from "next/link";
 import { EmailAndPasswordForm } from "@/components/organisms/EmailAndPasswordForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
+import { useAuth } from "@/hooks/useAuth";
+
 
 type FormData = {
   email: string;
@@ -13,8 +15,8 @@ type FormData = {
 
 
 export const SignIn: React.FC = (): JSX.Element => {
-
   const router = useRouter();
+  useAuth();
 
   //モーダル関係
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +35,7 @@ export const SignIn: React.FC = (): JSX.Element => {
 
           setTimeout(() => {
             setIsOpen(false)
-            if (!result.success) return window.location.reload();
+            if (!result.success) return router.reload();
             router.push("/homeScreen")
           }, 2000)
         }

@@ -27,7 +27,6 @@ export const EditProfileModal = ({
 
 
   const onEditSubmit = async (submitData: any) => {
-    console.log(submitData)
     if (!userId) throw new Error("userStateのRecoilValueが空");
     let updateUser = await UserRepository.updateUserInfo(submitData);
     setUser(updateUser);

@@ -12,9 +12,9 @@ interface Param extends ParsedUrlQuery {
   id: string;
 }
 
-export const getServerSideProps: GetServerSideProps<SSRProps, Param> = async ({ params }) => {
-  const { id } = params as Param
-  const user = await UserRepository.findByFirebaseUIDWithoutFirebaseAuth(id);
+export const getServerSideProps: GetServerSideProps<SSRProps> = async (context) => {
+  const { id } = context.query;
+   const user = await UserRepository.findByFirebaseUIDWithoutFirebaseAuth(id as string);
 
   return {
     props: {

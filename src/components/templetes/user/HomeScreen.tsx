@@ -7,23 +7,18 @@ import { UploadProductModal } from "../../organisms/UploadProductModal";
 import { Loading } from "../common/Loading";
 import { UserLayout } from "../layouts/UserLayout";
 import { useRouter } from "next/router";
-import { UserState, UserStateType } from "@/global-states/atoms";
+import { UserState } from "@/global-states/atoms";
 import { useRecoilValue } from "recoil";
 
 export const HomeScreen = () => {
+  const router = useRouter()
   const user = useRecoilValue(UserState)
   const [uid, setUid] = useState<string>();
   const [isOpen, setIsOpen] = useState(false);
 
-
-
   useEffect(() => {
-    setUid(user?.firebaseUID);
-  }, [user?.firebaseUID])
-
-
-  if (!user?.firebaseUID) return <Loading />;
-
+    if (!user) { router.push('/signIn') }
+  }, [])
 
   const openModal = () => {
     setIsOpen(true);
@@ -72,7 +67,7 @@ export const HomeScreen = () => {
   );
 };
 
-HomeScreen.getLayout = function getLayout(page: ReactElement) {
-  return <UserLayout>{page}</UserLayout>
-}
+// HomeScreen.getLayout = function getLayout(page: ReactElement) {
+//   return <UserLayout>{page}</UserLayout>
+// }
 

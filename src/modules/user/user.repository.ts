@@ -22,8 +22,8 @@ export const UserRepository = {
   },
 
   //認証を利用せずにparamでユーザーを取得
-  async findByFirebaseUIDWithoutFirebaseAuth(id: string):Promise<User> {
-    const user =  (await axios.get(`localhost:8080/${id}`).catch((err) => {
+  async findByFirebaseUIDWithoutFirebaseAuth(firebaseUID: string):Promise<User> {
+    const user =  (await axios.get(`http://localhost:8080/user/${firebaseUID}`).catch((err) => {
       throw new Error(`user not found | error: ${err}`)
     })).data
     return user
