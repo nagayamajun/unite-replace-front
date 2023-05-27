@@ -14,8 +14,8 @@ export const UserList = () => {
         {users.map((user) => {
           return (
             <UserCard
-              key={user.uid}
-              uid={user.uid}
+              key={user.firebaseUID}
+              uid={user.firebaseUID}
               name={user.name}
               university={user.university}
               programingSkills={user.programingSkills}

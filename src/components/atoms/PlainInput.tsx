@@ -14,7 +14,7 @@ type PlainInputProps = {
   register?: UseFormRegister<FieldValues>;
   registerLabel: string;
   rules?: ValidationRulus;
-  errors: FieldErrors<FieldValues>
+  errors?: FieldErrors<FieldValues>
 };
 
 export const PlainInput = ({
@@ -38,7 +38,8 @@ export const PlainInput = ({
           rules
         ))}
       />
-      {errors[registerLabel] && <p className="text-xs font-ligh text-red-500">{errors[registerLabel]?.message as ReactNode}</p>}
+
+      {errors && (errors[registerLabel] && <p className="text-xs font-ligh text-red-500">{errors[registerLabel]?.message as ReactNode}</p>)}
     </div>
   );
 };

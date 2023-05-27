@@ -1,14 +1,16 @@
-import { UserStateType } from "@/global-states/atoms";
+import { UserState, UserStateType } from "@/global-states/atoms";
 import { UserRepository } from "@/modules/user/user.repository";
 import { Dialog, Transition } from "@headlessui/react";
-import { Dispatch, Fragment, SetStateAction } from "react";
+import { useRouter } from "next/router";
+import { Dispatch, Fragment, SetStateAction, useEffect } from "react";
 import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
+import { useRecoilState } from "recoil";
 
 type EditProfileModalProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   children: any;
-  userStateVal: UserStateType;
+  userId: string;
   handleSubmit: UseFormHandleSubmit<FieldValues>;
 };
 
@@ -16,17 +18,19 @@ export const EditProfileModal = ({
   isOpen,
   setIsOpen,
   children,
-  userStateVal,
+  userId,
   handleSubmit,
 }: EditProfileModalProps): JSX.Element => {
+
+  const router = useRouter();
+  const [user, setUser ] = useRecoilState<UserStateType>(UserState);
+
+
   const onEditSubmit = async (submitData: any) => {
-    if (!userStateVal) throw new Error("userStateのRecoilValueが空");
-    await UserRepository.update(userStateVal.uid, {
-      ...userStateVal,
-      ...submitData,
-    });
+    if (!userId) throw new Error("userStateのRecoilValueが空");
+    let updateUser = await UserRepository.updateUserInfo(submitData);
+    setUser(updateUser);
     setIsOpen(false);
-    location.reload();
   };
 
   return (

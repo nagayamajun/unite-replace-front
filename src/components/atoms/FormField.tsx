@@ -14,7 +14,7 @@ export const FormField = ({
 }: FormFieldProps): JSX.Element => {
   return (
     <div className="flex flex-col gap-6 text-lg w-2/5">
-      <div className="flex justify-between">
+      <div className="flex items-center justify-between">
         <div>{labelText}</div>
         <Image
           src="/pen.gif"

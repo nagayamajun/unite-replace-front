@@ -9,31 +9,27 @@ import { db } from "@/libs/firebase";
 import { User } from "../types/user";
 import { CorporationState, CorporationStateType } from "@/global-states/corporateAtom";
 import { Corporation } from "../types/corporation";
+import { setAuthToken } from "@/libs/axios";
+import { CorporationRepositry } from "@/modules/corporation/corporation.repository";
+import { employeeRepository } from "@/modules/employee/employee.repository";
 
 
 export const useCorporateAuth = (): UserStateType => {
   const router = useRouter();
   const [corporation, setCorporation] = useRecoilState<CorporationStateType>(CorporationState);
 
+  //apiは作成している
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (authCorporation) => {
-      console.log(authCorporation?.uid)
       if (authCorporation) {
-        const ref = doc(db, `corporations/${authCorporation.uid}`);
-        const snap = await getDoc(ref);
+        // const token = await authCorporation.getIdToken();
+        // setAuthToken(token);
+        // const employee = await employeeRepository.findEmployeeByFirebaseUID()
 
-        if(snap.exists()) {
-          const appCorporation = (await getDoc(ref)).data() as Corporation;
-          setCorporation(appCorporation);
-        } else {
-          const appCorporation: Corporation = {
-            uid: authCorporation.uid,
-          }
-
-          setDoc(ref, appCorporation).then(() => {
-            setCorporation(appCorporation)
-          })
-        }
+        // if (employee) {
+        //   setCorporation(employee)
+        // }
+        //
       } else {
         // resetStatus();
         //Authコンポーネントにpush

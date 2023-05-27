@@ -7,7 +7,7 @@ import Select from "react-select";
 import { useRecoilState } from "recoil";
 import { SubmitButton } from "../../atoms/SubmitButton";
 import { ProgramingSkill } from "@/types/programingSkill";
-import { UserRepository } from "@/modules/user/user.repository";
+import { UserRepository, updateUserInfo } from "@/modules/user/user.repository";
 
 export type Option = {
   label: string;
@@ -30,9 +30,10 @@ export const SkillPage = (): JSX.Element => {
   const onSubmit = async (submitData: any) => {
     setUserState({ ...userState, ...submitData });
     //※デプロイまでには↓エラーはスローしないようにしたい
-    if (!userState?.uid) throw new Error("userState.uidがないです！");
+    if (!userState?.firebaseUID) throw new Error("userState.uidがないです！");
     //Nextに接続する。
-    await UserRepository.update(userState.uid, { ...userState, ...submitData });
+    // await UserRepository.update(userState.firebaseUID, { ...userState, ...submitData });
+    await updateUserInfo(submitData);
     router.push("/homeScreen");
   };
 

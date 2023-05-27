@@ -27,12 +27,10 @@ export const NarrowSearch = () => {
   const filterRecruit = (name?: string, skills?: ProgramingSkill[]) => {
     let alterRecruitList = recruits.filter((recruit) => {
       if(name && skills?.length! > 0) {
-        console.log("両方あります")
         return recruit.hackthonName?.includes(name) && recruit.programingSkills?.some((skill) => skills?.includes(skill));
       } else if(name || skills?.length! > 0) {
         return (name && recruit.hackthonName?.includes(name)) || (skills && recruit.programingSkills?.some((skill) => skills.includes(skill)));
       } else {
-        console.log("両方ありません🙇‍♀️")
         return recruits
       }
     });

@@ -32,8 +32,8 @@ export const SignUp = () => {
 
             setTimeout(() => {
               setIsOpen(false)
-              if (!result.success) return window.location.reload();
-              router.push("/profiles/otherThanTech")
+              if (!result.success) return router.reload();
+              router.push("/signIn")
             }, 2000)
           }
         })

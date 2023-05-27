@@ -9,6 +9,8 @@ import Image from "next/image";
 import { recruitCard } from "../../types/recruitCard";
 import { recruitRepository } from "@/modules/recruit/recruit.repository";
 import { serverTimestamp } from "firebase/firestore";
+import { ProgramingSkill } from "@/types/programingSkill";
+import { ProgramingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
 
 type Props = {
   isOpen: boolean;
@@ -22,16 +24,9 @@ export const CreateRecruitModal: React.FC<Props> = ({
   user,
 }): JSX.Element => {
   const { handleSubmit, register, control } = useForm();
-
-  const { programingSkills } = useProgramingSkills();
   const [selectedSkills, setSelectedSkills] = useState<Option[]>([]);
 
-  const options = programingSkills.map((skill) => {
-    return { label: skill.name, value: skill.name };
-  });
-
   const onSubmit = (data: any) => {
-    console.log(user);
 
     let recruit_data: recruitCard = {
       headline: data.headline,
@@ -40,7 +35,7 @@ export const CreateRecruitModal: React.FC<Props> = ({
       timestamp: serverTimestamp(),
       user_id: user,
     };
-    recruitRepository.createRecruitment(recruit_data);
+    recruitRepository.createRecuit(recruit_data);
     location.reload()
     closeModal();
   };
@@ -101,7 +96,7 @@ export const CreateRecruitModal: React.FC<Props> = ({
                           render={({ field }) => (
                             <Select
                               isMulti
-                              options={options}
+                              options={ProgramingSkillOptions}
                               onChange={(selectedSkills) => {
                                 setSelectedSkills(selectedSkills as Option[]);
                                 field.onChange(
