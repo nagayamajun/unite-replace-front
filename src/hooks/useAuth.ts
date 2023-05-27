@@ -1,40 +1,32 @@
-import { UserState, UserStateType } from "@/global-states/atoms";
-import { axiosInstance, setAuthToken } from "@/libs/axios";
-import { auth } from "@/libs/firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { startTransition, useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { UserState } from "@/global-states/atoms";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/libs/firebase";
+import { useRouter } from "next/router";
+import { UserStateType } from "@/global-states/atoms";
+import { UserRepository } from "@/modules/user/user.repository";
+import { setAuthToken } from "@/libs/axios";
 
 export const useAuth = (): UserStateType => {
-  const router = useRouter();
   const [user, setUser] = useRecoilState<UserStateType>(UserState);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (authUser) => {
-      console.log(authUser?.uid);
       if (authUser) {
         const token = await authUser.getIdToken();
+        console.log(`token ${token}`);
         setAuthToken(token);
-        const user = (
-          await axiosInstance.get("/user/find-by-firebase-uid").catch((err) => {
-            throw new Error(`user not found. error: ${err}`);
-          })
-        ).data;
+        const user = await UserRepository.findUserByFirebaseUID();
         if (user) {
           setUser(user);
         }
-      } else {
-        // resetStatus();
-        //Authコンポーネントにpush
-        router.push("/signIn");
       }
     });
     return () => unsub();
   }, []);
-
   return user;
 };
 
 //リファクタ
-//今はmainでしか認証ができていないが認証に関連するコンポーネント単位でできるようにする。
+//contextの形で認証が必要なページを囲う

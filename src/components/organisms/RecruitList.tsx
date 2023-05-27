@@ -14,7 +14,7 @@ export const RecruitList = (): JSX.Element => {
   // const { recruits } =  useRecruits()
   const recruits = useRecoilValue(recruitAtomState);
   const filteredRecruits = useRecoilValue(filteredRecruitAtomState);
-  if (recruits.length === 0) return <Loading />
+  // if (recruits.length === 0) return <Loading />
 
   type RecruitCardProps = {
     id: string;
@@ -33,6 +33,7 @@ export const RecruitList = (): JSX.Element => {
                 //useridができたら自分の投稿が表示されないようにする
                 //現状はuserIDがなかったので記述を消してます
                 <RecruitCard
+                  key={recruit.id}
                   id={recruit.id}
                   createdAt={recruit.createdAt}
                   headline={recruit.headline}

@@ -1,13 +1,15 @@
 import { HomeScreen } from "@/components/templetes/user/HomeScreen";
 import { filteredRecruitAtomState } from "@/global-states/filteredRecruits";
 import { recruitAtomState } from "@/global-states/recruitAtom";
-import { getRecruits } from "@/modules/recruit/recruit.repository";
+import { useAuth } from "@/hooks/useAuth";
+import { recruitRepository } from "@/modules/recruit/recruit.repository";
+import { UserRepository } from "@/modules/user/user.repository";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const recruitsArray = await getRecruits();
+  const recruitsArray = await recruitRepository.getRecruits();
 
   return {
     props: {
@@ -20,7 +22,7 @@ type Props = {
   recruitsArray: InferGetStaticPropsType<typeof getStaticProps>["recruits"];
 };
 
-const homeScreen = ({ recruitsArray }: Props) => {
+const HomeScreenPage = ({ recruitsArray }: Props) => {
   const [recruits, setRecruits] = useRecoilState(recruitAtomState);
   const [filteredRecruits, setFilteredRecruits] = useRecoilState(
     filteredRecruitAtomState
@@ -39,7 +41,7 @@ const homeScreen = ({ recruitsArray }: Props) => {
   );
 };
 
-export default homeScreen;
+export default HomeScreenPage;
 
 //パスを変える
 //queryパラメータで変える

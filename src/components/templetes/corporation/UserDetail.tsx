@@ -105,3 +105,4 @@ export const UserDetailPage = (): JSX.Element => {
     </div>
   );
 };
+//

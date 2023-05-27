@@ -1,8 +1,8 @@
-import { ProgramingSkill } from "@/types/programingSkill";
 import { ReactNode } from "react";
 import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
 import Select from "react-select";
 import { FormRecruitData } from "../templetes/user/AddRecruit";
+import { ProgramingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
 
 type ValidationRulus = {
   required?: boolean | string;
@@ -20,11 +20,6 @@ type Props = {
 }
 
 export const SkillSelect = ({ labelText, placepholder, control, rules, errors, registerLabel}: Props) => {
-  //enum型からスキルオブジェクト作成
-  const options = Object.values(ProgramingSkill).map((skill) => ({
-    value: skill,
-    label: skill,
-  }))
   return (
     <div className="flex flex-col gap-1 mb-6">
       <label htmlFor="programingSkills" className="text-xs sm:text-sm">{labelText}</label>
@@ -38,12 +33,12 @@ export const SkillSelect = ({ labelText, placepholder, control, rules, errors, r
             className="text-xs sm:text-sm text-gray-500"
             placeholder={placepholder}
             isMulti
-            options={options}
+            options={ProgramingSkillOptions}
             onChange={(selected) => {
               onChange(selected.map((item) => item.value));
             }}
             onBlur={onBlur}
-            value={options.filter((option) => value.includes(option.value))}
+            value={ProgramingSkillOptions.filter((option) => value.includes(option.value))}
           />
         )}
       />

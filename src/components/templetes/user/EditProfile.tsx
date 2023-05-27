@@ -15,12 +15,25 @@ import { EditProfileModal } from "../../organisms/EditProfileModal";
 import { FormField } from "../../atoms/FormField";
 import { GraduationYearRadio } from "../../atoms/GraduationYearRadio";
 import { Loading } from "../common/Loading";
+import { ProgramingSkill } from "@/types/programingSkill";
+import { User } from "@/types/user";
+import { userAgent } from "next/server";
+import { ProgramingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
+import { useRouter } from "next/router";
+import { axiosInstance } from "@/libs/axios";
+import { Header } from "@/components/organisms/Header";
+
+// type EditProfileProps = {
+//   userStateVal: User;
+// }
+// SSR時
+// export const EditProfile = ({ userStateVal }: EditProfileProps): JSX.Element => {
 
 export const EditProfile = (): JSX.Element => {
-  useAuth(); //レンダリング時にuserCollectionから再fetchするため (もうちょっと良さそうな方法に書き換えたい)
   const userStateVal = useRecoilValue<UserStateType>(UserState);
-  const [user, setUser] = useState<UserStateType>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isUserNameOpen, setIsUserNameOpen] = useState(false);
   const [isUniversityOpen, setIsUniversityOpen] = useState(false);
   const [isGraduationYearOpen, setIsGraduationYearOpen] = useState(false);
@@ -28,31 +41,27 @@ export const EditProfile = (): JSX.Element => {
   const [isSkillOpen, setIsSkillOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const { register, handleSubmit, control } = useForm();
-  const { programingSkills } = useProgramingSkills();
-  const { ownRecruits } = useSpecificRecruits(userStateVal?.uid);
-  const options = programingSkills.map((skill) => {
-    return { label: skill.name, value: skill.name };
-  });
+  // const { ownRecruits } = useSpecificRecruits(firebaseUID);
 
   useEffect(() => {
-    if (!userStateVal) {
-      setIsLoading(true);
+    if (!userStateVal || !axiosInstance.defaults.headers.common["Authorization"]) {
+      router.push('/signIn')
     } else {
-      setUser(userStateVal);
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, [userStateVal?.uid]);
+  }, [])
 
-  if (!user || isLoading) return <Loading />;
+  if (isLoading) return <Loading />
 
-  const deleteRecruit = async (recruit: any) => {
-    await recruitRepository.delete(recruit.id);
-    setIsConfirmOpen(false);
-    location.reload();
-  };
+  // const deleteRecruit = async (recruit: any) => {
+  //   await recruitRepository.delete(recruit.id);
+  //   setIsConfirmOpen(false);
+  //   // location.reload();
+  // };
 
-  return (
-    <div className="flex flex-col items-center gap-20 my-8">
+ return (
+    <div className="flex flex-col items-center gap-20">
+      <Header />
       {/* 名前とアイコン */}
       <div className="flex flex-col gap-8 items-end">
         <Image
@@ -76,7 +85,7 @@ export const EditProfile = (): JSX.Element => {
       <EditProfileModal
         isOpen={isUserNameOpen}
         setIsOpen={setIsUserNameOpen}
-        userStateVal={userStateVal}
+        userId={userStateVal?.firebaseUID!}
         handleSubmit={handleSubmit}
       >
         <PlainInput
@@ -91,12 +100,12 @@ export const EditProfile = (): JSX.Element => {
         labelText="大学・専門"
         onCLick={() => setIsUniversityOpen(true)}
       >
-        <div className="border-b border-black">{userStateVal?.university}</div>
+        <div className="border rounded-md p-2 border-black">{userStateVal?.university}</div>
       </FormField>
       <EditProfileModal
         isOpen={isUniversityOpen}
         setIsOpen={setIsUniversityOpen}
-        userStateVal={userStateVal}
+        userId={userStateVal?.firebaseUID!}
         handleSubmit={handleSubmit}
       >
         <PlainInput
@@ -107,6 +116,7 @@ export const EditProfile = (): JSX.Element => {
         />
       </EditProfileModal>
       {/* 卒業予定年度 */}
+      {/* Nest.jsにculumnがそもそもない */}
       <FormField
         labelText="卒業予定年度"
         onCLick={() => setIsGraduationYearOpen(true)}
@@ -118,7 +128,7 @@ export const EditProfile = (): JSX.Element => {
       <EditProfileModal
         isOpen={isGraduationYearOpen}
         setIsOpen={setIsGraduationYearOpen}
-        userStateVal={userStateVal}
+        userId={userStateVal?.firebaseUID!}
         handleSubmit={handleSubmit}
       >
         <GraduationYearRadio
@@ -136,7 +146,7 @@ export const EditProfile = (): JSX.Element => {
       <EditProfileModal
         isOpen={isGithubInfoOpen}
         setIsOpen={setIsGithubInfoOpen}
-        userStateVal={userStateVal}
+        userId={userStateVal?.firebaseUID!}
         handleSubmit={handleSubmit}
       >
         <PlainInput
@@ -165,7 +175,7 @@ export const EditProfile = (): JSX.Element => {
       <EditProfileModal
         isOpen={isSkillOpen}
         setIsOpen={setIsSkillOpen}
-        userStateVal={userStateVal}
+        userId={userStateVal?.firebaseUID!}
         handleSubmit={handleSubmit}
       >
         <div className="flex flex-col gap-6 text-lg">
@@ -176,7 +186,7 @@ export const EditProfile = (): JSX.Element => {
             render={({ field }) => (
               <Select
                 isMulti
-                options={options}
+                options={ProgramingSkillOptions}
                 onChange={(selectedSkills) => {
                   field.onChange(selectedSkills.map((skill) => skill.value));
                 }}
@@ -187,7 +197,7 @@ export const EditProfile = (): JSX.Element => {
         </div>
       </EditProfileModal>
       {/* userが作成している募集 */}
-      <div className="flex flex-col gap-6 text-lg w-2/5">
+      {/* <div className="flex flex-col gap-6 text-lg w-2/5">
         <div>募集中のカード</div>
         <div className="flex flex-wrap justify-center gap-16">
           {ownRecruits && ownRecruits.length > 0 ? (
@@ -221,7 +231,7 @@ export const EditProfile = (): JSX.Element => {
             <></>
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

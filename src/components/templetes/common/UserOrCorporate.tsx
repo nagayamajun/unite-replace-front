@@ -5,7 +5,7 @@ export const UserOrCorporate = () => {
   const router = useRouter();
 
   const directUser = () => {
-    router.push("/homeScreen");
+    router.push("/homeScreen")
   }
 
   const directCorporate = () => {
