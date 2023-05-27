@@ -18,6 +18,7 @@ export const useCorporateAuth = (): UserStateType => {
   const router = useRouter();
   const [corporation, setCorporation] = useRecoilState<CorporationStateType>(CorporationState);
 
+  //apiは作成している
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (authCorporation) => {
       if (authCorporation) {
@@ -28,21 +29,7 @@ export const useCorporateAuth = (): UserStateType => {
         // if (employee) {
         //   setCorporation(employee)
         // }
-        const ref = doc(db, `corporations/${authCorporation.uid}`);
-        const snap = await getDoc(ref);
-
-        if(snap.exists()) {
-          const appCorporation = (await getDoc(ref)).data() as Corporation;
-          setCorporation(appCorporation);
-        } else {
-          const appCorporation: Corporation = {
-            uid: authCorporation.uid,
-          }
-
-          setDoc(ref, appCorporation).then(() => {
-            setCorporation(appCorporation)
-          })
-        }
+        //
       } else {
         // resetStatus();
         //Authコンポーネントにpush
