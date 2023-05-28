@@ -31,7 +31,6 @@ import { Header } from "@/components/organisms/Header";
 
 export const EditProfile = (): JSX.Element => {
   const userStateVal = useRecoilValue<UserStateType>(UserState);
-  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isUserNameOpen, setIsUserNameOpen] = useState(false);
@@ -43,27 +42,16 @@ export const EditProfile = (): JSX.Element => {
   const { register, handleSubmit, control } = useForm();
   // const { ownRecruits } = useSpecificRecruits(firebaseUID);
 
-  useEffect(() => {
-    if (!userStateVal || !axiosInstance.defaults.headers.common["Authorization"]) {
-      router.push('/signIn')
-    } else {
-      setIsLoading(false)
-    }
-  }, [])
-
-  if (isLoading) return <Loading />
-
   // const deleteRecruit = async (recruit: any) => {
   //   await recruitRepository.delete(recruit.id);
   //   setIsConfirmOpen(false);
   //   // location.reload();
   // };
 
- return (
+  return (
     <div className="flex flex-col items-center gap-20">
-      <Header />
       {/* 名前とアイコン */}
-      <div className="flex flex-col gap-8 items-end">
+      <div className="mt-20 flex flex-col gap-8 items-end">
         <Image
           src="/avatar.gif"
           alt="人物アイコン"
@@ -100,7 +88,9 @@ export const EditProfile = (): JSX.Element => {
         labelText="大学・専門"
         onCLick={() => setIsUniversityOpen(true)}
       >
-        <div className="border rounded-md p-2 border-black">{userStateVal?.university}</div>
+        <div className="border rounded-md p-2 border-black">
+          {userStateVal?.university}
+        </div>
       </FormField>
       <EditProfileModal
         isOpen={isUniversityOpen}

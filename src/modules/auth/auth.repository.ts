@@ -1,15 +1,12 @@
 import { axiosInstance, setAuthToken } from "@/libs/axios";
 import { auth } from "@/libs/firebase";
-import axios from "axios";
 import {
-  createUserWithEmailAndPassword,
   GithubAuthProvider,
   GoogleAuthProvider,
   signInWithCustomToken,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  UserCredential,
 } from "firebase/auth";
 
 export const authRepository = {
