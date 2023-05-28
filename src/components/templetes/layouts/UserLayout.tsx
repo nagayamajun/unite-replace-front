@@ -13,11 +13,10 @@ type Props = {
 
 export const UserLayout = ({ children }: Props) => {
   const user = useRecoilValue(UserState);
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsloading] = useState(true);
   const auth = useAuth();
 
   useEffect(() => {
-    setIsloading(true);
     if (user && axiosInstance.defaults.headers.common["Authorization"]) {
       setIsloading(false);
     }
