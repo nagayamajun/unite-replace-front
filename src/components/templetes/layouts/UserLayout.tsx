@@ -1,19 +1,34 @@
-import { Header } from "@/components/organisms/Header"
+import { Header } from "@/components/organisms/Header";
+import { UserState } from "@/global-states/atoms";
+import { useAuth } from "@/hooks/useAuth";
+import { axiosInstance } from "@/libs/axios";
 // import { SuccessModal } from "@/components/organisms/SuccessModal"
-import { ReactNode } from "react"
-
+import { ReactNode, useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { Loading } from "../common/Loading";
 
 type Props = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 export const UserLayout = ({ children }: Props) => {
+  const user = useRecoilValue(UserState);
+  const [isLoading, setIsloading] = useState(true);
+  const auth = useAuth();
+
+  useEffect(() => {
+    if (user && axiosInstance.defaults.headers.common["Authorization"]) {
+      setIsloading(false);
+    }
+  }, [auth]);
+
+  if (isLoading) return <Loading />;
+
   return (
     <>
       {/* <SuccessModal /> */}
       <Header />
       <main>{children}</main>
     </>
-
-  )
-}
+  );
+};

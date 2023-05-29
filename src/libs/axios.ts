@@ -10,5 +10,5 @@ export const setAuthToken = (token: string) => {
 };
 
 export const clearAuthToken = () => {
-  delete axiosInstance.defaults.headers.common["Authorization"]
+  delete axiosInstance.defaults.headers.common["Authorization"];
 };

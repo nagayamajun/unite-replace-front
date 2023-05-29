@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { AuthButton } from "../../atoms/AuthButton";
 import Link from "next/link";
 import { EmailAndPasswordForm } from "@/components/organisms/EmailAndPasswordForm";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
 import { useAuth } from "@/hooks/useAuth";
 

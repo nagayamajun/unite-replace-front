@@ -1,47 +1,43 @@
+import { UserLayout } from "@/components/templetes/layouts/UserLayout";
 import { HomeScreen } from "@/components/templetes/user/HomeScreen";
 import { filteredRecruitAtomState } from "@/global-states/filteredRecruits";
 import { recruitAtomState } from "@/global-states/recruitAtom";
-import { useAuth } from "@/hooks/useAuth";
 import { recruitRepository } from "@/modules/recruit/recruit.repository";
-import { UserRepository } from "@/modules/user/user.repository";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { useEffect } from "react";
-import { useRecoilState,} from "recoil";
+import { ReactElement, useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import { NextPageWithLayout } from "./_app";
 
 export const getStaticProps: GetStaticProps = async () => {
   const recruitsArray = await recruitRepository.getRecruits();
 
   return {
     props: {
-      recruitsArray
-    }
-  }
+      recruitsArray,
+    },
+  };
 };
 
 type Props = {
-  recruitsArray: InferGetStaticPropsType <typeof getStaticProps>["recruits"];
-}
+  recruitsArray: InferGetStaticPropsType<typeof getStaticProps>["recruits"];
+};
 
 const HomeScreenPage = ({ recruitsArray }: Props) => {
-  const [recruits, setRecruits] = useRecoilState(recruitAtomState);
-  const [filteredRecruits, setFilteredRecruits ] = useRecoilState(filteredRecruitAtomState)
+  const setRecruits = useSetRecoilState(recruitAtomState);
+  const setFilteredRecruits = useSetRecoilState(filteredRecruitAtomState);
 
   //しなくても良い？
   useEffect(() => {
     setRecruits(recruitsArray);
-    setFilteredRecruits(recruitsArray)
+    setFilteredRecruits(recruitsArray);
   }, [recruitsArray]);
 
-  return (
-    <>
-     <HomeScreen
-     />
-    </>
-  )
-}
+  return <HomeScreen />;
+};
 
-
-
+HomeScreenPage.getLayout = (page: ReactElement) => (
+  <UserLayout> {page} </UserLayout>
+);
 export default HomeScreenPage;
 
 //パスを変える
