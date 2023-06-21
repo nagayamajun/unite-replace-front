@@ -1,9 +1,13 @@
-import { FieldValue } from "firebase/firestore"
+import { Comment } from "./comment"
+import { Recruit } from "./recruit"
 
 export type Product = {
-  user_id: string,
-  genre: string,
-  detailInfo: string,
-  filePath: string,
-  createDate: FieldValue
+  id: string,
+  headline: string,
+  url: string //firesotreに保存したfileのurl
+  detail: string,
+  comment?: Comment[]
+  recruit?: Recruit
+  createdAt: Date,
+  updatedAt?: Date
 }

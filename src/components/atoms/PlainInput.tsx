@@ -10,7 +10,7 @@ type ValidationRulus = {
 type PlainInputProps = {
   labelText?: string;
   inputType?: string;
-  placeholder: string;
+  placeholder?: string;
   register?: UseFormRegister<FieldValues>;
   registerLabel: string;
   rules?: ValidationRulus;
@@ -27,7 +27,7 @@ export const PlainInput = ({
   errors
 }: PlainInputProps): JSX.Element => {
   return (
-    <div className="flex flex-col gap-1 mb-4">
+    <div className="flex flex-col gap-1 mb-4 w-full">
       <label htmlFor="nameInput" className="text-xs sm:text-sm">{labelText}</label>
       <input
         id="nameInput"

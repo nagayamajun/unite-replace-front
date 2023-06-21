@@ -22,7 +22,7 @@ export const SignIn: React.FC = (): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalMessage ,setModalMessage] = useState("");
   const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false)
+  const closeModal = () => setIsOpen(false);
 
 
   const onSubmit = ({email, password}: FormData) => {
@@ -40,7 +40,6 @@ export const SignIn: React.FC = (): JSX.Element => {
           }, 2000)
         }
       })
-
   };
 
   return (

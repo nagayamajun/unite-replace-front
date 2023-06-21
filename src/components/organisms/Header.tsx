@@ -11,6 +11,8 @@ export const Header = (): JSX.Element => {
   const menuLinks = [
     // {href: `/profiles/${userStateVal?.firebaseUID}`, label: 'マイページへ'},
     {href: '/profiles/editProfile', label: 'マイページへ'},
+    {href: `/profiles/${userStateVal?.id}/myRecruitsAndRelatedRecruits`, label: '募集一覧'},
+    {href: '/product/myProductsAndRelatedProducts', label: '成果物一覧'},
     {href: '/', label: 'お問合せ'},
     {href: '/', label: 'ログアウト'},
   ]

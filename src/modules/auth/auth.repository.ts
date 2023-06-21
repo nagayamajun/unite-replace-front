@@ -103,22 +103,32 @@ export const authRepository = {
     email: string,
     password: string
   ): Promise<any> {
-    const customToken = (
-      await axiosInstance.post("/user", { email, password }).catch((err) => {
-        throw new Error(err);
-      })
-    ).data.token;
+    try {
+      const customToken = (
+        await axiosInstance.post("/user", { email, password }).catch((err) => {
+          throw new Error(err);
+        })
+      ).data.token;
+  
+      // サーバーサイドから発行されたCustom Tokenを使ってFirebaseにサインイン
+      const userCredential = await signInWithCustomToken(auth, customToken).catch(
+        (err) => {
+          throw new Error(err);
+        }
+      );
 
-    // サーバーサイドから発行されたCustom Tokenを使ってFirebaseにサインイン
-    const userCredential = await signInWithCustomToken(auth, customToken).catch(
-      (err) => {
-        throw new Error(err);
-      }
-    );
+      // 上記でサインインした後、Firebase IDトークンを取得
+      // ここにおけるidTokenとcustomTokenは別物
+      const idToken = await userCredential.user.getIdToken();
+      setAuthToken(idToken);
 
-    // 上記でサインインした後、Firebase IDトークンを取得
-    // ここにおけるidTokenとcustomTokenは別物
-    const idToken = await userCredential.user.getIdToken();
-    setAuthToken(idToken);
+      return { success: true, message: "新規登録に成功しました。" };
+
+    } catch (error) {
+      return { success: false, message: "新規登録に失敗しました。" };
+    }
+
+
+    return {}
   },
 };

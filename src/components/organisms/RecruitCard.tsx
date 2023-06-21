@@ -51,7 +51,7 @@ export const RecruitCard = ({
         <p className="text-sm pl-8">{new Date(createdAt).toISOString().slice(0, 10)}</p>
         </div>
         <div className="w-1/3 flex flex-col justify-center items-center">
-        <Link href={`recruit/${id}`}
+        <Link href={`recruit/${id}/recruitDetail`}
           className=" text-green-800  rounded-lg focus:outline-none focus:border-transparent text-center bg-transparent text-sm sm:text-lg hover:bg-pink-300 hover:text-white p-3"
         >
           詳細を見る

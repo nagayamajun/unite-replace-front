@@ -1,7 +1,10 @@
+import { Product } from "./product";
 import { ProgramingSkill } from "./programingSkill";
+import { User } from "./user";
 
 export type Recruit = {
   id: string;
+  recruiter?: User;
   createdAt: Date;
   updatedAt?: Date;
   headline: string;
@@ -9,6 +12,12 @@ export type Recruit = {
   programingSkills: ProgramingSkill[];
   developmentPeriod: string;
   hackathonUrl: string;
-  numberOfApplicants: number;
   hackthonName?: string;
+  numberOfApplicants: number;
+  applications?: User[]
+  userRecruitParticipant?: any[];
+  product: Product
 }
+
+//リファクタ
+//productとuserRecruitParticipantの型付けをする。

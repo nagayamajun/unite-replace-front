@@ -23,11 +23,6 @@ import { useRouter } from "next/router";
 import { axiosInstance } from "@/libs/axios";
 import { Header } from "@/components/organisms/Header";
 
-// type EditProfileProps = {
-//   userStateVal: User;
-// }
-// SSR時
-// export const EditProfile = ({ userStateVal }: EditProfileProps): JSX.Element => {
 
 export const EditProfile = (): JSX.Element => {
   const userStateVal = useRecoilValue<UserStateType>(UserState);
