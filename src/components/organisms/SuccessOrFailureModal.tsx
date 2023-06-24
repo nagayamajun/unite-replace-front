@@ -1,20 +1,24 @@
-import { Dialog, Transition } from "@headlessui/react"
+import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
 // export type ModalBgColor = 'successColor' | 'failedColor';
 
 type Props = {
-  modalBgColor: boolean
+  modalBgColor: boolean;
   isOpen: boolean;
   closeModal: () => void;
-  modalMessage: string
-}
+  modalMessage: string;
+};
 
-export const SuccessOrFailureModal: React.FC<Props> = ({ isOpen, closeModal, modalMessage,  modalBgColor}): JSX.Element => {
-
+export const SuccessOrFailureModal: React.FC<Props> = ({
+  isOpen,
+  closeModal,
+  modalMessage,
+  modalBgColor,
+}): JSX.Element => {
   return (
     <>
-     <Transition appear show={isOpen} as={Fragment}>
+      <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
@@ -39,9 +43,13 @@ export const SuccessOrFailureModal: React.FC<Props> = ({ isOpen, closeModal, mod
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className={` max-w-md transform overflow-hidden rounded-xl p-3 text-left align-middle shadow-xl transition-all bg-green-400 ${modalBgColor ? "bg-green-400" : "bg-red-400"}`}>
+                <Dialog.Panel
+                  className={` max-w-md transform overflow-hidden rounded-xl p-3 text-left align-middle shadow-xl transition-all bg-green-400 ${
+                    modalBgColor ? "bg-green-400" : "bg-red-400"
+                  }`}
+                >
                   <div className="mt-2">
-                    <p className="text-sm text-white">
+                    <p className="text-sm text-white whitespace-pre-wrap">
                       {modalMessage}
                     </p>
                   </div>
@@ -52,8 +60,8 @@ export const SuccessOrFailureModal: React.FC<Props> = ({ isOpen, closeModal, mod
         </Dialog>
       </Transition>
     </>
-  )
-}
+  );
+};
 
 // モーダルを使いたい場所で記述する必要あり。
 // const [isOpen, setIsOpen] = useState(false);
