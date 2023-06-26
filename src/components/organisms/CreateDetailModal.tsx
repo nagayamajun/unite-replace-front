@@ -159,5 +159,4 @@ export const CreateDetailModal: React.FC<Props> = ({
   );
 };
 
-
 //ModalからPageに変更する

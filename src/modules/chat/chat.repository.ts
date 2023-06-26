@@ -1,27 +1,19 @@
 import { realTimeDb } from "@/libs/firebase";
-import { onValue, push, ref, serverTimestamp, set } from "firebase/database";
-import { Dispatch, SetStateAction } from "react";
+import { push, ref, serverTimestamp, set } from "firebase/database";
 import { CorporationRepositry } from "../corporation/corporation.repository";
 
 import { UserRepository } from "../user/user.repository";
+import { axiosInstance } from "@/libs/axios";
+import { errorSelector } from "recoil";
 
 export const ChatRepository = {
-  async findOneRoomHistory(
-    roomId: string,
-    setChatHistories: Dispatch<SetStateAction<any[] | undefined>>
-  ): Promise<any> {
-    onValue(ref(realTimeDb, roomId), (snapShot) => {
-      const posts: any[] = [];
-      snapShot.forEach((childSnapShot) => {
-        const post = childSnapShot.val();
-        posts.push(post);
-        /**
-         * 挙動がおかしくなった時は、以下を試してみる
-         * posts.push(post[Object.keys(post)[0]]);
-         */
+  async findOneRoomHistory(roomId: string): Promise<any> {
+    const res = await axiosInstance
+      .get(`/chat-room-message/${roomId}`)
+      .catch((error) => {
+        throw new Error(error);
       });
-      setChatHistories(posts);
-    });
+    return res.data;
   },
 
   async findManyRooms(roomIds: string[], senderUid: string): Promise<any> {

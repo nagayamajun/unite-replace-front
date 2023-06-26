@@ -1,30 +1,41 @@
+import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
 import { UserState } from "@/global-states/atoms";
-import { recruitRepository } from "@/modules/recruit/recruit.repository";
+import { UserRecruitApplicationRepository } from "@/modules/user-recruit-application/userRecruitApplication.repository";
 import { userRecruitParticipantRepository } from "@/modules/user-recruit-participant/userRecruitParticipant.repository";
 import { Recruit } from "@/types/recruit";
+import { UserRecruitApplicationWithRoomId } from "@/types/userRecruilApplication";
 import { format } from "date-fns";
 import Link from "next/link";
-import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 
+type Props = {
+  recruit: Recruit;
+};
 
-export const RecruitDetail: React.FC = ()  => {
-  const router = useRouter()
-  const { id } = router.query;
-  const user = useRecoilValue(UserState);
+export const RecruitDetail: React.FC<Props> = ({ recruit }) => {
+  let {
+    id,
+    createdAt,
+    updatedAt,
+    headline,
+    details,
+    programingSkills,
+    hackthonName,
+    developmentPeriod,
+    hackathonUrl,
+    numberOfApplicants,
+    userRecruitParticipant
+  } = recruit;
 
-  const [ recruit , setRecruit ] = useState<Recruit>();
-  const isParticipant = recruit?.userRecruitParticipant?.some(participant => participant.userId == user?.id);
-
-  useEffect(() => {
-    ( async () => {
-      const fetchedRecruit = await recruitRepository.getRecruitById(id as string);
-      setRecruit(fetchedRecruit);
-    })()
-  }, [])
-
-  console.log(recruit)
+  const user = useRecoilValue(UserState)
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [color, setColor] = useState<boolean>();
+  const closeModal = () => setIsOpen(false);
+  const isParticipant = userRecruitParticipant?.some(participant => participant.userId == user?.id);
 
   const applyForJoin = async() => {
     console.log(id)
@@ -32,25 +43,47 @@ export const RecruitDetail: React.FC = ()  => {
     router.reload()
   }
 
+  const onApplyFor = async () => {
+    UserRecruitApplicationRepository.applyFor(id)
+      .then((applicationWithRoomId) => {
+        router.push(`/chat/${applicationWithRoomId.roomId}`);
+      })
+      .catch((error) => {
+        setIsOpen(true);
+        setModalMessage(error.message);
+        setColor(error.success);
+
+        setTimeout(() => {
+          setIsOpen(false);
+          router.reload();
+        }, 2000);
+      });
+  };
+
   return (
     <div className="h-screen flex flex-col">
-      <div className="flex flex-col justify-center items-center h-full text-gray-600 bg-gray-200">
-        <div className="flex flex-col items-center w-3/5 h-3/4 rounded-xl bg-white">
-          <div className="h-1/5 w-full flex flex-col justify-center items-center bg-gradient-to-r from-green-300 to-pink-300 text-white rounded-xl rounded-b-none">
-            {/* ハッカソン名 */}
-            <h1 className="text-3xl font-bold text-center">{recruit?.hackthonName}</h1>
-          </div>
-
-          <div className="h-3/5  w-3/4 flex flex-col">
-            <div className="border-b border-gray-200 text-center text-lg p-4">
-              {recruit?.headline}
+      <div className="flex flex-col justify-center items-center h-full text-white bg-gray-100">
+        <div className="flex flex-col items-center w-9/12 h-3/4 rounded-md bg-gradient-to-r from-green-300 to-pink-300 ">
+          <div className="flex flex-col w-full h-full">
+            <div className="h-1/4 flex flex-col justify-center items-center">
+              {/* ハッカソン名 */}
+              <h1 className="text-4xl font-bold mt-5 text-center">
+                {hackthonName}
+              </h1>
+              {/* headline */}
+              <p className="text-xl mt-2 text-center">{headline}</p>
             </div>
             {/* プログラミングスキル */}
-            <div className="h-1/5 flex justify-start items-center border-b m-1">
-            スキル:{recruit?.programingSkills?.map(skill => {
-              return (
-                <div key={skill} className="border rounded-2xl m-1 px-3">{skill}</div>
-              )
+            <div className="h-1/5 flex justify-center items-center">
+              {programingSkills?.map((skill) => {
+                return (
+                  <div
+                    key={skill}
+                    className="bg-white text-gray-400 mx-2 p-2 rounded-md"
+                  >
+                    {skill}
+                  </div>
+                );
               })}
             </div>
 
@@ -62,7 +95,9 @@ export const RecruitDetail: React.FC = ()  => {
 
             <div className="border-b">
               {/* 募集の詳細 */}
-              <p className="leading-snug border border-white p-3 ">{recruit?.details}</p>
+              <p className="mt-5 mx-5 leading-snug border border-white p-1 rounded-md ">
+                {details}
+              </p>
             </div>
 
             <div className="p-1 border-b">
@@ -77,7 +112,7 @@ export const RecruitDetail: React.FC = ()  => {
           <div className="w-full border-t"></div>
 
           <div className="flex flex-row justify-between w-2/5 mt-5">
-              <button className="bg-green-500 text-white px-6 py-2 rounded-sm">話を聞く</button>
+              <button onClick={onApplyFor} className="bg-green-500 text-white px-6 py-2 rounded-sm">話を聞く</button>
               {isParticipant ? null : (
                 <button onClick={applyForJoin} className="bg-green-500 text-white px-6 py-2 rounded-sm">
                   参加依頼
@@ -95,7 +130,13 @@ export const RecruitDetail: React.FC = ()  => {
           </div>
         </div>
       </div>
-    </div>
-  )
-}
 
+      <SuccessOrFailureModal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        modalMessage={modalMessage}
+        modalBgColor={color!}
+      />
+    </div>
+  );
+};
