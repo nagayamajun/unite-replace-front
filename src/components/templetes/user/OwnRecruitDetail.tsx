@@ -112,7 +112,7 @@ export const OwnRecruitDetail: React.FC = ()  => {
             </div>
             {
               recruit?.product ? (
-                <Link href={"/"} >Productページへ</Link>
+                <Link href={`/product/${recruit.product?.id}`} >Productページへ</Link>
               ) : (
                 <div className="w-1/3 flex justify-center items-center">
                   <button onClick={handleUploadProduct} className="bg-green-400 px-12 py-2 rounded-md text-white">UPLOAD</button>

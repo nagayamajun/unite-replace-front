@@ -6,30 +6,12 @@ import { GetServerSideProps } from "next";
 import { ParsedUrlQuery } from "querystring";
 import { ReactElement } from "react";
 
-type Props = {
-  product: Product
-}
 
-interface Params extends ParsedUrlQuery {
-  id: string;
-}
-
-export const getServerSideProps: GetServerSideProps<Props, Params> = async ({ params }) => {
-  const { id } = params as Params;
-  const product = await ProductRepositry.getProductById(id)
-
-  return {
-    props: {
-      product
-    }
-  }
-}
-
-const EditProductPage = ({ product }: Props) => {
+const EditProductPage = () => {
 
   return (
     <>
-      <EditProduct product={product} />
+      <EditProduct />
     </>
   )
 }

@@ -1,8 +1,4 @@
-import { FormRecruitData } from "@/components/templetes/user/AddRecruit";
-import { Recruit } from "@/types/recruit";
 import { axiosInstance } from "@/libs/axios";
-import { ConfirmModal } from "@/types/confirmModal";
-import axios from "axios";
 
 export const userRecruitParticipantRepository = {
   //参加依頼を送る
@@ -18,7 +14,7 @@ export const userRecruitParticipantRepository = {
   //一件のuserRecruitに紐ずくuserRecruitPArticipantレコードを全件取得
   async findManyByUserRecruitId(recruitId: string) {
     try {
-      const userRecruitParticipants = ( await axios.post('http://localhost:8080/user-recruit-participant/find-many-by-userRecruit',  { recruitId } )).data
+      const userRecruitParticipants = ( await axiosInstance.post('/user-recruit-participant/find-many-by-userRecruit', { recruitId })).data
       return userRecruitParticipants
 
     } catch (error) {
@@ -28,7 +24,7 @@ export const userRecruitParticipantRepository = {
 
   async  approveParticipant(id: string) {
     try {
-      await axios.put(`http://localhost:8080/user-recruit-participant/${id}/approve`)
+      await axiosInstance.put(`/user-recruit-participant/${id}/approve`)
       return{ message: '承認しました。'}
     } catch (error) {
       throw new Error(`承認することができませんでした。${error}`)

@@ -1,5 +1,6 @@
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
 import { UserState } from "@/global-states/atoms";
+import { recruitRepository } from "@/modules/recruit/recruit.repository";
 import { UserRecruitApplicationRepository } from "@/modules/user-recruit-application/userRecruitApplication.repository";
 import { userRecruitParticipantRepository } from "@/modules/user-recruit-participant/userRecruitParticipant.repository";
 import { Recruit } from "@/types/recruit";
@@ -7,35 +8,32 @@ import { UserRecruitApplicationWithRoomId } from "@/types/userRecruilApplication
 import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 
-type Props = {
-  recruit: Recruit;
-};
 
-export const RecruitDetail: React.FC<Props> = ({ recruit }) => {
-  let {
-    id,
-    createdAt,
-    updatedAt,
-    headline,
-    details,
-    programingSkills,
-    hackthonName,
-    developmentPeriod,
-    hackathonUrl,
-    numberOfApplicants,
-    userRecruitParticipant
-  } = recruit;
+export const RecruitDetail: React.FC = () => {
 
-  const user = useRecoilValue(UserState)
+  const user = useRecoilValue(UserState);
   const router = useRouter();
+  const { id } = router.query;
+  const [ recruit, setRecruit ] = useState<Recruit>();
+
+
+  useEffect(() => {
+    (async () => {
+      const fetchedRecruit = await recruitRepository.getRecruitById(id as string)
+      setRecruit(fetchedRecruit)
+    })()
+  }, [])
+
+  console.log('recruitDetail情報', recruit)
+
   const [isOpen, setIsOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [color, setColor] = useState<boolean>();
   const closeModal = () => setIsOpen(false);
-  const isParticipant = userRecruitParticipant?.some(participant => participant.userId == user?.id);
+  const isParticipant = recruit?.userRecruitParticipant?.some(participant => participant.userId == user?.id);
 
   const applyForJoin = async() => {
     console.log(id)
@@ -44,7 +42,9 @@ export const RecruitDetail: React.FC<Props> = ({ recruit }) => {
   }
 
   const onApplyFor = async () => {
-    UserRecruitApplicationRepository.applyFor(id)
+    if (!recruit?.id) throw new Error('recruitIdが確認できません')
+
+    UserRecruitApplicationRepository.applyFor(recruit?.id!)
       .then((applicationWithRoomId) => {
         router.push(`/chat/${applicationWithRoomId.roomId}`);
       })
@@ -68,14 +68,14 @@ export const RecruitDetail: React.FC<Props> = ({ recruit }) => {
             <div className="h-1/4 flex flex-col justify-center items-center">
               {/* ハッカソン名 */}
               <h1 className="text-4xl font-bold mt-5 text-center">
-                {hackthonName}
+                {recruit?.hackthonName}
               </h1>
               {/* headline */}
-              <p className="text-xl mt-2 text-center">{headline}</p>
+              <p className="text-xl mt-2 text-center">{recruit?.headline}</p>
             </div>
             {/* プログラミングスキル */}
             <div className="h-1/5 flex justify-center items-center">
-              {programingSkills?.map((skill) => {
+              {recruit?.programingSkills?.map((skill) => {
                 return (
                   <div
                     key={skill}
@@ -96,7 +96,7 @@ export const RecruitDetail: React.FC<Props> = ({ recruit }) => {
             <div className="border-b">
               {/* 募集の詳細 */}
               <p className="mt-5 mx-5 leading-snug border border-white p-1 rounded-md ">
-                {details}
+                {recruit?.details}
               </p>
             </div>
 
