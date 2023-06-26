@@ -23,8 +23,6 @@ export const recruitRepository = {
         throw new Error(`recruit is not by Id | error: ${err}`);
       })
     ).data;
-
-    console.log(recruit)
     return recruit;
   },
 

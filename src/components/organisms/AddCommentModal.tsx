@@ -23,8 +23,6 @@ export const AddCommentModal: React.FC<Props> = ({ isOpen, setIsOpen, closeModal
   } = useForm();
 
   const onSubmit = async(data: {content: string}) => {
-
-    console.log("提出")
     const formData = {
       content: data.content,
       productId: productId

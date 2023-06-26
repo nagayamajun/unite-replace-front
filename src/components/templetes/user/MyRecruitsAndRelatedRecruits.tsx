@@ -21,8 +21,6 @@ export const MyRecruitsAndRelatedRecruits = () => {
     })()
   }, [])
 
-  console.log(myRecruits)
-
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <div className="w-3/5 mt-10 p-5 bg-gray-100 rounded-lg shadow-md">

@@ -10,6 +10,7 @@ export const CorporateSignIn = () => {
   const { handleSubmit, register, formState: {errors}} = useForm();
 
   const onSubmit = () => {
+    //今度実装する箇所
     console.log("submit")
   }
 

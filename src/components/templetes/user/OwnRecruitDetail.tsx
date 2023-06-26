@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { userRecruitParticipantRepository } from "@/modules/user-recruit-participant/userRecruitParticipant.repository";
 import { useRouter } from "next/router";
 import { recruitRepository } from "@/modules/recruit/recruit.repository";
-import { Loading } from "../common/Loading";
 
 
 
@@ -14,8 +13,7 @@ export const OwnRecruitDetail: React.FC = ()  => {
   const { id } = router.query
 
   const [ recruit, setRecruit ] = useState<Recruit>()
-  const [ userRecruitParticipants , setUserRecruitParticipants ] = useState<any>()
-  const [ isLoading, setIsLoading ] = useState(true)
+  const [ userRecruitParticipants , setUserRecruitParticipants ] = useState<UserRecruitParticipant[]>()
 
   
   useEffect(() =>{
@@ -26,9 +24,6 @@ export const OwnRecruitDetail: React.FC = ()  => {
       setUserRecruitParticipants(fetchedUserRecruitParticipants)
     })()
   },[])
-
-  console.log(recruit)
-
 
   const handleUploadProduct = () => {
     router.push(`/product/uploadProduct?recruitId=${recruit?.id}`);
@@ -82,7 +77,7 @@ export const OwnRecruitDetail: React.FC = ()  => {
               {userRecruitParticipants?.map((participant: any) => {
                 if (participant.isApproved) {
                   return (
-                    <div className="">
+                    <div>
                       <p>{participant.user.email}</p>
                     </div>
                   )
@@ -116,7 +111,7 @@ export const OwnRecruitDetail: React.FC = ()  => {
               {recruit?.createdAt && format(new Date(recruit.createdAt), 'yyyy-MM-dd')}
             </div>
             {
-              recruit?.product?.length !== 0 ? (
+              recruit?.product ? (
                 <Link href={"/"} >Productページへ</Link>
               ) : (
                 <div className="w-1/3 flex justify-center items-center">

@@ -22,7 +22,7 @@ export const EditCommentModal = ({
   const router = useRouter();
 
   const onEditSubmit = async (submitData: any) => {
-    let comment = await commentRepository.updateCommentInfo(commentId, submitData)
+    const comment = await commentRepository.updateCommentInfo(commentId, submitData)
     router.reload()
     setIsOpen(false);
     

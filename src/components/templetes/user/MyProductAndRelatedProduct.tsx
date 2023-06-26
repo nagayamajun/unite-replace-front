@@ -27,7 +27,6 @@ export const MyProductAndRelatedProduct = () => {
           <p className="text-center font-bold text-red-400">There are no my recruits.</p>
         ) : (
           myProducts?.map((myProduct) => {
-            console.log(myProduct.comment)
             const hasCommnet = myProduct.comment?.some((comment) => comment.userId === user?.id);
             return (
               <div className="flex flex-row justify-between p-4 my-3 rounded-md border border-gray-300">
