@@ -6,18 +6,18 @@ import { useRecruits } from "@/hooks/useRecruits";
 import { recruitAtomState } from "@/global-states/recruitAtom";
 import { filteredRecruitAtomState } from "@/global-states/filteredRecruits";
 import Link from "next/link";
+import { User } from "@/types/user";
 
 
 export const RecruitList = (): JSX.Element => {
   const user = useRecoilValue(UserState);
 
-  // const { recruits } =  useRecruits()
   const recruits = useRecoilValue(recruitAtomState);
   const filteredRecruits = useRecoilValue(filteredRecruitAtomState);
-  // if (recruits.length === 0) return <Loading />
 
   type RecruitCardProps = {
     id: string;
+    recruiter?: User;
     createdAt: Date;
     headline: string;
     programingSkills: string[];
@@ -29,6 +29,7 @@ export const RecruitList = (): JSX.Element => {
       <div className="grid mx-12 sm:mx-20 gap-x-20 gap-y-8 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
           {filteredRecruits.length == 0 && <p>条件に一致する募集はありません</p>}
           { filteredRecruits?.map((recruit: RecruitCardProps) => {
+            if (user?.id !== recruit?.recruiter?.id)
               return (
                 //useridができたら自分の投稿が表示されないようにする
                 //現状はuserIDがなかったので記述を消してます

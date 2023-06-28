@@ -2,6 +2,7 @@ import { FormRecruitData } from "@/components/templetes/user/AddRecruit";
 import { Recruit } from "@/types/recruit";
 import { axiosInstance } from "@/libs/axios";
 import { ConfirmModal } from "@/types/confirmModal";
+import axios from "axios";
 
 export const recruitRepository = {
   //募集の一覧取得
@@ -17,12 +18,31 @@ export const recruitRepository = {
   //特定のuidを持つ募集の取得
   async getRecruitById(recruitId: string): Promise<Recruit> {
     const recruit = (
-      await axiosInstance.get(`/user-recruit/${recruitId}`).catch((err) => {
+      await axiosInstance.get(`/user-recruit/findOne/${recruitId}`).catch((err) => {
         throw new Error(`recruit is not by Id | error: ${err}`);
       })
     ).data;
     return recruit;
   },
+
+  //ユーザーが作成したRecruitを全件取得
+  async getMyRecruitsbyFirebaseUID(): Promise<Recruit[]> {
+    const myRecruits = (await axiosInstance.get('/user-recruit/my-recruits').catch((err) => {
+      throw new Error(`Recruits is not founded ${err} `)
+      })
+    ).data
+    return myRecruits
+  },
+
+  //ユーザーに関連するRecruitを全件取得
+  async getRelatedRecruitbyUserId(): Promise<Recruit[]> {
+    const relatedRecruits = ( await axiosInstance.get('/user-recruit/related-recruits').catch((err) => {
+      throw new Error(`Recruits is not founded ${err} `)
+    })).data
+
+    return relatedRecruits
+  },
+
   //募集の作成
   async createRecuit(
     recruitData: FormRecruitData,

@@ -12,7 +12,7 @@ type PlainTextAreaProps = {
   placeholder?: string;
   register?: UseFormRegister<FieldValues>;
   registerLabel: string;
-  errors: FieldErrors<FieldValues>
+  errors?: FieldErrors<FieldValues>
   rules?: ValidationRulus
 }
 
@@ -29,7 +29,7 @@ export const PlainTextArea = ({
 
   return (
     <>
-      <div className="flex flex-col gap-1 mb-6">
+      <div className="flex flex-col gap-1 mb-6 w-full">
         <label htmlFor="nameInput" className="text-xs sm:text-sm">{labelText}</label>
         <textarea
           id="textarea"
@@ -39,7 +39,7 @@ export const PlainTextArea = ({
             rules
           ))}
         ></textarea>
-        {errors[registerLabel] && <p className="text-xs font-ligh text-red-500">{errors[registerLabel]?.message as ReactNode}</p>}
+        {errors && (errors[registerLabel] && <p className="text-xs font-ligh text-red-500">{errors[registerLabel]?.message as ReactNode}</p>)}
       </div>
     </>
   )

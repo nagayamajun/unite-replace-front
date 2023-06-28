@@ -9,10 +9,13 @@ import { ChatRoomListMenu } from "./ChatRoomListMenu";
 export const Header = (): JSX.Element => {
   const userStateVal = useRecoilValue(UserState);
   const menuLinks = [
-    { href: "/profiles/editProfile", label: "マイページへ" },
-    { href: "/", label: "お問合せ" },
-    { href: "/", label: "ログアウト" },
-  ];
+    // {href: `/profiles/${userStateVal?.firebaseUID}`, label: 'マイページへ'},
+    {href: '/profiles/editProfile', label: 'マイページへ'},
+    {href: `/profiles/${userStateVal?.id}/myRecruitsAndRelatedRecruits`, label: '募集一覧'},
+    {href: '/product/myProductsAndRelatedProducts', label: '成果物一覧'},
+    {href: '/', label: 'お問合せ'},
+    {href: '/', label: 'ログアウト'},
+  ]
 
   return (
     <div className="border-b border-gray-300 w-full">

@@ -8,7 +8,6 @@ export const ChatRoomParticipantRepository = {
       .catch((error) => {
         throw new Error("チャット参加者の取得に失敗しました", error);
       });
-    console.log(res.data);
 
     return res.data;
   },
