@@ -1,3 +1,4 @@
+import { UserRecruitParticipant } from "./UserRecruitParticipant";
 import { Product } from "./product";
 import { ProgramingSkill } from "./programingSkill";
 import { User } from "./user";
@@ -15,8 +16,8 @@ export type Recruit = {
   hackthonName?: string;
   numberOfApplicants: number;
   applications?: User[]
-  userRecruitParticipant?: any[];
-  product: Product
+  userRecruitParticipant?: UserRecruitParticipant[];
+  product: Product[] //BEで配列になっているため1対1の関係だが配列で受け取る必要がある
 }
 
 //リファクタ

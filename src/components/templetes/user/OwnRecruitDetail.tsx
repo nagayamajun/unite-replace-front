@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { userRecruitParticipantRepository } from "@/modules/user-recruit-participant/userRecruitParticipant.repository";
 import { useRouter } from "next/router";
 import { recruitRepository } from "@/modules/recruit/recruit.repository";
+import { UserRecruitParticipant } from "@/types/UserRecruitParticipant";
 
 
 
@@ -13,15 +14,11 @@ export const OwnRecruitDetail: React.FC = ()  => {
   const { id } = router.query
 
   const [ recruit, setRecruit ] = useState<Recruit>()
-  const [ userRecruitParticipants , setUserRecruitParticipants ] = useState<UserRecruitParticipant[]>()
-
   
   useEffect(() =>{
     (async () => {
       const fetchedRecruit = await recruitRepository.getRecruitById(id as string);
       setRecruit(fetchedRecruit);
-      const fetchedUserRecruitParticipants = await userRecruitParticipantRepository.findManyByUserRecruitId(recruit?.id as string);
-      setUserRecruitParticipants(fetchedUserRecruitParticipants)
     })()
   },[])
 
@@ -73,12 +70,12 @@ export const OwnRecruitDetail: React.FC = ()  => {
 
             <div className="flex flex-col w-full">
               参加者:
-              {userRecruitParticipants?.length === 0 && <p>参加者はまだいません</p>}
-              {userRecruitParticipants?.map((participant: any) => {
+              {recruit?.userRecruitParticipant?.length === 0 && <p>参加者はまだいません</p>}
+              {recruit?.userRecruitParticipant?.map((participant: UserRecruitParticipant) => {
                 if (participant.isApproved) {
                   return (
                     <div>
-                      <p>{participant.user.email}</p>
+                      <p>{participant.user.name}</p>
                     </div>
                   )
                 }
@@ -90,13 +87,13 @@ export const OwnRecruitDetail: React.FC = ()  => {
           <div className="mt-10 w-3/4 flex flex-col">
             <p className="mb-2">参加希望者一覧</p>
             {/* ここは応募してくれた方を一覧表示する */}
-            {userRecruitParticipants?.length === 0 && <p>希望者はまだいません</p>}
-             {userRecruitParticipants?.map((participant: any) => {
+            {recruit?.userRecruitParticipant?.length === 0 && <p>希望者はまだいません</p>}
+             {recruit?.userRecruitParticipant?.map((participant: UserRecruitParticipant) => {
               if (!participant.isApproved) {
                 return (
                   <div className="flex flex-row justify-between">
-                    <p>{participant.user.email}</p>
-                    <div className="">
+                    <p>{participant.user?.name}</p>
+                    <div>
                       <button onClick={() =>  {approveApplication(participant.id)}} className="mr-2 hover:text-green-400">承認</button>
                       <button className="hover:text-red-400">拒否</button>
                     </div>
@@ -111,8 +108,8 @@ export const OwnRecruitDetail: React.FC = ()  => {
               {recruit?.createdAt && format(new Date(recruit.createdAt), 'yyyy-MM-dd')}
             </div>
             {
-              recruit?.product ? (
-                <Link href={`/product/${recruit.product?.id}`} >Productページへ</Link>
+              recruit?.product.length !== 0 ? (
+                <Link href={`/product/${recruit?.product[0]?.id}`} >Productページへ</Link>
               ) : (
                 <div className="w-1/3 flex justify-center items-center">
                   <button onClick={handleUploadProduct} className="bg-green-400 px-12 py-2 rounded-md text-white">UPLOAD</button>

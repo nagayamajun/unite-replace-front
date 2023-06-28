@@ -17,7 +17,6 @@ export const recruitRepository = {
 
   //特定のuidを持つ募集の取得
   async getRecruitById(recruitId: string): Promise<Recruit> {
-    console.log(recruitId)
     const recruit = (
       await axiosInstance.get(`/user-recruit/findOne/${recruitId}`).catch((err) => {
         throw new Error(`recruit is not by Id | error: ${err}`);

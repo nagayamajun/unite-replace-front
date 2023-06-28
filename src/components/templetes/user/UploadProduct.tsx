@@ -7,8 +7,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
 
-//募集者の管理者ページからproductをアップロードすることができる。
-//現在はrecrutIdを指定して対応している。
 export const UploadProduct = () => {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
@@ -35,6 +33,7 @@ export const UploadProduct = () => {
       detail: data.detail,
       file: data.file[0]
     }
+
     await ProductRepositry.createProduct(submitDate)
       .then(result => {
         if(result) {
@@ -45,7 +44,7 @@ export const UploadProduct = () => {
           setTimeout(() => {
             setIsOpen(false)
             if (!result.success) return router.reload();
-            router.push("/募集管理者ページ")
+            router.push("/homeScreen")
           }, 2000)
         }
       })

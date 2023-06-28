@@ -131,10 +131,9 @@ export const EditProduct = () => {
             return (
               <div>
                 {
-                  user?.id !== comment.userId ? (
+                  user?.id === comment.userId ? (
                     <div>
                       <FormField
-                        labelText={comment.user.name ? comment.user.name : 'unkown'}
                         onCLick={() => setIsComment(true)}
                       >
                         <p>{comment.content}</p>
@@ -154,7 +153,10 @@ export const EditProduct = () => {
                       </EditCommentModal>
                     </div>
                   ) : (
-                    <p>{comment.content}</p>
+                    <div>
+                      <p>{comment.user.name}</p>
+                      <p>{comment.content}</p>
+                    </div>
                   )
                 }
                 {/* <FormField

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { MouseEventHandler } from "react";
 
 type FormFieldProps = {
-  labelText: string;
+  labelText?: string;
   children: any;
   onCLick: MouseEventHandler<HTMLImageElement>;
 };

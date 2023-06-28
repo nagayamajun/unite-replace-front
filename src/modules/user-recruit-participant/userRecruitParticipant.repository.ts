@@ -31,11 +31,3 @@ export const userRecruitParticipantRepository = {
     }
   }
 };
-
-  // //認証を利用せずにparamでユーザーを取得
-  // async findByFirebaseUIDWithoutFirebaseAuth(firebaseUID: string):Promise<User> {
-  //   const user =  (await axios.get(`http://localhost:8080/user-recruit-participant/:id/approve`).catch((err) => {
-  //     throw new Error(`user not found | error: ${err}`)
-  //   })).data
-  //   return user
-  // },

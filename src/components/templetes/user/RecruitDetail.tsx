@@ -27,8 +27,6 @@ export const RecruitDetail: React.FC = () => {
     })()
   }, [])
 
-  console.log('recruitDetail情報', recruit)
-
   const [isOpen, setIsOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [color, setColor] = useState<boolean>();
@@ -36,7 +34,6 @@ export const RecruitDetail: React.FC = () => {
   const isParticipant = recruit?.userRecruitParticipant?.some(participant => participant.userId == user?.id);
 
   const applyForJoin = async() => {
-    console.log(id)
     await userRecruitParticipantRepository.applyForJoin(recruit?.id as string);
     router.reload()
   }
