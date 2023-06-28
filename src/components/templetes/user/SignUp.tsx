@@ -29,11 +29,15 @@ export const SignUp = () => {
           setModalMessage(result.message);
           setColor(result.success);
 
-          setTimeout(() => {
-            setIsOpen(false);
-            if (!result.success) return router.reload();
-            router.push("/signIn");
-          }, 2000);
+          setTimeout(
+            () => {
+              setIsOpen(false);
+              if (result.success) {
+                router.push("/signIn");
+              }
+            },
+            result.success ? 2000 : 4000
+          );
         }
       });
   };
@@ -50,11 +54,15 @@ export const SignUp = () => {
         setModalMessage(result.message);
         setColor(result.success);
 
-        setTimeout(() => {
-          setIsOpen(false);
-          if (!result.success) return window.location.reload();
-          router.push("/profiles/otherThanTech");
-        }, 2000);
+        setTimeout(
+          () => {
+            setIsOpen(false);
+            if (result.success) {
+              router.push("/profiles/otherThanTech");
+            }
+          },
+          result.success ? 2000 : 4000
+        );
       }
     });
   };

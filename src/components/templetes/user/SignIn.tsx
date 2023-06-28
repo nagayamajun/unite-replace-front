@@ -29,11 +29,15 @@ export const SignIn: React.FC = (): JSX.Element => {
         setModalMessage(result.message);
         setColor(result.success);
 
-        setTimeout(() => {
-          setIsOpen(false);
-          if (!result.success) return router.reload();
-          router.push("/homeScreen");
-        }, 2000);
+        setTimeout(
+          () => {
+            setIsOpen(false);
+            if (result.success) {
+              router.push("/homeScreen");
+            }
+          },
+          result.success ? 2000 : 4000
+        );
       }
     });
   };
@@ -50,11 +54,15 @@ export const SignIn: React.FC = (): JSX.Element => {
         setModalMessage(result.message);
         setColor(result.success);
 
-        setTimeout(() => {
-          setIsOpen(false);
-          if (!result.success) return window.location.reload();
-          router.push("/homeScreen");
-        }, 2000);
+        setTimeout(
+          () => {
+            setIsOpen(false);
+            if (result.success) {
+              router.push("/homeScreen");
+            }
+          },
+          result.success ? 2000 : 4000
+        );
       }
     });
   };
