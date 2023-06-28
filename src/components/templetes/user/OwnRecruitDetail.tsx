@@ -31,6 +31,11 @@ export const OwnRecruitDetail: React.FC = ()  => {
     router.reload();
   }
 
+  const rejectApplication = async(uid: string) => {
+    await userRecruitParticipantRepository.rejectParticipant(uid);
+    router.reload();
+  }
+
   return (
     <div className="h-screen flex flex-col">
       <div className="flex flex-col justify-center items-center h-full text-gray-600 bg-gray-200">
@@ -94,8 +99,8 @@ export const OwnRecruitDetail: React.FC = ()  => {
                   <div className="flex flex-row justify-between">
                     <p>{participant.user?.name}</p>
                     <div>
-                      <button onClick={() =>  {approveApplication(participant.id)}} className="mr-2 hover:text-green-400">承認</button>
-                      <button className="hover:text-red-400">拒否</button>
+                      <button onClick={() => {approveApplication(participant.id)}} className="mr-2 hover:text-green-400">承認</button>
+                      <button onClick={() => {rejectApplication(participant.id)}} className="hover:text-red-400">拒否</button>
                     </div>
                   </div>
                 )

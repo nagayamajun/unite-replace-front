@@ -15,7 +15,7 @@ export const MyProductAndRelatedProduct = () => {
       const fetchedMyProducts = await ProductRepositry.getMyProducts()
       setProducts(fetchedMyProducts)
       const fetchedrelatedProducts = await ProductRepositry.getRelatedProduct()
-      setRelatedProducts(fetchedMyProducts);
+      setRelatedProducts(fetchedrelatedProducts);
     })()
   }, [])
 

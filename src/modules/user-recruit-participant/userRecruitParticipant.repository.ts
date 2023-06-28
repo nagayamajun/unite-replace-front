@@ -29,5 +29,13 @@ export const userRecruitParticipantRepository = {
     } catch (error) {
       throw new Error(`承認することができませんでした。${error}`)
     }
+  },
+
+  async rejectParticipant(id: string) {
+    try {
+      await axiosInstance.delete(`/user-recruit-participant/${id}/reject`)
+    } catch (error) {
+      throw new Error(`承認することができませんでした。 ${error}`)
+    }
   }
 };
