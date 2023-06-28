@@ -17,6 +17,7 @@ export const useAuth = (): UserStateType => {
       if (authUser) {
         const token = await authUser.getIdToken();
         setAuthToken(token);
+        
 
         const user = await UserRepository.findUserByFirebaseUID();
         if (user) {

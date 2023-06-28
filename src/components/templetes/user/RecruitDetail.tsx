@@ -1,39 +1,47 @@
-import { Header } from "@/components/organisms/Header";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
+import { UserState } from "@/global-states/atoms";
+import { recruitRepository } from "@/modules/recruit/recruit.repository";
 import { UserRecruitApplicationRepository } from "@/modules/user-recruit-application/userRecruitApplication.repository";
-import { ConfirmModal } from "@/types/confirmModal";
+import { userRecruitParticipantRepository } from "@/modules/user-recruit-participant/userRecruitParticipant.repository";
 import { Recruit } from "@/types/recruit";
 import { UserRecruitApplicationWithRoomId } from "@/types/userRecruilApplication";
+import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 
-type Props = {
-  recruit: Recruit;
-};
 
-export const RecruitDetail: React.FC<Props> = ({ recruit }) => {
-  let {
-    id,
-    createdAt,
-    updatedAt,
-    headline,
-    details,
-    programingSkills,
-    hackthonName,
-    developmentPeriod,
-    hackathonUrl,
-    numberOfApplicants,
-  } = recruit;
+export const RecruitDetail: React.FC = () => {
 
+  const user = useRecoilValue(UserState);
   const router = useRouter();
+  const { id } = router.query;
+  const [ recruit, setRecruit ] = useState<Recruit>();
+
+
+  useEffect(() => {
+    (async () => {
+      const fetchedRecruit = await recruitRepository.getRecruitById(id as string)
+      setRecruit(fetchedRecruit)
+    })()
+  }, [])
+
   const [isOpen, setIsOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [color, setColor] = useState<boolean>();
   const closeModal = () => setIsOpen(false);
+  const isParticipant = recruit?.userRecruitParticipant?.some(participant => participant.userId == user?.id);
+
+  const applyForJoin = async() => {
+    await userRecruitParticipantRepository.applyForJoin(recruit?.id as string);
+    router.reload()
+  }
 
   const onApplyFor = async () => {
-    UserRecruitApplicationRepository.applyFor(id)
+    if (!recruit?.id) throw new Error('recruitIdが確認できません')
+
+    UserRecruitApplicationRepository.applyFor(recruit?.id!)
       .then((applicationWithRoomId) => {
         router.push(`/chat/${applicationWithRoomId.roomId}`);
       })
@@ -57,14 +65,14 @@ export const RecruitDetail: React.FC<Props> = ({ recruit }) => {
             <div className="h-1/4 flex flex-col justify-center items-center">
               {/* ハッカソン名 */}
               <h1 className="text-4xl font-bold mt-5 text-center">
-                {hackthonName}
+                {recruit?.hackthonName}
               </h1>
               {/* headline */}
-              <p className="text-xl mt-2 text-center">{headline}</p>
+              <p className="text-xl mt-2 text-center">{recruit?.headline}</p>
             </div>
             {/* プログラミングスキル */}
             <div className="h-1/5 flex justify-center items-center">
-              {programingSkills?.map((skill) => {
+              {recruit?.programingSkills?.map((skill) => {
                 return (
                   <div
                     key={skill}
@@ -75,48 +83,48 @@ export const RecruitDetail: React.FC<Props> = ({ recruit }) => {
                 );
               })}
             </div>
-            <div className="h-1/5">
-              {/* 募集の詳細 */}
-              <p className="mt-5 mx-5 leading-snug border border-white p-1 rounded-md ">
-                {details}
-              </p>
-            </div>
-            <div className="flex flex-row justify-between h-1/5">
-              <div className="w-1/3">
-                <p className="text-sm">・hackthon URL</p>
-                <Link href={"/"}>{hackathonUrl}</Link>
-              </div>
-              <div className="w-1/3">
-                <p className="text-sm">・開発期間</p>
-                <p>{developmentPeriod}</p>
-              </div>
+
+            <div className="flex flex-row justify-between border-b p-3">
+              <div>開発期間: <span className="ml-2">{recruit?.developmentPeriod}</span></div>
+              <div>募集人数: <span className="ml-2">{recruit?.numberOfApplicants}</span></div>
+              <div>開発人数: <span className="ml-2">{recruit?.numberOfApplicants}</span></div>
             </div>
 
-            <div className="flex flex-row justify justify-between w-full">
-              <div className="ml-5">
-                <p className="text-sm">募集人数</p>
-                <p>{numberOfApplicants}</p>
-              </div>
-              <div className="w-1/2 flex justify-end mr-5">
-                {/* <Link href={"/"} className="bg-green-300 p-3 rounded-md">話を聞く</Link> */}
-                <button
-                  onClick={onApplyFor}
-                  className="bg-green-300 p-3 rounded-md"
-                >
-                  話を聞く
-                </button>
-              </div>
+            <div className="border-b">
+              {/* 募集の詳細 */}
+              <p className="mt-5 mx-5 leading-snug border border-white p-1 rounded-md ">
+                {recruit?.details}
+              </p>
+            </div>
+
+            <div className="p-1 border-b">
+              ハッカソンのurl: <span className="ml-5">{recruit?.hackathonUrl}</span>
+            </div>
+
+            <div className="p-2">
+              募集主: <span className="ml-5">{recruit?.recruiter?.name}</span>
             </div>
           </div>
-          {/* <div className="flex flex-row justify-between w-full items-end">
-              <div className="w-1/2 ml-5 ">
-                <p className="text-sm">募集人数</p>
-                <p>{numberOfApplicants}</p>
-              </div>
-              <div className="w-1/2 flex justify-end mr-5">
-                <Link href={"/"} className="bg-green-300 p-3 rounded-md">話を聞く</Link>
-              </div>
-            </div> */}
+
+          <div className="w-full border-t"></div>
+
+          <div className="flex flex-row justify-between w-2/5 mt-5">
+              <button onClick={onApplyFor} className="bg-green-500 text-white px-6 py-2 rounded-sm">話を聞く</button>
+              {isParticipant ? null : (
+                <button onClick={applyForJoin} className="bg-green-500 text-white px-6 py-2 rounded-sm">
+                  参加依頼
+                </button>
+              )}
+          </div>
+
+          <div className="flex flex-row items-center justify-between w-full mt-10">
+            <div className="ml-5">
+              {recruit && format(new Date(recruit?.createdAt), 'yyyy-MM-dd')}
+            </div>
+            <div className="w-1/2 flex justify-end mr-5">
+              <Link href={"/"} className="bg-green-400 px-12 py-2 rounded-md text-white">戻る</Link>
+            </div>
+          </div>
         </div>
       </div>
 
