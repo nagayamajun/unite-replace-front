@@ -25,10 +25,12 @@ export const authRepository = {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       return { success: true, message: SUCCESS_IN_SIGN_IN };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
+
       return {
         success: false,
-        message: `${FAIL_TO_SIGN_IN}\n${error.message}`,
+        message: `${FAIL_TO_SIGN_IN}\n${isTypeSafeError ? error.message : ""}`,
       };
     }
   },
@@ -56,10 +58,12 @@ export const authRepository = {
       setAuthToken(idToken);
 
       return { success: true, message: SUCCESS_IN_SIGN_UP };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
+
       return {
         success: false,
-        message: `${FAIL_TO_SIGN_UP}\n${error.message}`,
+        message: `${FAIL_TO_SIGN_UP}\n${isTypeSafeError ? error.message : ""}`,
       };
     }
   },
@@ -79,10 +83,14 @@ export const authRepository = {
       setAuthToken(idToken);
 
       return { success: true, message: SUCCESS_IN_SIGN_UP };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
+
       return {
         success: false,
-        message: `失敗しました。再度お試しください。\n${error.message}`,
+        message: `失敗しました。再度お試しください。\n${
+          isTypeSafeError ? error.message : ""
+        }`,
       };
     }
   },
@@ -93,24 +101,35 @@ export const authRepository = {
     password: string,
     sharedPassword: string
   ): Promise<any> {
-    //customTokenはサーバーサイドで発行されたトークンを返す。
-    const customToken = (
-      await axiosInstance
-        .post("/employee", { email, password, sharedPassword })
-        .catch((err) => {
-          throw new Error(err);
+    try {
+      //customTokenはサーバーサイドで発行されたトークンを返す。
+      const customToken = (
+        await axiosInstance.post("/employee", {
+          email,
+          password,
+          sharedPassword,
         })
-    ).data.token;
-    //userCredentialはサーバーサイドのtokenを利用してfirebaseにログイン
-    const userCredential = await signInWithCustomToken(auth, customToken).catch(
-      (err) => {
+      ).data.token;
+      //userCredentialはサーバーサイドのtokenを利用してfirebaseにログイン
+      const userCredential = await signInWithCustomToken(
+        auth,
+        customToken
+      ).catch((err) => {
         throw new Error(err);
-      }
-    );
-    //firebaseのIDtokenを取得
-    const idToken = await userCredential.user.getIdToken();
-    setAuthToken(idToken);
-    return { success: true, message: "一旦成功" };
+      });
+      //firebaseのIDtokenを取得
+      const idToken = await userCredential.user.getIdToken();
+      setAuthToken(idToken);
+
+      return { success: true, message: "一旦成功" };
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
+
+      return {
+        success: false,
+        message: `${FAIL_TO_SIGN_UP}\n${isTypeSafeError ? error.message : ""}`,
+      };
+    }
   },
 
   //学生ユーザーGoogle認証
@@ -129,10 +148,12 @@ export const authRepository = {
         });
 
       return { success: true, message: SUCCESS_IN_SIGN_IN };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
+
       return {
         success: false,
-        message: `${FAIL_TO_SIGN_IN}\n${error.message}`,
+        message: `${FAIL_TO_SIGN_IN}\n${isTypeSafeError ? error.message : ""}`,
       };
     }
   },
@@ -153,10 +174,12 @@ export const authRepository = {
         });
 
       return { success: true, message: SUCCESS_IN_SIGN_IN };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
+
       return {
         success: false,
-        message: `${FAIL_TO_SIGN_IN}\n${error.message}`,
+        message: `${FAIL_TO_SIGN_IN}\n${isTypeSafeError ? error.message : ""}`,
       };
     }
   },
