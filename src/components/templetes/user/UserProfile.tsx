@@ -61,7 +61,6 @@ export const UserProfile = (): JSX.Element => {
 
   const onEditSubmit = async (submitData: any) => {
     if (!userId) throw new Error("userStateのRecoilValueが空");
-    console.log(submitData);
 
     await UserRepository.updateUserInfo({
       ...submitData,
