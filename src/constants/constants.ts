@@ -9,3 +9,6 @@ export const FAIL_TO_SIGN_UP = "新規登録に失敗しました。";
 
 export const MAIL_USED_IN_PROVIDER_EXISTS =
   "選択した認証プロバイダで使用されているメールアドレスが、本サービスですでに登録済みである可能性があります。";
+
+export const SUCCESS_IN_UPDATE_USER = "ユーザー情報が更新されました。";
+export const FAIL_TO_UPDATE_USER = "ユーザー情報の更新に失敗しました。";

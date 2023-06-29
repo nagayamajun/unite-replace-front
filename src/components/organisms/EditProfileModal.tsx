@@ -1,38 +1,27 @@
-import { UserState, UserStateType } from "@/global-states/atoms";
-import { UserRepository } from "@/modules/user/user.repository";
 import { Dialog, Transition } from "@headlessui/react";
-import { useRouter } from "next/router";
-import { Dispatch, Fragment, SetStateAction, useEffect } from "react";
-import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
-import { useRecoilState } from "recoil";
+import {
+  BaseSyntheticEvent,
+  Dispatch,
+  Fragment,
+  ReactElement,
+  SetStateAction,
+} from "react";
 
 type EditProfileModalProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  children: any;
-  userId: string;
-  handleSubmit: UseFormHandleSubmit<FieldValues>;
+  children: ReactElement;
+  onSubmit: (
+    e?: BaseSyntheticEvent<object, any, any> | undefined
+  ) => Promise<void>;
 };
 
 export const EditProfileModal = ({
   isOpen,
   setIsOpen,
   children,
-  userId,
-  handleSubmit,
+  onSubmit,
 }: EditProfileModalProps): JSX.Element => {
-
-  const router = useRouter();
-  const [user, setUser ] = useRecoilState<UserStateType>(UserState);
-
-
-  const onEditSubmit = async (submitData: any) => {
-    if (!userId) throw new Error("userStateのRecoilValueが空");
-    let updateUser = await UserRepository.updateUserInfo(submitData);
-    setUser(updateUser);
-    setIsOpen(false);
-  };
-
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
@@ -64,9 +53,8 @@ export const EditProfileModal = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <form onSubmit={handleSubmit(onEditSubmit)}>
+                <form onSubmit={onSubmit}>
                   {children}
-
                   <div className="mt-4 flex justify-center gap-8">
                     <button
                       type="button"
@@ -79,7 +67,7 @@ export const EditProfileModal = ({
                       type="submit"
                       className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-green-500 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                     >
-                      保存
+                      ok
                     </button>
                   </div>
                 </form>
