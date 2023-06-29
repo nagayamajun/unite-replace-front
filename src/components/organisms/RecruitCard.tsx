@@ -52,7 +52,7 @@ export const RecruitCard = ({
         </div>
         <div className="w-1/3 flex flex-col justify-center items-center">
         <Link href={`recruit/${id}/recruitDetail`}
-          className=" text-green-800  rounded-lg focus:outline-none focus:border-transparent text-center bg-transparent text-sm sm:text-lg hover:bg-pink-300 hover:text-white p-3"
+          className=" text-green-800  rounded-lg focus:outline-none focus:border-transparent text-center bg-transparent text-sm sm:text-lg hover:bg-pink-200 hover:text-white p-3"
         >
           詳細を見る
         </Link>

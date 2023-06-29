@@ -1,3 +1,4 @@
+import { LikeButton } from "@/components/atoms/LikeButton";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
 import { UserState } from "@/global-states/atoms";
 import { recruitRepository } from "@/modules/recruit/recruit.repository";
@@ -19,7 +20,6 @@ export const RecruitDetail: React.FC = () => {
   const { id } = router.query;
   const [ recruit, setRecruit ] = useState<Recruit>();
 
-
   useEffect(() => {
     (async () => {
       const fetchedRecruit = await recruitRepository.getRecruitById(id as string)
@@ -32,6 +32,8 @@ export const RecruitDetail: React.FC = () => {
   const [color, setColor] = useState<boolean>();
   const closeModal = () => setIsOpen(false);
   const isParticipant = recruit?.userRecruitParticipant?.some(participant => participant.userId == user?.id);
+  //いいねをしているかしていないかの判定に利用する
+  const isLiked = recruit?.userToRecruitLikes?.some((like) => like.userId === user?.id);
 
   const applyForJoin = async() => {
     await userRecruitParticipantRepository.applyForJoin(recruit?.id as string);
@@ -121,6 +123,10 @@ export const RecruitDetail: React.FC = () => {
             <div className="ml-5">
               {recruit && format(new Date(recruit?.createdAt), 'yyyy-MM-dd')}
             </div>
+            <LikeButton 
+              recruitId={recruit?.id as string} 
+              isLiked={isLiked!} 
+            />
             <div className="w-1/2 flex justify-end mr-5">
               <Link href={"/"} className="bg-green-400 px-12 py-2 rounded-md text-white">戻る</Link>
             </div>

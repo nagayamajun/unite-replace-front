@@ -2,7 +2,6 @@ import { FormRecruitData } from "@/components/templetes/user/AddRecruit";
 import { Recruit } from "@/types/recruit";
 import { axiosInstance } from "@/libs/axios";
 import { ConfirmModal } from "@/types/confirmModal";
-import axios from "axios";
 
 export const recruitRepository = {
   //募集の一覧取得
@@ -41,6 +40,15 @@ export const recruitRepository = {
     })).data
 
     return relatedRecruits
+  },
+
+  //いいねしたRecruitを全件取得
+  async getLikedRecruits(): Promise<Recruit[]> {
+    const likedRecruits = ( await axiosInstance.get('/user-recruit/liked-recruits').catch((error) => {
+      throw new Error('取得に失敗しました。')
+    })).data
+
+    return likedRecruits
   },
 
   //募集の作成

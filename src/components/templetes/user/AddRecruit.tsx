@@ -16,7 +16,7 @@ export type FormRecruitData = {
   details: string;
   programingSkills: ProgramingSkill[];
   developmentPeriod: string;
-  hackthonUrl: String;
+  hackathonUrl: String;
   numberOfApplicants: number; //募集人数
 };
 
@@ -43,13 +43,15 @@ export const AddRecruit = () => {
     if (!userState) return;
     let userId = JSON.parse(userState)["UserState"].uid;
 
+    console.log
+
     const recruitData: FormRecruitData = {
       hackthonName: data.hackthonName,
       headline: data.headline,
       details: data.details,
       programingSkills: data.programingSkills,
       developmentPeriod: data.developmentPeriod,
-      hackthonUrl: data.hackthonUrl,
+      hackathonUrl: data.hackathonUrl,
       numberOfApplicants: data.numberOfApplicants,
     };
 
