@@ -29,13 +29,42 @@ export const SignUp = () => {
           setModalMessage(result.message);
           setColor(result.success);
 
-          setTimeout(() => {
-            setIsOpen(false);
-            if (!result.success) return router.reload();
-            router.push("/signIn");
-          }, 2000);
+          setTimeout(
+            () => {
+              setIsOpen(false);
+              if (result.success) {
+                router.push("/signIn");
+              }
+            },
+            result.success ? 2000 : 4000
+          );
         }
       });
+  };
+
+  const onClickGoogleOrGithub = (
+    promise: Promise<{
+      success: boolean;
+      message: string;
+    }>
+  ) => {
+    promise.then((result) => {
+      if (result) {
+        setIsOpen(true);
+        setModalMessage(result.message);
+        setColor(result.success);
+
+        setTimeout(
+          () => {
+            setIsOpen(false);
+            if (result.success) {
+              router.push("/profiles/otherThanTech");
+            }
+          },
+          result.success ? 2000 : 4000
+        );
+      }
+    });
   };
 
   return (
@@ -53,27 +82,17 @@ export const SignUp = () => {
         <div className="w-full ">
           <AuthButton
             src="/home.png"
-            onClick={() =>
-              authRepository.signInWithGoogle().then((result) => {
-                if (result) {
-                  setIsOpen(true);
-                  setModalMessage(result.message);
-                  setColor(result.success);
-
-                  setTimeout(() => {
-                    setIsOpen(false);
-                    if (!result.success) return window.location.reload();
-                    router.push("/profiles/otherThanTech");
-                  }, 2000);
-                }
-              })
+            onClick={async () =>
+              onClickGoogleOrGithub(authRepository.signInWithGoogle())
             }
           >
             Continue with Google
           </AuthButton>
           <AuthButton
             src="/github-mark.png"
-            onClick={authRepository.signWithGithub}
+            onClick={async () =>
+              onClickGoogleOrGithub(authRepository.signInWithGithub())
+            }
           >
             Continue with GitHub
           </AuthButton>
