@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { PlainInput } from "../../atoms/PlainInput";
 import { EditProfileModal } from "../../organisms/EditProfileModal";
 import { FormField } from "../../atoms/FormField";
@@ -27,6 +27,7 @@ export const UserProfile = (): JSX.Element => {
   const { register, handleSubmit, control, reset } = useForm();
 
   const mySelf = useRecoilValue<UserStateType>(UserState);
+  const setMyselfState = useSetRecoilState<UserStateType>(UserState);
   const {
     certainUser: profileUser,
     setCertainUser: setProfileUser,
@@ -60,24 +61,28 @@ export const UserProfile = (): JSX.Element => {
   }, [profileUser]);
 
   const onEditSubmit = async (submitData: any) => {
-    if (!userId) throw new Error("userStateのRecoilValueが空");
-
     await UserRepository.updateUserInfo({
       ...submitData,
       imageFile: submitData.imageFile && submitData.imageFile[0],
     }).then((result) => {
+      //notice表示
       setIsNoticeOpen(true);
       setNoticeMessage(result.message);
       setNoticeColor(result.success);
 
+      //userProfileの状態と認証されている自分のrecoil stateを更新
       if (result.data) {
         setProfileUser(result.data);
+        setMyselfState(result.data);
       }
+
+      //モーダル系全部閉じる
       setIsImageOpen(false);
       setIsGraduationYearOpen(false);
+      setIsSkillOpen(false);
 
+      //hook-formのregisterされてる値をリセット
       reset({});
-      router.reload();
 
       setTimeout(
         () => {
@@ -109,7 +114,7 @@ export const UserProfile = (): JSX.Element => {
           <EditProfileModal
             isOpen={isImageOpen}
             setIsOpen={setIsImageOpen}
-            onSubmit={handleSubmit(onEditSubmit)}
+            onClickOk={handleSubmit(onEditSubmit)}
           >
             <PlainInput
               labelText="アイコン画像"
@@ -161,7 +166,7 @@ export const UserProfile = (): JSX.Element => {
         <EditProfileModal
           isOpen={isGraduationYearOpen}
           setIsOpen={setIsGraduationYearOpen}
-          onSubmit={handleSubmit(onEditSubmit)}
+          onClickOk={handleSubmit(onEditSubmit)}
         >
           <GraduationYearRadio
             control={control}
@@ -200,7 +205,7 @@ export const UserProfile = (): JSX.Element => {
         <EditProfileModal
           isOpen={isSkillOpen}
           setIsOpen={setIsSkillOpen}
-          onSubmit={handleSubmit(onEditSubmit)}
+          onClickOk={handleSubmit(onEditSubmit)}
         >
           <div className="flex flex-col gap-6">
             <div>プログラミングスキル</div>
@@ -247,7 +252,9 @@ export const UserProfile = (): JSX.Element => {
               </Fragment>
             ))
           ) : (
-            <p className="text-gray-500 my-16">募集がありません。</p>
+            <p className="text-gray-500 my-16 w-full text-center">
+              募集がありません。
+            </p>
           )}
         </div>
         <div className="flex justify-end">
@@ -263,7 +270,7 @@ export const UserProfile = (): JSX.Element => {
       {/* userが参加確定した募集 */}
       <div className="flex flex-col gap-6 w-3/4 sm:w-1/2 overflow-scroll">
         <p>参加する/参加した募集</p>
-        <div className="flex flex-wrap justify-center gap-16">
+        <div className="flex gap-4 overflow-scroll">
           {relatedRecruits && relatedRecruits.length > 0 ? (
             relatedRecruits.map((recruit: Recruit, index: number) => (
               //以降をcomponentに切り出したい
@@ -278,7 +285,9 @@ export const UserProfile = (): JSX.Element => {
               </Fragment>
             ))
           ) : (
-            <p className="text-gray-500 my-16">募集がありません。</p>
+            <p className="text-gray-500 my-16 w-full text-center">
+              募集がありません。
+            </p>
           )}
         </div>
         <div className="flex justify-end">

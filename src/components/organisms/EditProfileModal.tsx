@@ -11,16 +11,14 @@ type EditProfileModalProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   children: ReactElement;
-  onSubmit: (
-    e?: BaseSyntheticEvent<object, any, any> | undefined
-  ) => Promise<void>;
+  onClickOk: () => void;
 };
 
 export const EditProfileModal = ({
   isOpen,
   setIsOpen,
   children,
-  onSubmit,
+  onClickOk,
 }: EditProfileModalProps): JSX.Element => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -53,24 +51,23 @@ export const EditProfileModal = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <form onSubmit={onSubmit}>
-                  {children}
-                  <div className="mt-4 flex justify-center gap-8">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-red-500 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      キャンセル
-                    </button>
-                    <button
-                      type="submit"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-green-500 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                    >
-                      ok
-                    </button>
-                  </div>
-                </form>
+                {children}
+                <div className="mt-4 flex justify-center gap-8">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-red-500 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    キャンセル
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onClickOk}
+                    className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-green-500 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                  >
+                    保存
+                  </button>
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
