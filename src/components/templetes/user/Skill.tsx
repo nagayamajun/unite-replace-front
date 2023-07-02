@@ -1,5 +1,4 @@
 import { UserState } from "@/global-states/atoms";
-import { useProgramingSkills } from "@/hooks/useProgramingSkills";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -7,7 +6,6 @@ import Select from "react-select";
 import { useRecoilState } from "recoil";
 import { SubmitButton } from "../../atoms/SubmitButton";
 import { ProgramingSkill } from "@/types/programingSkill";
-import { UserRepository, updateUserInfo } from "@/modules/user/user.repository";
 
 export type Option = {
   label: string;
@@ -27,20 +25,20 @@ export const SkillPage = (): JSX.Element => {
     label: skill,
   }))
 
-  const onSubmit = async (submitData: any) => {
-    setUserState({ ...userState, ...submitData });
-    //※デプロイまでには↓エラーはスローしないようにしたい
-    if (!userState?.firebaseUID) throw new Error("userState.uidがないです！");
-    //Nextに接続する。
-    // await UserRepository.update(userState.firebaseUID, { ...userState, ...submitData });
-    await updateUserInfo(submitData);
-    router.push("/homeScreen");
-  };
+  // const onSubmit = async (submitData: any) => {
+  //   setUserState({ ...userState, ...submitData });
+  //   //※デプロイまでには↓エラーはスローしないようにしたい
+  //   if (!userState?.firebaseUID) throw new Error("userState.uidがないです！");
+  //   //Nextに接続する。
+  //   // await UserRepository.update(userState.firebaseUID, { ...userState, ...submitData });
+  //   await updateUserInfo(submitData);
+  //   router.push("/homeScreen");
+  // };
 
   return (
     <div className="flex flex-col justify-center px-80 h-screen text-lg">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        // onSubmit={handleSubmit(onSubmit)}
         className="container flex flex-col gap-12 max-w-500"
       >
         <Controller

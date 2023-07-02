@@ -7,8 +7,8 @@ export const useUser = () => {
 
   useEffect(() => {
     (async () => {
-      const fetchedUser = await UserRepository.findMany();
-      setUser(fetchedUser);
+      // const fetchedUser = await UserRepository.findMany();
+      // setUser(fetchedUser);
     })()
   }, [])
 

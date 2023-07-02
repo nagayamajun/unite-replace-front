@@ -1,4 +1,3 @@
-import { ChatRepository } from "@/modules/chat/chat.repository";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -13,6 +12,7 @@ import { useChatRoomList } from "@/hooks/useChatRoomList";
 import { ChatRoom } from "@/types/chatRoom";
 import Link from "next/link";
 import { isoToJstString } from "@/utils/date";
+import { ChatRepository } from "@/modules/chat/chat.repository";
 
 export const ChatPage = (): JSX.Element => {
   const socket = io(`${process.env.NEXT_PUBLIC_API_BASE_URL}`, {

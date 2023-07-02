@@ -12,22 +12,22 @@ export const InputInfo = () => {
   const router = useRouter()
   const { handleSubmit, register } = useForm();
 
-  const onSubmit = (submitData: any) => {
-    let data: Corporation = {
-      uid: corporation!.uid,
-      corporation_name: submitData.corporation_name,
-      phone_number: submitData.phone_number,
-      introduction: submitData.introduction
-    }
-    CorporationRepositry.update(corporation!.uid, data);
-    router.push('/corporation')
-  }
+  // const onSubmit = (submitData: any) => {
+  //   let data: Corporation = {
+  //     uid: corporation!.uid,
+  //     corporation_name: submitData.corporation_name,
+  //     phone_number: submitData.phone_number,
+  //     introduction: submitData.introduction
+  //   }
+  //   CorporationRepositry.update(corporation!.uid, data);
+  //   router.push('/corporation')
+  // }
 
   return (
     <>
       <div className="flex flex-col justify-center px-80 h-screen text-lg">
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          // onSubmit={handleSubmit(onSubmit)}
           className="container flex flex-col gap-16 max-w-500"
         >
           <PlainInput

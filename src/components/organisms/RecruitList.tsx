@@ -25,14 +25,12 @@ export const RecruitList = (): JSX.Element => {
   };
 
   return (
-    <div className="bg-gray-100 pt-10 ">
+    <div className="bg-gray-100 pt-10 h-auto">
       <div className="grid mx-12 sm:mx-20 gap-x-20 gap-y-8 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
           {filteredRecruits.length == 0 && <p>条件に一致する募集はありません</p>}
           { filteredRecruits?.map((recruit: RecruitCardProps) => {
-            if (user?.id !== recruit?.recruiter?.id)
+            if (user?.id !== recruit?.recruiter?.id) {
               return (
-                //useridができたら自分の投稿が表示されないようにする
-                //現状はuserIDがなかったので記述を消してます
                 <RecruitCard
                   key={recruit.id}
                   id={recruit.id}
@@ -42,14 +40,13 @@ export const RecruitList = (): JSX.Element => {
                   hackthonName={recruit.hackthonName}
                 />
               );
+            }
           })}
       </div>
 
-      <div className="fixed bottom-0 right-0 mr-10 mb-10 bg-green-400 h-14 w-14 sm:w-20 sm:h-20 rounded-full flex col items-center justify-center">
-        <Link href={"/addRecruit"} className="text-white text-4xl font-bold">
-          +
-        </Link>
-      </div>
+      <Link href={"/addRecruit"} className="text-white text-4xl font-bold fixed bottom-0 right-0 mr-10 mb-10 bg-green-400 h-14 w-14 sm:w-20 sm:h-20 rounded-full flex col items-center justify-center">
+        +
+      </Link>
     </div>
   );
 

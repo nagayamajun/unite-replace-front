@@ -40,7 +40,7 @@ export const CorporateSignUp = () => {
 
   return (
      <div className="w-full h-screen">
-      <div className="flex flex-col h-full items-center justify-center">
+      {/* <div className="flex flex-col h-full items-center justify-center">
         <div className="flex flex-col w-2/3 bg-gray-50 rounded-lg p-10">
           <div className="font-bold text-center">企業様従業員アカウント作成</div>
           <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
@@ -93,7 +93,7 @@ export const CorporateSignUp = () => {
         closeModal={closeModal}
         modalMessage={modalMessage}
         modalBgColor={color!}
-      />
+      /> */}
      </div>
   )
 }

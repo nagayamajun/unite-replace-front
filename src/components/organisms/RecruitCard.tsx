@@ -25,8 +25,8 @@ export const RecruitCard = ({
       </p>
     </div>
     <div className="flex col">
-      {programingSkills?.map((skill) => (
-        <div className="flex flex-wrap justify-start line-clamp-1">
+      {programingSkills?.map((skill, index) => (
+        <div key={index} className="flex flex-wrap justify-start line-clamp-1">
           <span className="text-gray-500 inline-flex items-center gap-1.5 py-1 px-2  mx-1 my-3  text-xs rounded-full border-2 border-gray-400 ">
             {skill}
           </span>

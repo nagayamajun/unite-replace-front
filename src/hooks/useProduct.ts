@@ -5,12 +5,12 @@ import { Product } from "../types/product"
 export const useProducts = () => {
   const [products, setProducts] = useState<Product[]>();
 
-  useEffect(() => {
-    (async () => {
-      const fetchedProducts = await ProductRepositry.findMany();
-      setProducts(fetchedProducts)
-    })()
-  }, [])
+  // useEffect(() => {
+  //   (async () => {
+  //     const fetchedProducts = await ProductRepositry.findMany();
+  //     setProducts(fetchedProducts)
+  //   })()
+  // }, [])
 
   return { products }
 }

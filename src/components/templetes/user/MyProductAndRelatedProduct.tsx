@@ -7,40 +7,46 @@ import { useRecoilValue } from "recoil"
 
 export const MyProductAndRelatedProduct = () => {
   const user = useRecoilValue(UserState);
-  const [ myProducts, setProducts ] =  useState<Product[]>();
+  const [ myProducts, setMyProducts ] =  useState<Product[]>();
   const [ relatedProducts, setRelatedProducts ] = useState<Product[]>();
 
   useEffect(() => {
     (async () => {
-      const fetchedMyProducts = await ProductRepositry.getMyProducts()
-      setProducts(fetchedMyProducts)
-      const fetchedrelatedProducts = await ProductRepositry.getRelatedProduct()
-      setRelatedProducts(fetchedrelatedProducts);
+      await Promise.all([
+        ProductRepositry.getMyProducts().then((res) => {
+          setMyProducts(res)
+        }),
+        ProductRepositry.getRelatedProduct().then((res) => {
+          setRelatedProducts(res)
+        })
+      ])
     })()
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center w-full">
-      <div className="w-3/5 mt-10 p-5 bg-gray-100 rounded-lg shadow-md">
-        <h1 className="text-center mb-5 font-bold text-lg">自分の作成したProduct一覧</h1>
+    <div className="flex flex-col items-center justify-start h-screen space-y-10">
+      <div className="w-80 sm:w-base md:w-sm mt-10 sm:mt-20 p-5 bg-gray-100 sm:bg-white rounded-lg shadow-md">
+        <h1 className="text-center mb-5 font-bold text-lg">自分の作成した作品一覧</h1>
         {myProducts?.length === 0 ? (
           <p className="text-center font-bold text-red-400">There are no my recruits.</p>
         ) : (
-          myProducts?.map((myProduct) => {
+          myProducts?.map((myProduct, index) => {
+            //自分の作成したコメントがあるかをチェックする
             const hasCommnet = myProduct.comment?.some((comment) => comment.userId === user?.id);
+
             return (
-              <div className="flex flex-row justify-between p-4 my-3 rounded-md border border-gray-300">
-                <div className="flex flex-row">
-                  <p className="font-semibold mr-10">{myProduct.headline}</p>
+              <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
+                <div className="flex flex-col items-center sm:flex-row">
+                  <p className="font-semibold mb-2 sm:mb-0 sm:mr-10">{myProduct.headline}</p>
                   { hasCommnet ? (
-                    <p className="text-red-400 text-sm">comment登録済み</p>
+                    <p className="mb-2 sm:mb-0 text-sm sm:text-base">comment登録済み</p>
                   ) : (
-                    <p className="text-red-400 text-sm">commentを追加してください</p>
+                    <p className="text-red-400 text-sm mb-2 sm:mb-0 sm:text-base">commentを追加してください</p>
                   )
                   }
                 </div>
-                <div>
-                  <Link href={`/product/${myProduct?.id}`} className="text-red-600">
+                <div className="flex justify-end">
+                  <Link href={`/product/${myProduct?.id}`} className="flex text-red-600 text-sm sm:text-base">
                     詳細へ
                   </Link>
                 </div>
@@ -51,26 +57,28 @@ export const MyProductAndRelatedProduct = () => {
       </div>
 
       {/* 関連する方 */}
-      <div className="w-3/5 mt-10 p-5 bg-gray-100 rounded-lg shadow-md">
-        <h1 className="text-center mb-5 font-bold text-lg">関連したProduct一覧</h1>
+      <div className="w-80 sm:w-sm mt-10 sm:mt-20 p-5 bg-gray-100 sm:bg-white rounded-lg shadow-md">
+        <h1 className="text-center mb-5 font-bold text-lg">参加した作品一覧</h1>
         {relatedProducts?.length === 0 ? (
           <p className="text-center font-bold text-red-400">There are no my recruits.</p>
         ) : (
-          relatedProducts?.map((relatedProduct) => {
+          relatedProducts?.map((relatedProduct, index) => {
+            //自分の作成したコメントがあるかをチェックする
             const hasCommnet = relatedProduct.comment?.some((comment) => comment.userId === user?.id);
+
             return (
-              <div className="flex flex-row justify-between p-4 my-3 rounded-md border border-gray-300">
-                <div className="flex flex-row">
+              <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
+                <div className="flex flex-col items-center sm:flex-row">
                   <p className="font-semibold mr-10">{relatedProduct.headline}</p>
                   { hasCommnet ? (
-                    <p className="text-red-400 text-sm">comment登録済み</p>
+                    <p className="mb-2 sm:mb-0 text-sm sm:text-base">comment登録済み</p>
                   ) : (
-                    <p className="text-red-400 text-sm">commentを追加してください</p>
+                    <p className="text-red-400 text-sm mb-2 sm:mb-0 sm:text-base">commentを追加してください</p>
                   )
                   }
                 </div>
-                <div>
-                  <Link href={`/product/`} className="text-red-600">
+                <div className="flex justify-end">
+                  <Link href={`/product/`} className="flex text-red-600 text-sm sm:text-base">
                     詳細へ
                   </Link>
                 </div>

@@ -9,11 +9,11 @@ const CorporationHome = () => {
   const corporation = useCorporateAuth();
   const [uid, setUid] = useState<string>();
 
-  useEffect(() => {
-    setUid(corporation?.uid);
-  }, [corporation?.uid]);
+  // useEffect(() => {
+  //   setUid(corporation?.uid);
+  // }, [corporation?.uid]);
 
-  if (!uid) return <Loading />;
+  // if (!uid) return <Loading />;
 
   return (
     <>

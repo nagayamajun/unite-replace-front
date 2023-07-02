@@ -2,6 +2,7 @@ import { UserRecruitParticipant } from "./UserRecruitParticipant";
 import { Product } from "./product";
 import { ProgramingSkill } from "./programingSkill";
 import { User } from "./user";
+import { UserToRecruitLike } from "./userToRecruitLike";
 
 export type Recruit = {
   id: string;
@@ -18,6 +19,7 @@ export type Recruit = {
   applications?: User[]
   userRecruitParticipant?: UserRecruitParticipant[];
   product: Product[] //BEで配列になっているため1対1の関係だが配列で受け取る必要がある
+  userToRecruitLikes?: UserToRecruitLike[]
 }
 
 //リファクタ

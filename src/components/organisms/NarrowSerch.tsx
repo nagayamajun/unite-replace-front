@@ -34,34 +34,35 @@ export const NarrowSearch = () => {
         return recruits
       }
     });
-
     setFilteredRecruits([...alterRecruitList]);
     alterRecruitList = [];
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className=" mx-14 mt-4 sm:ml-20 sm:mt-10 sm:w-3/5 ">
-      <div>
-        <p className=" sm:text-2xl text-gray-600 mb-1">条件検索</p>
-        <PlainInput
-          labelText="ハッカソン名"
-          inputType="search"
-          placeholder="ハッカソン名で検索できます"
-          register={register}
-          registerLabel="hackthonName"
-          errors={errors}
+    <div className="bg-white pt-5 px-10">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full sm:w-3/4">
+        <div>
+          <p className=" sm:text-2xl text-gray-600 mb-1">条件検索</p>
+          <PlainInput
+            labelText="ハッカソン名"
+            inputType="search"
+            placeholder="ハッカソン名で検索できます"
+            register={register}
+            registerLabel="hackthonName"
+            errors={errors}
+          />
+          <SkillSelect
+            registerLabel="programingSkills"
+            labelText="スキル"
+            placepholder="スキルを選択してください(複数選択可)"
+            control={control}
+            errors={errors}
+          />
+        </div>
+        <SubmitButton
+          innerText="絞り込み"
         />
-        <SkillSelect
-          registerLabel="programingSkills"
-          labelText="スキル"
-          placepholder="スキルを選択してください(複数選択可)"
-          control={control}
-          errors={errors}
-        />
-      </div>
-      <SubmitButton
-        innerText="絞り込み"
-      />
-    </form>
+      </form>
+    </div>
   )
 }

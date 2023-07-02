@@ -12,37 +12,40 @@ export const MyRecruitsAndRelatedRecruits = () => {
 
   useEffect(() => {
     (async () => {
-      const fetchedMyProducts = await recruitRepository.getMyRecruitsbyFirebaseUID()
-      setMyRecruits(fetchedMyProducts)
-      
-      const fetchedRelatedProducts = await recruitRepository.getRelatedRecruitbyUserId()
-      setRelatedRecruit(fetchedRelatedProducts)
-
+      await Promise.all([
+        recruitRepository.getMyRecruitsbyFirebaseUID().then((res) => {
+          setMyRecruits(res)
+        }),
+        recruitRepository.getRelatedRecruitbyUserId().then((res) => {
+          setRelatedRecruit(res)
+        })
+      ])
     })()
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center w-full">
-      <div className="w-3/5 mt-10 p-5 bg-gray-100 rounded-lg shadow-md">
-        <h1 className="text-center mb-5 font-bold text-lg">自分の作成したRecruit一覧</h1>
+    <div className="flex flex-col items-center justify-start h-screen space-y-10">
+      {/* 自分で作成した募集 */}
+      <div className="w-80 sm:w-sm mt-10 sm:mt-20 p-5 bg-gray-100 sm:bg-white rounded-lg shadow-md">
+        <h1 className="text-center mb-5 font-bold text-lg">自分の作成した募集一覧</h1>
         {myRecruits?.length === 0 ? (
           <p className="text-center font-bold text-red-400">There are no my recruits.</p>
         ) : (
-          myRecruits?.map((myRecruit) => {
-            const hasApprovedApplicants = myRecruit.userRecruitParticipant?.some((participant) => participant.isApproved);
+          myRecruits?.map((myRecruit, index) => {
+            const hasApprovedApplicants = myRecruit.userRecruitParticipant?.some(participant => participant.isApproved === false);
             return (
-              <div className="flex flex-row justify-between p-4 my-3 rounded-md border border-gray-300">
-                <div className="flex flex-row">
-                  <p className="font-semibold mr-10">{myRecruit.hackthonName}</p>
+              <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
+                <div className="flex flex-col items-center sm:flex-row">
+                  <p className="font-semibold mb-2 sm:mb-0 sm:mr-10">{myRecruit.hackthonName}</p>
                   { hasApprovedApplicants ? (
-                    <p className="text-red-400">応募者がいます！</p>
+                    <p className="text-red-400 mb-2 sm:mb-0 text-sm sm:text-base">応募者がいます！</p>
                   ) : (
-                    <p>応募者はいません...</p>
+                    <p className="text-sm mb-2 sm:mb-0 sm:text-base">応募者はいません...</p>
                   )
                   }
                 </div>
-                <div>
-                  <Link href={`/recruit/${myRecruit.id}/ownRecruitDetail`} className="text-red-600">
+                <div className="flex justify-end">
+                  <Link href={`/recruit/${myRecruit.id}/ownRecruitDetail`} className="flex text-red-600 text-sm sm:text-base">
                     詳細へ
                   </Link>
                 </div>
@@ -52,21 +55,21 @@ export const MyRecruitsAndRelatedRecruits = () => {
         )}
       </div>
 
-      {/* 関連する方 */}
-      <div className="w-3/5 mt-10 p-5 bg-gray-100 rounded-lg shadow-md">
-        <h1 className="text-center mb-5 font-bold text-lg">関連しているRecruit一覧</h1>
+      {/* 自分に関連する募集 */}
+      <div className="w-80 sm:w-sm mt-10 sm:mt-20 p-5 bg-gray-100 sm:bg-white rounded-lg shadow-md">
+        <h1 className="text-center mb-5 font-bold text-lg">参加する/参加した募集一覧</h1>
         {relatedRecruits?.length === 0? (
           <p className="text-center font-bold text-red-400">There are no related recruits.</p>
         ) : (
-          relatedRecruits?.map((relatedRecruit) => {
+          relatedRecruits?.map((relatedRecruit, index) => {
             return (
-              <div className="flex flex-row justify-between p-4 my-3 rounded-md border border-gray-300">
-                <div className="flex flex-row">
-                  <p className="font-semibold mr-10">{relatedRecruit.hackthonName}</p>
-                  <p className="">{relatedRecruit.recruiter?.name}</p>
+              <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
+                <div className="flex flex-col items-center sm:flex-row">
+                  <p className="font-semibold mb-2 sm:mb-0 sm:mr-10">{relatedRecruit.hackthonName}</p>
+                  <p className="text-sm mb-2 sm:mb-0 sm:text-base">募集主: {relatedRecruit.recruiter?.name}</p>
                 </div>
-                <div>
-                  <Link href={`/recruit/${relatedRecruit.id}/recruitDetail`} className="text-red-500">
+                <div  className="flex justify-end">
+                  <Link href={`/recruit/${relatedRecruit.id}/recruitDetail`} className="flex text-red-600 text-sm sm:text-base">
                     詳細へ
                   </Link>
                 </div>

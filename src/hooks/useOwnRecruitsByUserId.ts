@@ -1,4 +1,3 @@
-import { recruitRepository } from "@/modules/recruit/recruit.repository";
 import { useEffect, useState } from "react";
 
 export const useOwnRecruitsByUserId = (userId: string) => {
@@ -6,10 +5,9 @@ export const useOwnRecruitsByUserId = (userId: string) => {
 
   useEffect(() => {
     (async () => {
-      const fetchedRecruits = await recruitRepository.getRecruitsByUserId(
-        userId
-      );
-      setOwnRecruits(fetchedRecruits);
+      // if (!uid) return;
+      // const fetchedRecruits = await recruitRepository.findManyByUid(uid);
+      // setOwnRecruits(fetchedRecruits);
     })();
   }, []);
 

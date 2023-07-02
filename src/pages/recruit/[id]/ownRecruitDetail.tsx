@@ -3,14 +3,7 @@ import { OwnRecruitDetail } from "@/components/templetes/user/OwnRecruitDetail";
 import { ReactElement } from "react";
 
 
-const OwnRecruitDetailPage = () => {
-
-  return (
-    <>
-      <OwnRecruitDetail />
-    </>
-  )
-}
+const OwnRecruitDetailPage = () => <OwnRecruitDetail />
 
 OwnRecruitDetailPage.getLayout = (page: ReactElement) => (
   <UserLayout>{page}</UserLayout>
