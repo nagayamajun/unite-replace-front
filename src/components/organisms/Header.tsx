@@ -9,13 +9,15 @@ import { ChatRoomListMenu } from "./ChatRoomListMenu";
 export const Header = (): JSX.Element => {
   const userStateVal = useRecoilValue(UserState);
   const menuLinks = [
-    {href: '/profiles/editProfile', label: 'マイページへ'},
-    {href: `/profiles/${userStateVal?.id}/myRecruitsAndRelatedRecruits`, label: '募集一覧'},
-    {href: '/product/myProductsAndRelatedProducts', label: '成果物一覧'},
-    {href: '/recruit/likedRecruitList', label: 'いいねした募集'},
-    // {href: '/', label: 'お問合せ'},
-    // {href: '/', label: 'ログアウト'},
-  ]
+    { href: `/profiles/user/${userStateVal?.id}`, label: "マイページへ" },
+    {
+      href: `/profiles/${userStateVal?.id}/myRecruitsAndRelatedRecruits`,
+      label: "募集一覧",
+    },
+    { href: "/product/myProductsAndRelatedProducts", label: "成果物一覧" },
+    { href: "/", label: "お問合せ" },
+    { href: "/", label: "ログアウト" },
+  ];
 
   return (
     <div className="border-b border-gray-300 w-full">
@@ -44,7 +46,7 @@ export const Header = (): JSX.Element => {
             <Menu>
               <Menu.Button>
                 <Image
-                  src="/avatar.gif"
+                  src={userStateVal?.imageUrl ?? "/avatar.gif"}
                   alt="Logo"
                   width={50}
                   height={50}

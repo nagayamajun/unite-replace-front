@@ -13,7 +13,7 @@ export const SideBar = (): JSX.Element => {
   const menuLinks = [
     {href: `/homeScreen`, label: '募集一覧', icon: <CiViewList />},
     {href: `/addRecruit`, label: '募集を作成', icon: <IoIosCreate />},
-    {href: '/profiles/editProfile', label: 'マイページへ', icon: <MdOutlineManageAccounts />},
+    { href: `/profiles/user/${userStateVal?.id}`, label: "マイページへ", icon: <MdOutlineManageAccounts /> },
     {href: `/profiles/${userStateVal?.id}/myRecruitsAndRelatedRecruits`, label: '参加した/作成した募集', icon: <CiViewList />},
     {href: '/recruit/likedRecruitList', label: 'いいねした募集', icon: <AiOutlineHeart />},
     {href: '/product/myProductsAndRelatedProducts', label: '成果物一覧', icon: <CiViewList />},

@@ -2,15 +2,17 @@ import { UserRepository } from "@/modules/user/user.repository";
 import { useEffect, useState } from "react";
 import { User } from "../types/user";
 
-export const useCertainUser = () => {
+export const useCertainUser = (userId: string) => {
   const [certainUser, setCertainUser] = useState<User>();
+  const [error, setError] = useState<Error>();
 
   useEffect(() => {
     (async () => {
-      const fetchedUser = await UserRepository.findUserByFirebaseUID();
-      setCertainUser(fetchedUser);
+      await UserRepository.findUserById(userId)
+        .then((user) => setCertainUser(user))
+        .catch((error) => setError(error));
     })();
   }, []);
 
-  return { certainUser };
+  return { certainUser, setCertainUser, error };
 };

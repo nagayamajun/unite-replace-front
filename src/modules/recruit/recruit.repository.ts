@@ -14,32 +14,71 @@ export const recruitRepository = {
     return recruits;
   },
 
+  //自分が作成したRecruitを全件取得
+  async getMyRecruitsbyFirebaseUID(): Promise<Recruit[]> {
+    const myRecruits = (
+      await axiosInstance.get("/user-recruit/my-recruits").catch((err) => {
+        throw new Error(`Recruits is not founded ${err} `);
+      })
+    ).data;
+    return myRecruits;
+  },
+
+  //自分が関与している募集の一覧取得
+  async getMyRelatedRecruits(): Promise<Recruit[]> {
+    const recruits = (
+      await axiosInstance.get("/user-recruit/related-recruits").catch((err) => {
+        throw new Error(`recruits is not found | ${err}`);
+      })
+    ).data;
+    return recruits;
+  },
+
+  //あるユーザーが作成したRecruitを全件取得
+  async getRecruitsByUserId(userId: string): Promise<Recruit[]> {
+    const myRecruits = (
+      await axiosInstance
+        .get(`/user-recruit/owned-recruits-by-id/${userId}`)
+        .catch((err) => {
+          throw new Error(`Recruits is not founded ${err} `);
+        })
+    ).data;
+    return myRecruits;
+  },
+
+  //あるユーザーが関与している募集の一覧取得
+  async getRelatedRecruitsByUserId(userId: string): Promise<Recruit[]> {
+    const recruits = (
+      await axiosInstance
+        .get(`/user-recruit/related-recruits-by-id/${userId}`)
+        .catch((err) => {
+          throw new Error(`recruits is not found | ${err}`);
+        })
+    ).data;
+    return recruits;
+  },
+
   //特定のuidを持つ募集の取得
   async getRecruitById(recruitId: string): Promise<Recruit> {
     const recruit = (
-      await axiosInstance.get(`/user-recruit/findOne/${recruitId}`).catch((err) => {
-        throw new Error(`recruit is not by Id | error: ${err}`);
-      })
+      await axiosInstance
+        .get(`/user-recruit/findOne/${recruitId}`)
+        .catch((err) => {
+          throw new Error(`recruit is not by Id | error: ${err}`);
+        })
     ).data;
     return recruit;
   },
 
-  //ユーザーが作成したRecruitを全件取得
-  async getMyRecruitsbyFirebaseUID(): Promise<Recruit[]> {
-    const myRecruits = (await axiosInstance.get('/user-recruit/my-recruits').catch((err) => {
-      throw new Error(`Recruits is not founded ${err} `)
-      })
-    ).data
-    return myRecruits
-  },
-
   //ユーザーに関連するRecruitを全件取得
   async getRelatedRecruitbyUserId(): Promise<Recruit[]> {
-    const relatedRecruits = ( await axiosInstance.get('/user-recruit/related-recruits').catch((err) => {
-      throw new Error(`Recruits is not founded ${err} `)
-    })).data
+    const relatedRecruits = (
+      await axiosInstance.get("/user-recruit/related-recruits").catch((err) => {
+        throw new Error(`Recruits is not founded ${err} `);
+      })
+    ).data;
 
-    return relatedRecruits
+    return relatedRecruits;
   },
 
   //いいねしたRecruitを全件取得

@@ -12,3 +12,6 @@ export const MAIL_USED_IN_PROVIDER_EXISTS =
 
 export const FAIL_TO_PUSH_LIKE = "いいねを押すことに失敗しました。";
 export const FAIL_TO_DELETE_LIKE = "いいねを取り消すことに失敗しました。"
+
+export const SUCCESS_IN_UPDATE_USER = "ユーザー情報が更新されました。";
+export const FAIL_TO_UPDATE_USER = "ユーザー情報の更新に失敗しました。";

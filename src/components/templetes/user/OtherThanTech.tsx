@@ -9,12 +9,17 @@ import { PlainTextArea } from "@/components/atoms/PlainTextarea";
 
 export const OtherThanTechPage = (): JSX.Element => {
   const [userState, setUserState] = useRecoilState(UserState);
-  const { register, handleSubmit, control, formState: {errors} } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
   const router = useRouter();
 
   const onSubmit = (submitData: any) => {
     setUserState({ ...userState, ...submitData });
-    router.push("/profiles/skill");
+    router.push("/profiles/user/skill");
   };
 
   return (
@@ -67,7 +72,7 @@ export const OtherThanTechPage = (): JSX.Element => {
           placeholder="自己PRなどご記入ください"
           register={register}
           errors={errors}
-          rules={{required: "必須項目です"}}
+          rules={{ required: "必須項目です" }}
         />
 
         <PlainTextArea
@@ -76,7 +81,7 @@ export const OtherThanTechPage = (): JSX.Element => {
           placeholder="自身のキャリアについてご記入ください"
           register={register}
           errors={errors}
-          rules={{required: "必須項目です"}}
+          rules={{ required: "必須項目です" }}
         />
         <GraduationYearRadio control={control} />
 
@@ -88,15 +93,14 @@ export const OtherThanTechPage = (): JSX.Element => {
   );
 };
 
-
-  // id: string;
-  // name: string;
-  // email: string;
+// id: string;
+// name: string;
+// email: string;
 // imageUrl: string;
-  // age: number;
-  // prefecture: string;
-  // university: string;
-  // undergraduate: string;
-  // selfPublicity: string;
-  // careerVision: string;
+// age: number;
+// prefecture: string;
+// university: string;
+// undergraduate: string;
+// selfPublicity: string;
+// careerVision: string;
 // programingSkills: Prisma.JsonValue;

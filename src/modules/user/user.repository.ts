@@ -1,37 +1,71 @@
 import axios from "axios";
 import { User } from "../../types/user";
 import { axiosInstance } from "@/libs/axios";
+import {
+  FAIL_TO_UPDATE_USER,
+  SUCCESS_IN_UPDATE_USER,
+} from "@/constants/constants";
 
 export const UserRepository = {
   //全件取得
   async findAll(): Promise<User[]> {
-    const users = (await axiosInstance.get('/user').catch((err) => {
-      throw new Error(`users not found err:${err}`)
-    })).data
+    const users = (
+      await axiosInstance.get("/user").catch((err) => {
+        throw new Error(`users not found err:${err}`);
+      })
+    ).data;
 
-    return users
+    return users;
   },
 
-  //一意のユーザーを取得
+  //一意のユーザーをuserIdで取得
+  async findUserById(userId: string): Promise<User> {
+    const user = (
+      await axiosInstance.get(`/user/find-by-id/${userId}`).catch((err) => {
+        throw new Error(`user not found | error: ${err}`);
+      })
+    ).data;
+    return user;
+  },
+
+  //一意のユーザーをfirebaseUidで取得
   async findUserByFirebaseUID(): Promise<User> {
-    const user = ( await axiosInstance.get('/user/find-by-firebase-uid').catch((err) => {
-      throw new Error(`user not found | error: ${err}`)
-    })).data
-    return user
+    const user = (
+      await axiosInstance.get("/user/find-by-firebase-uid").catch((err) => {
+        throw new Error(`user not found | error: ${err}`);
+      })
+    ).data;
+    return user;
   },
 
   //認証を利用せずにparamでユーザーを取得
-  async findByFirebaseUIDWithoutFirebaseAuth(firebaseUID: string):Promise<User> {
-    const user =  (await axios.get(`http://localhost:8080/user/${firebaseUID}`).catch((err) => {
-      throw new Error(`user not found | error: ${err}`)
-    })).data
-    return user
+  async findByFirebaseUIDWithoutFirebaseAuth(
+    firebaseUID: string
+  ): Promise<User> {
+    const user = (
+      await axios
+        .get(`http://localhost:8080/user/${firebaseUID}`)
+        .catch((err) => {
+          throw new Error(`user not found | error: ${err}`);
+        })
+    ).data;
+    return user;
   },
+
   //更新
-  async updateUserInfo(submitDate: any): Promise<User> {
-    const user = ( await axiosInstance.put('/user/update-by-firebase-uid', submitDate).catch((err) => {
-      throw new Error(`user not update | ${err}`)
-    })).data
-    return user
-  }
+  async updateUserInfo(
+    submitData: any
+  ): Promise<{ data: User | null; success: boolean; message: string }> {
+    try {
+      const user = (
+        await axiosInstance.put("/user/update-by-firebase-uid", submitData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+      ).data;
+
+      return { data: user, success: true, message: SUCCESS_IN_UPDATE_USER };
+    } catch (error) {
+      return { data: null, success: false, message: FAIL_TO_UPDATE_USER };
+    }
+  },
 };
