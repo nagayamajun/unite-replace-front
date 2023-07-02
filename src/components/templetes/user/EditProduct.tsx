@@ -7,12 +7,12 @@ import { EditProductModal } from "@/components/organisms/EditProductModal";
 import { UserState } from "@/global-states/atoms";
 import { ProductRepositry } from "@/modules/product/product.repository";
 import { Product } from "@/types/product"
-import { format } from "date-fns";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
-
+import { ProductFormField } from "@/components/atoms/ProductFormField";
+import { Loading } from "../common/Loading";
 
 export const EditProduct = () => {
   const router = useRouter();
@@ -26,7 +26,6 @@ export const EditProduct = () => {
   const [ isheadline, setIsHeadline ] = useState(false);
   const [ isComment, setIsComment ] = useState(false);
 
-
   const closeModal = () => {
     setIsOpen(false);
   }
@@ -38,27 +37,23 @@ export const EditProduct = () => {
     })()
   },[])
 
+  if (product === undefined) return <Loading /> 
 
   return (
-    <div className="flex flex-col w-full h-full justify-center items-center text-blue-900">
-      <div className="text-left w-4/5 mt-20 mb-3">
-        <h1 className="font-bold text-2xl">プロダクト詳細</h1>
-      </div>
-      <div className="flex flex-col rounded-lg items-center w-4/5 bg-gray-200 gap-10 mb-10">
-        <div className="flex justify-center items-center w-2/3 h-2/3 mt-10">
+    <div className="flex flex-col w-full h-full justify-center items-center text-gray-600 bg-gray-100">
+      <div className="flex flex-col rounded-lg items-center w-4/5 sm:w-base md:w-sm gap-14 mb-10 bg-white">
+        <div className="flex justify-center items-center w-4/5 mt-10">
           {/* <img src={product?.url} className="object-contain w-full h-full rounded-sm"/> */}
-          <video src={product?.url} controls></video>
+          <video src={product?.url} controls className="w-full h-60"></video>
         </div>
-        <div className=" flex flex-col items-center w-2/3 gap-5">
+        <div className=" flex flex-col items-center w-4/5 gap-5">
           {/* headline */}
-          <FormField
-            labelText="題名"
+          <ProductFormField 
+            labelText='プロダクト名'
+            input={product?.headline}
             onCLick={() => setIsHeadline(true)}
-          >
-            <div className="border rounded-md p-2 border-black">
-              {product?.headline}
-            </div>
-          </FormField>
+          />
+
           <EditProductModal
             isOpen={isheadline}
             setIsOpen={setIsHeadline}
@@ -73,15 +68,12 @@ export const EditProduct = () => {
             />
           </EditProductModal>
 
-          {/* detail */}
-          <FormField
-            labelText="詳細"
+          {/* プロダクト詳細 */}
+          <ProductFormField
+            labelText="プロダクト詳細"
+            input={product?.detail}
             onCLick={() => setIsDetailOpen(true)}
-          >
-            <div className="border rounded-md p-2 border-black">
-              {product?.detail}
-            </div>
-          </FormField>
+          />
           
           <EditProductModal
             isOpen={isDetailOpen}
@@ -97,93 +89,72 @@ export const EditProduct = () => {
             />
           </EditProductModal>
 
-          <div className="flex flex-row justify-between w-full border-b border-black pb-2">
-            <p>
-              {product
-                ? product.updatedAt
-                  ? format(new Date(product.updatedAt), 'yyyy-MM-dd')
-                  : format(new Date(product.createdAt), 'yyyy-MM-dd')
-                : ''
-              }
-            </p>
-            {!product?.comment || (product?.comment.length === 0) || !product?.comment.some((comment) => comment.userId === user?.id) ? (
-              <button
-                onClick={() => setIsOpen(true)}
-                className="py-2 px-6 rounded-md text-white font-bold bg-green-500 hover:bg-green-600"
-              >
-                Comment作成
-              </button>
-            ) : (
-              product?.comment.map((comment) => (
-                <div key={comment.id}>
-                  {comment.userId === user?.id && <p>作成済み</p>}
-                </div>
-              ))
+          {/* プロダクト参加者のアイコンを一覧表示したい。それぞれのユーザーのプロフィールに飛ぶことができる */}
+
+          
+          <div className="flex flex-col items-start w-full gap-5 mb-10 border-t border-gray-400 pt-5">
+            <div className="flex flex-row justify-between w-full">
+              <div className="bg-green-500 text-white p-2 rounded-md text-left">個人アピールポイント一覧</div>
+              <div>
+                {!product?.comment || (product?.comment.length === 0) || !product?.comment.some((comment) => comment.userId === user?.id) ? (
+                <button
+                  onClick={() => setIsOpen(true)}
+                  className="py-2 px-6 rounded-md text-white font-bold bg-green-500 hover:bg-green-600"
+                >
+                  Comment作成
+                </button>
+              ) : (
+                product?.comment.map((comment) => (
+                  <div key={comment.id}>
+                    {comment.userId === user?.id && <p>作成済み</p>}
+                  </div>
+                ))
             )}
+              </div>
+            </div>
+            { !product?.comment && <div className="p-2 rounded-md text-white font-bold bg-red-500">※アピールポイントを追加してください</div>}
+            {product?.comment?.map((comment) => {
+              return (
+                <div className="flex flex-col w-full">
+                  {
+                    user?.id === comment.userId ? (
+                      <>
+                        <ProductFormField
+                          labelText={comment.user.name}
+                          input={comment.content}
+                          onCLick={() => setIsComment(true)}
+                        />
+                        <EditCommentModal
+                          isOpen={isComment}
+                          setIsOpen={setIsComment}
+                          commentId={comment.id}
+                          handleSubmit={handleSubmit}
+                        >
+                          <PlainTextArea
+                            registerLabel="content"
+                            labelText="アピールポイントを記述してください。"
+                            placeholder="FEの分野で〇〇に取り組みました....."
+                            register={register}
+                          />
+                        </EditCommentModal>
+                      </>
+                    ) : (
+                      <div className="w-full flex flex-col">
+                        <div className="flex flex-row w-full mb-3">
+                          <p className="font-semibold w-1/2">{comment.user.name}</p>
+                        </div>
+                        <div className="border rounded-md p-4 border-gray-300">
+                          {comment.content}
+                        </div>
+                      </div>
+                    )
+                  }
+                </div>
+              )
+            })}
           </div>
         </div>
-
-
-        <div className="flex flex-col items-start w-2/3 gap-5 mb-10">
-          <div className="bg-green-500 text-white p-2 rounded-md text-left">個人コメント一覧</div>
-          { !product?.comment && <div className="p-2 rounded-md text-white font-bold bg-red-500">※commentを追加してください</div>}
-          {product?.comment?.map((comment) => {
-            return (
-              <div>
-                {
-                  user?.id === comment.userId ? (
-                    <div>
-                      <FormField
-                        onCLick={() => setIsComment(true)}
-                      >
-                        <p>{comment.content}</p>
-                      </FormField>
-                      <EditCommentModal
-                        isOpen={isComment}
-                        setIsOpen={setIsComment}
-                        commentId={comment.id}
-                        handleSubmit={handleSubmit}
-                      >
-                        <PlainTextArea
-                          registerLabel="content"
-                          labelText="アピールポイントを記述してください。"
-                          placeholder="FEの分野で〇〇に取り組みました....."
-                          register={register}
-                        />
-                      </EditCommentModal>
-                    </div>
-                  ) : (
-                    <div>
-                      <p>{comment.user.name}</p>
-                      <p>{comment.content}</p>
-                    </div>
-                  )
-                }
-                {/* <FormField
-                  labelText={comment.user.name ? comment.user.name : 'unkown'}
-                  onCLick={() => setIsComment(true)}
-                >
-                  <p>{comment.content}</p>
-                </FormField>
-                <EditCommentModal
-                  isOpen={isComment}
-                  setIsOpen={setIsComment}
-                  commentId={comment.id}
-                  handleSubmit={handleSubmit}
-                >
-                  <PlainTextArea
-                    registerLabel="content"
-                    labelText="アピールポイントを記述してください。"
-                    placeholder="FEの分野で〇〇に取り組みました....."
-                    register={register}
-                  />
-                </EditCommentModal> */}
-              </div>
-            )
-          })}
-        </div>
       </div>
-
 
       <AddCommentModal
         isOpen={isOpen}

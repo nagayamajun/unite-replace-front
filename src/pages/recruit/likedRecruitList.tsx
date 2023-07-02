@@ -3,11 +3,10 @@ import { LikedRecruitList } from "@/components/templetes/user/LikedRecruitList";
 import { ReactElement } from "react"
 
 const LikedRecruitListPage = () => (
-  <><LikedRecruitList /></>
+  <LikedRecruitList />
 )
 
-LikedRecruitListPage.getLayout = (page: ReactElement) => (
-  <UserLayout>{page}</UserLayout>
-);
+LikedRecruitListPage.getLayout = (page: ReactElement) => <UserLayout>{page}</UserLayout>
+
 
 export default LikedRecruitListPage

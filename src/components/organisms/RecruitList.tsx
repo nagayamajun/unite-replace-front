@@ -25,7 +25,7 @@ export const RecruitList = (): JSX.Element => {
   };
 
   return (
-    <div className="bg-gray-100 pt-10 h-screen">
+    <div className="bg-gray-100 pt-10 h-auto">
       <div className="grid mx-12 sm:mx-20 gap-x-20 gap-y-8 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
           {filteredRecruits.length == 0 && <p>条件に一致する募集はありません</p>}
           { filteredRecruits?.map((recruit: RecruitCardProps) => {

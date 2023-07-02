@@ -5,12 +5,10 @@ import { recruitRepository } from "@/modules/recruit/recruit.repository";
 import { UserRecruitApplicationRepository } from "@/modules/user-recruit-application/userRecruitApplication.repository";
 import { userRecruitParticipantRepository } from "@/modules/user-recruit-participant/userRecruitParticipant.repository";
 import { Recruit } from "@/types/recruit";
-import { UserRecruitApplicationWithRoomId } from "@/types/userRecruilApplication";
-import { format } from "date-fns";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { Loading } from "../common/Loading";
 
 
 export const RecruitDetail: React.FC = () => {
@@ -59,87 +57,70 @@ export const RecruitDetail: React.FC = () => {
       });
   };
 
+  if (isLiked === undefined) return <Loading/>
+
   return (
-    <div className="h-screen flex flex-col">
-      <div className="flex flex-col justify-center items-center h-full text-white bg-gray-100">
-        <div className="flex flex-col items-center w-9/12 h-3/4 rounded-md bg-gradient-to-r from-green-300 to-pink-300 ">
-          <div className="flex flex-col w-full h-full">
-            <div className="h-1/4 flex flex-col justify-center items-center">
-              {/* ハッカソン名 */}
-              <h1 className="text-4xl font-bold mt-5 text-center">
-                {recruit?.hackthonName}
-              </h1>
-              {/* headline */}
-              <p className="text-xl mt-2 text-center">{recruit?.headline}</p>
-            </div>
-            {/* プログラミングスキル */}
-            <div className="h-1/5 flex justify-center items-center">
-              {recruit?.programingSkills?.map((skill) => {
-                return (
-                  <div
-                    key={skill}
-                    className="bg-white text-gray-400 mx-2 p-2 rounded-md"
-                  >
-                    {skill}
-                  </div>
-                );
-              })}
-            </div>
+    <div className="h-full flex justify-center items-center sm:bg-gray-100 pb-[200px] text-gray-600">
+      <div className="flex flex-col items-center w-4/5 sm:w-base md:w-sm  bg-white rounded-sm">
+        <div className="h-20 sm:h-40 w-full flex flex-col justify-center items-center bg-gradient-to-r from-green-300 to-pink-300 text-white rounded-sm rounded-b-none">
+          {/* ハッカソン名 */}
+          <h1 className="text-3xl sm:text-4xl font-bold text-center">{recruit?.hackthonName}</h1>
+        </div>
 
-            <div className="flex flex-row justify-between border-b p-3">
-              <div>開発期間: <span className="ml-2">{recruit?.developmentPeriod}</span></div>
-              <div>募集人数: <span className="ml-2">{recruit?.numberOfApplicants}</span></div>
-              <div>開発人数: <span className="ml-2">{recruit?.numberOfApplicants}</span></div>
+        <div className="w-full sm:w-4/5 flex flex-col">
+          <div className="flex items-center justify-center h-20 sm:h-24 border-b border-gray-200 text-lg">
+            {recruit?.headline}
+          </div>
+          {/* プログラミングスキル */}
+          <div className="flex flex-col justify-start items-start border-b pl-5 m-2 sm:pl-0 pb-5">
+            <p className="my-2 font-semibold">募集スキル</p>
+            <div className="break-all flex-row flex flex-wrap">
+              {recruit?.programingSkills?.map(skill => (
+                  <p className="bg-gray-50 border rounded-2xl m-1 px-3 overflow-hidden text-overflow-ellipsis">{skill}</p>
+              ))}
             </div>
-
-            <div className="border-b">
-              {/* 募集の詳細 */}
-              <p className="mt-5 mx-5 leading-snug border border-white p-1 rounded-md ">
-                {recruit?.details}
-              </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-between border-b pl-5 sm:pl-0 m-2 pb-5">
+            <div className="mb-2 w-full">
+              <p className="font-semibold">開発期間</p>
+              <div>{recruit?.developmentPeriod}</div>
             </div>
-
-            <div className="p-1 border-b">
-              ハッカソンのurl: <span className="ml-5">{recruit?.hackathonUrl}</span>
-            </div>
-
-            <div className="p-2">
-              募集主: <span className="ml-5">{recruit?.recruiter?.name}</span>
+            <div className="w-full">
+              <p className="font-semibold">募集人数</p>
+              <div><span className="bg-green-400 p-1 rounded-md text-white">{recruit?.numberOfApplicants}</span> 人</div>
             </div>
           </div>
 
-          <div className="w-full border-t"></div>
+          <div className="border-b pl-5 sm:pl-0 m-2 pb-7">
+            {/* 募集の詳細 */}
+            <p className="font-semibold mb-2">詳細</p>
+            <div className="leading-snug border border-gray-200 rounded p-3">{recruit?.details}</div>
+          </div>
 
-          <div className="flex flex-row justify-between w-2/5 mt-5">
-              <button onClick={onApplyFor} className="bg-green-500 text-white px-6 py-2 rounded-sm">話を聞く</button>
-              {isParticipant ? null : (
+          <div className="border-b pl-5 sm:pl-0 m-2 pb-5">
+            <p className="font-semibold mb-2">ハッカソンURL</p>
+            <div className="leading-snug border border-gray-200 rounded p-2">{recruit?.hackathonUrl}</div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row justify-between mt-5">
+            <div className="flex items-center w-full sm:w-1/2 mb-5 sm:mb-0">
+              {isParticipant ? <p className="text-red-500">*参加を申請しました</p> : (
                 <button onClick={applyForJoin} className="bg-green-500 text-white px-6 py-2 rounded-sm">
-                  参加依頼
+                  参加を申請する
                 </button>
               )}
-          </div>
-
-          <div className="flex flex-row items-center justify-between w-full mt-10">
-            <div className="ml-5">
-              {recruit && format(new Date(recruit?.createdAt), 'yyyy-MM-dd')}
             </div>
-            <LikeButton 
-              recruitId={recruit?.id as string} 
-              isLiked={isLiked!} 
-            />
-            <div className="w-1/2 flex justify-end mr-5">
-              <Link href={"/"} className="bg-green-400 px-12 py-2 rounded-md text-white">戻る</Link>
+            <div className="flex flex-row justify-between sm:justify-end items-center w-full sm:w-1/2">
+              <LikeButton 
+                recruitId={recruit?.id as string} 
+                isPropsLiked={isLiked} 
+              />
+              <button onClick={onApplyFor} className="ml-5 bg-green-500 text-white px-6 py-2 rounded-sm">話を聞く</button>
             </div>
+            
           </div>
         </div>
       </div>
-
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
     </div>
-  );
+  )
 };
