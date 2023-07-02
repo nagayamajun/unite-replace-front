@@ -2,7 +2,6 @@ import { Header } from "@/components/organisms/Header";
 import { NarrowSearch } from "@/components/organisms/NarrowSerch";
 import { useState } from "react";
 import { RecruitList } from "../../organisms/RecruitList";
-import { UploadProductModal } from "../../organisms/UploadProductModal";
 
 export const HomeScreen = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +18,6 @@ export const HomeScreen = () => {
       <NarrowSearch />
       <div className="border-b w-full "></div>
       <RecruitList />
-      <UploadProductModal isOpen={isOpen} closeModal={closeModal} />
     </>
   );
 };

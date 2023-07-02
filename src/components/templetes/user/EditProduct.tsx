@@ -113,9 +113,9 @@ export const EditProduct = () => {
               </div>
             </div>
             { !product?.comment && <div className="p-2 rounded-md text-white font-bold bg-red-500">※アピールポイントを追加してください</div>}
-            {product?.comment?.map((comment) => {
+            {product?.comment?.map((comment, index) => {
               return (
-                <div className="flex flex-col w-full">
+                <div key={index} className="flex flex-col w-full">
                   {
                     user?.id === comment.userId ? (
                       <>

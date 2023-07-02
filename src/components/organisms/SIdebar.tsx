@@ -32,8 +32,8 @@ export const SideBar = (): JSX.Element => {
         </Link>
       </div>
       <div className="flex flex-col items-center">
-        { menuLinks.map((e) => (
-          <Link href={e.href} className="flex flex-row items-center justify-start font-semibold h-16 ml-2 w-full hover:bg-green-500">
+        { menuLinks.map((e, index) => (
+          <Link key={index} href={e.href} className="flex flex-row items-center justify-start font-semibold h-16 ml-2 w-full hover:bg-green-500">
             <div className="text-2xl mr-2">{e.icon}</div>
             <div>{e.label}</div>
           </Link>

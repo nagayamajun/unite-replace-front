@@ -17,50 +17,50 @@ export const UserDetailPage = (): JSX.Element => {
     useRecoilState(CorporationState);
   const [user, setUser] = useState<User>();
 
-  useEffect(() => {
-    (async () => {
-      const user = await UserRepository.find(uid);
-      setUser(user);
-    })();
-  }, [uid]);
+  // useEffect(() => {
+  //   (async () => {
+  //     const user = await UserRepository.find(uid);
+  //     setUser(user);
+  //   })();
+  // }, [uid]);
 
   if (!user) return <Loading />;
 
-  const applyFor = async () => {
-    if (!corporationStateVal?.uid || !corporationStateVal?.corporation_name)
-      throw new Error("CorporationStateのuidかnameが空");
-    const roomId = `${corporationStateVal?.uid}*${user.uid}`;
+  // const applyFor = async () => {
+  //   if (!corporationStateVal?.uid || !corporationStateVal?.corporation_name)
+  //     throw new Error("CorporationStateのuidかnameが空");
+  //   const roomId = `${corporationStateVal?.uid}*${user.uid}`;
 
-    // この辺の処理はrepositoryとかserviceに切り出したい
-    await ChatRepository.post(
-      corporationStateVal.uid,
-      corporationStateVal.corporation_name,
-      roomId,
-      APPLY_FIRST_MESSAGE
-    );
-    await CorporationRepositry.update(corporationStateVal?.uid, {
-      ...corporationStateVal,
-      room_ids: corporationStateVal.room_ids
-        ? [...corporationStateVal.room_ids, roomId]
-        : [roomId],
-    });
-    // if (!recruitUser) throw new Error("recruitUserなし");
-    await UserRepository.update(user.uid, {
-      ...user,
-      room_ids: user.room_ids ? [...user.room_ids, roomId] : [roomId],
-    });
-    setCorporationState((prev: any): any => {
-      return {
-        ...prev,
-        room_ids: prev?.room_ids ? [...prev.room_ids, roomId] : [roomId],
-      };
-    });
-    router.push(`/corporation/chat/${roomId}`);
-  };
+  //   // この辺の処理はrepositoryとかserviceに切り出したい
+  //   await ChatRepository.post(
+  //     corporationStateVal.uid,
+  //     corporationStateVal.corporation_name,
+  //     roomId,
+  //     APPLY_FIRST_MESSAGE
+  //   );
+  //   await CorporationRepositry.update(corporationStateVal?.uid, {
+  //     ...corporationStateVal,
+  //     room_ids: corporationStateVal.room_ids
+  //       ? [...corporationStateVal.room_ids, roomId]
+  //       : [roomId],
+  //   });
+  //   // if (!recruitUser) throw new Error("recruitUserなし");
+  //   await UserRepository.update(user.uid, {
+  //     ...user,
+  //     room_ids: user.room_ids ? [...user.room_ids, roomId] : [roomId],
+  //   });
+  //   setCorporationState((prev: any): any => {
+  //     return {
+  //       ...prev,
+  //       room_ids: prev?.room_ids ? [...prev.room_ids, roomId] : [roomId],
+  //     };
+  //   });
+  //   router.push(`/corporation/chat/${roomId}`);
+  // };
 
   return (
     <div className="flex justify-center w-full my-5">
-      <div className="flex-col w-3/5 justify-center mt-10 rounded-lg bg-white">
+      {/* <div className="flex-col w-3/5 justify-center mt-10 rounded-lg bg-white">
         <div className="text-center text-2xl my-5">
           <p className="mb-2">名前</p>
           <p className="">{user?.name}</p>
@@ -101,7 +101,7 @@ export const UserDetailPage = (): JSX.Element => {
             戻る
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

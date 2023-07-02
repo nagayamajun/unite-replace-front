@@ -30,12 +30,12 @@ export const MyProductAndRelatedProduct = () => {
         {myProducts?.length === 0 ? (
           <p className="text-center font-bold text-red-400">There are no my recruits.</p>
         ) : (
-          myProducts?.map((myProduct) => {
+          myProducts?.map((myProduct, index) => {
             //自分の作成したコメントがあるかをチェックする
             const hasCommnet = myProduct.comment?.some((comment) => comment.userId === user?.id);
 
             return (
-              <div className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
+              <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
                 <div className="flex flex-col items-center sm:flex-row">
                   <p className="font-semibold mb-2 sm:mb-0 sm:mr-10">{myProduct.headline}</p>
                   { hasCommnet ? (
@@ -62,12 +62,12 @@ export const MyProductAndRelatedProduct = () => {
         {relatedProducts?.length === 0 ? (
           <p className="text-center font-bold text-red-400">There are no my recruits.</p>
         ) : (
-          relatedProducts?.map((relatedProduct) => {
+          relatedProducts?.map((relatedProduct, index) => {
             //自分の作成したコメントがあるかをチェックする
             const hasCommnet = relatedProduct.comment?.some((comment) => comment.userId === user?.id);
 
             return (
-              <div className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
+              <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
                 <div className="flex flex-col items-center sm:flex-row">
                   <p className="font-semibold mr-10">{relatedProduct.headline}</p>
                   { hasCommnet ? (

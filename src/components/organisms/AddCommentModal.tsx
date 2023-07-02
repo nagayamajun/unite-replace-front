@@ -22,7 +22,7 @@ export const AddCommentModal: React.FC<Props> = ({ isOpen, setIsOpen, closeModal
     control,
   } = useForm();
 
-  const onSubmit = async(data: {content: string}) => {
+  const onSubmit = async(data: any) => {
     const formData = {
       content: data.content,
       productId: productId

@@ -52,8 +52,8 @@ export const OwnRecruitDetail: React.FC = ()  => {
           <div className="flex flex-col justify-start items-start border-b pl-5 m-2 sm:pl-0 pb-5">
             <p className="my-2 font-semibold">募集スキル</p>
             <div className="break-all flex-row flex flex-wrap">
-              {recruit?.programingSkills?.map(skill => (
-                  <p className="bg-gray-50 border rounded-2xl m-1 px-3 overflow-hidden text-overflow-ellipsis">{skill}</p>
+              {recruit?.programingSkills?.map((skill, index) => (
+                  <p key={index} className="bg-gray-50 border rounded-2xl m-1 px-3 overflow-hidden text-overflow-ellipsis">{skill}</p>
               ))}
             </div>
           </div>
@@ -85,10 +85,10 @@ export const OwnRecruitDetail: React.FC = ()  => {
           <div className="border-b pl-5 sm:pl-0 m-2 pb-5">
             <p className="font-semibold mb-2">参加者</p>
             {recruit?.userRecruitParticipant?.length === 0 && <p>参加者はまだいません</p>}
-            {recruit?.userRecruitParticipant?.map((participant: UserRecruitParticipant) => {
+            {recruit?.userRecruitParticipant?.map((participant: UserRecruitParticipant, index) => {
               if (participant.isApproved) {
                 return (
-                  <div>
+                  <div key={index}>
                     {/* userの写真追加する */}
                     <p>{participant.user.name}</p>
                   </div>
@@ -101,10 +101,10 @@ export const OwnRecruitDetail: React.FC = ()  => {
             <p className="font-semibold mb-2">参加希望者一覧</p>
             {/* ここは応募してくれた方を一覧表示する */}
             {recruit?.userRecruitParticipant?.length === 0 && <p>希望者はまだいません</p>}
-            {recruit?.userRecruitParticipant?.map((participant: UserRecruitParticipant) => {
+            {recruit?.userRecruitParticipant?.map((participant: UserRecruitParticipant, index) => {
               if (!participant.isApproved) {
                 return (
-                  <div className="flex flex-row justify-between">
+                  <div key={index} className="flex flex-row justify-between">
                     <p>{participant.user?.name}</p>
                     <div>
                       <button onClick={() => {approveApplication(participant.id)}} className="mr-2 hover:text-green-400">承認</button>

@@ -14,30 +14,30 @@ import { CorporationRepositry } from "@/modules/corporation/corporation.reposito
 import { employeeRepository } from "@/modules/employee/employee.repository";
 
 
-export const useCorporateAuth = (): UserStateType => {
+export const useCorporateAuth = () => {
   const router = useRouter();
   const [corporation, setCorporation] = useRecoilState<CorporationStateType>(CorporationState);
 
   //apiは作成している
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (authCorporation) => {
-      if (authCorporation) {
-        // const token = await authCorporation.getIdToken();
-        // setAuthToken(token);
-        // const employee = await employeeRepository.findEmployeeByFirebaseUID()
+  // useEffect(() => {
+  //   const unsub = onAuthStateChanged(auth, async (authCorporation) => {
+  //     if (authCorporation) {
+  //       // const token = await authCorporation.getIdToken();
+  //       // setAuthToken(token);
+  //       // const employee = await employeeRepository.findEmployeeByFirebaseUID()
 
-        // if (employee) {
-        //   setCorporation(employee)
-        // }
-        //
-      } else {
-        // resetStatus();
-        //Authコンポーネントにpush
-        router.push('/corporation/corporateSignIn');
-      }
-    });
-    return () => unsub();
-  }, []);
+  //       // if (employee) {
+  //       //   setCorporation(employee)
+  //       // }
+  //       //
+  //     } else {
+  //       // resetStatus();
+  //       //Authコンポーネントにpush
+  //       router.push('/corporation/corporateSignIn');
+  //     }
+  //   });
+  //   return () => unsub();
+  // }, []);
 
-  return corporation;
+  // return corporation;
 };

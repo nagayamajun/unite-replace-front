@@ -75,8 +75,8 @@ export const RecruitDetail: React.FC = () => {
           <div className="flex flex-col justify-start items-start border-b pl-5 m-2 sm:pl-0 pb-5">
             <p className="my-2 font-semibold">募集スキル</p>
             <div className="break-all flex-row flex flex-wrap">
-              {recruit?.programingSkills?.map(skill => (
-                  <p className="bg-gray-50 border rounded-2xl m-1 px-3 overflow-hidden text-overflow-ellipsis">{skill}</p>
+              {recruit?.programingSkills?.map((skill, index) => (
+                  <p key={index} className="bg-gray-50 border rounded-2xl m-1 px-3 overflow-hidden text-overflow-ellipsis">{skill}</p>
               ))}
             </div>
           </div>

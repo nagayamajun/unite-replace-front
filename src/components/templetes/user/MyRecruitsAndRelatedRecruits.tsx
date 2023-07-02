@@ -31,10 +31,10 @@ export const MyRecruitsAndRelatedRecruits = () => {
         {myRecruits?.length === 0 ? (
           <p className="text-center font-bold text-red-400">There are no my recruits.</p>
         ) : (
-          myRecruits?.map((myRecruit) => {
+          myRecruits?.map((myRecruit, index) => {
             const hasApprovedApplicants = myRecruit.userRecruitParticipant?.some(participant => participant.isApproved === false);
             return (
-              <div className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
+              <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
                 <div className="flex flex-col items-center sm:flex-row">
                   <p className="font-semibold mb-2 sm:mb-0 sm:mr-10">{myRecruit.hackthonName}</p>
                   { hasApprovedApplicants ? (
@@ -61,9 +61,9 @@ export const MyRecruitsAndRelatedRecruits = () => {
         {relatedRecruits?.length === 0? (
           <p className="text-center font-bold text-red-400">There are no related recruits.</p>
         ) : (
-          relatedRecruits?.map((relatedRecruit) => {
+          relatedRecruits?.map((relatedRecruit, index) => {
             return (
-              <div className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
+              <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
                 <div className="flex flex-col items-center sm:flex-row">
                   <p className="font-semibold mb-2 sm:mb-0 sm:mr-10">{relatedRecruit.hackthonName}</p>
                   <p className="text-sm mb-2 sm:mb-0 sm:text-base">募集主: {relatedRecruit.recruiter?.name}</p>
