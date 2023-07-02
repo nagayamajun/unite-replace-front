@@ -2,7 +2,7 @@ export type User = {
   id: string;
   firebaseUID: string;
   name?: string;
-  image_url?: string;
+  imageUrl?: string;
   age?: string;
   prefecture?: string;
   university?: string;
@@ -12,7 +12,7 @@ export type User = {
   position?: string;
   development_experience?: boolean;
   internship_experience?: boolean;
-  github?: string;
+  githubAccount?: string;
   programingSkills?: [string];
   room_ids?: string[];
 };
