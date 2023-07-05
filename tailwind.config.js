@@ -17,7 +17,11 @@ module.exports = {
         "caveat": ["Caveat", "cursive"],
         "zen": ["Zen Maru Gothic", "sans-serif"]
       },
+      margin: {
+        "200": "200px",
+      },
       width: {
+        "100": "100px",
         'base': '500px',
         'sm': '640px',
         'md': '768px',

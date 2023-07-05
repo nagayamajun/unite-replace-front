@@ -32,11 +32,11 @@ export const UserLayout = ({ children }: Props) => {
         <main>{children}</main>
       </div>
 
-      <div className="hidden sm:flex sm:flex-row ">
+      <div className="hidden sm:flex sm:flex-row">
         {/* <Header /> */}
         <SideBar />
         <div className="flex-grow bg-gray-100 flex items-center justify-center">
-          <main>{children}</main>
+          {children}
         </div>
       </div>
     </>

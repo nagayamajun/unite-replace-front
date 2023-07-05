@@ -68,7 +68,7 @@ export const SignIn: React.FC = (): JSX.Element => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen mt-5">
+    <div className="flex flex-col justify-center items-center h-screen mt-5">
       <EmailAndPasswordForm onSubmit={onSubmit} buttonText="ログイン" />
       <div className="flex sm:w-1/2 w-3/5 my-6">
         <div className="h-0 w-1/3 border-b border-black mt-3"></div>
