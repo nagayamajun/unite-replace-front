@@ -37,7 +37,7 @@ export const PlainInput = ({
   inputFont = "text-sm",
 }: PlainInputProps): JSX.Element => {
   return (
-    <div className="flex flex-col gap-1 mb-4">
+    <div className="flex flex-col gap-1 mb-4 w-full">
       <label htmlFor="nameInput" className={labelFont}>
         {labelText}
       </label>

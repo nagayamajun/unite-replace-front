@@ -60,7 +60,7 @@ export const RecruitDetail: React.FC = () => {
   if (isLiked === undefined) return <Loading/>
 
   return (
-    <div className="h-full flex justify-center items-center sm:bg-gray-100 pb-[200px] text-gray-600">
+    <div className="h-full min-h-screen flex justify-center items-center sm:bg-gray-100  text-gray-600">
       <div className="flex flex-col items-center w-4/5 sm:w-base md:w-sm  bg-white rounded-sm">
         <div className="h-20 sm:h-40 w-full flex flex-col justify-center items-center bg-gradient-to-r from-green-300 to-pink-300 text-white rounded-sm rounded-b-none">
           {/* ハッカソン名 */}

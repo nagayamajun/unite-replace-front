@@ -25,8 +25,8 @@ export const Header = (): JSX.Element => {
         <div className="ml-4 flex justify-center items-center">
           <Link href={"/homeScreen"}>
             <p className="text-xl sm:text-2xl font-bold">
-              <span className="text-green-700">T</span>S
-              <span className="text-pink-400">U</span>NAGU
+              <span className="text-green-700">U</span>N
+              <span className="text-pink-400">I</span>TE
             </p>
           </Link>
         </div>

@@ -14,10 +14,10 @@ export const HomeScreen = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col">
       <NarrowSearch />
       <div className="border-b w-full "></div>
       <RecruitList />
-    </>
+    </div>
   );
 };

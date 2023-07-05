@@ -5,6 +5,8 @@ import { CiViewList } from 'react-icons/ci'
 import { IoIosCreate } from 'react-icons/io'
 import { AiOutlineHeart } from 'react-icons/ai'
 import { MdOutlineManageAccounts } from 'react-icons/md'
+import { ChatRoomListMenu } from "./ChatRoomListMenu";
+import Image from "next/image";
 
 
 export const SideBar = (): JSX.Element => {
@@ -25,11 +27,19 @@ export const SideBar = (): JSX.Element => {
     <div className="flex flex-col h-auto sm:w-52 md:w-64  bg-gray-800 text-white ">
       <div className="flex justify-center items-center h-20 border-b border-white mx-2">
         <Link href={"/homeScreen"}>
-          <p className="text-xl sm:text-2xl font-bold">
-            <span className="text-green-700">T</span>S
-            <span className="text-pink-400">U</span>NAGU
-          </p>
+        <p className="text-xl sm:text-2xl font-bold">
+              <span className="text-green-700">U </span>N 
+              <span className="text-pink-400"> I </span>T E
+            </p>
         </Link>
+      </div>
+      <div className="flex flex-row items-center justify-start font-semibold h-16 ml-1 w-full hover:bg-green-500">
+        <ChatRoomListMenu>
+          <div className="flex justify-start items-center  font-semibold">
+            <Image src="/chat.gif" alt="Logo" width={40} height={40} />
+            <p>チャットページ</p>
+          </div>
+        </ChatRoomListMenu>
       </div>
       <div className="flex flex-col items-center">
         { menuLinks.map((e, index) => (

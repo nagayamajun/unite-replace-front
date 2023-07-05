@@ -78,7 +78,7 @@ export const MyProductAndRelatedProduct = () => {
                   }
                 </div>
                 <div className="flex justify-end">
-                  <Link href={`/product/`} className="flex text-red-600 text-sm sm:text-base">
+                  <Link href={`/product/${relatedProduct.id}`} className="flex text-red-600 text-sm sm:text-base">
                     詳細へ
                   </Link>
                 </div>
