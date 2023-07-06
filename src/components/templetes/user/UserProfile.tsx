@@ -19,12 +19,17 @@ import Link from "next/link";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
 import { useOwnRecruitsByUserId } from "@/hooks/useOwnRecruitsByUserId";
 import { useRelatedRecruitsByUserId } from "@/hooks/useRelatedRecruitsByUserId";
+import { PiSignOutBold } from "react-icons/pi";
+import { authRepository } from "@/modules/auth/auth.repository";
+import { ConfirmModal } from "@/components/organisms/ConfirmModal";
 
 export const UserProfile = (): JSX.Element => {
   const router = useRouter();
   const { id: userId } = router.query;
 
   const { register, handleSubmit, control, reset } = useForm();
+
+  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
 
   const mySelf = useRecoilValue<UserStateType>(UserState);
   const setMyselfState = useSetRecoilState<UserStateType>(UserState);
@@ -42,11 +47,17 @@ export const UserProfile = (): JSX.Element => {
   const [isGraduationYearOpen, setIsGraduationYearOpen] = useState(false);
   const [isSkillOpen, setIsSkillOpen] = useState(false);
 
-  //失敗/成功notice
-  const [isNoticeOpen, setIsNoticeOpen] = useState(false);
-  const [noticeMessage, setNoticeMessage] = useState("");
-  const [noticeColor, setNoticeColor] = useState<boolean>();
-  const closeNotice = () => setIsNoticeOpen(false);
+  //ログアウト失敗/成功notice
+  const [isSignOutNoticeOpen, setIsSignOutNoticeOpen] = useState(false);
+  const [signOutNoticeMessage, setSignOutNoticeMessage] = useState("");
+  const [signOutNoticeColor, setSignOutNoticeColor] = useState<boolean>();
+  const closeSignOutNotice = () => setIsSignOutNoticeOpen(false);
+
+  //プロフィール編集失敗/成功notice
+  const [isProfileNoticeOpen, setIsProfileNoticeOpen] = useState(false);
+  const [profileNoticeMessage, setProfileNoticeMessage] = useState("");
+  const [profileNoticeColor, setProfileNoticeColor] = useState<boolean>();
+  const closeProfileNotice = () => setIsProfileNoticeOpen(false);
 
   const isMyself = mySelf?.id === userId;
 
@@ -60,15 +71,26 @@ export const UserProfile = (): JSX.Element => {
     }
   }, [profileUser]);
 
+  const onSignOut = async () => {
+    await authRepository.logOut().then((result) => {
+      //notice表示
+      setIsSignOutNoticeOpen(true);
+      setSignOutNoticeMessage(result.message);
+      setSignOutNoticeColor(result.success);
+
+      router.push("/signIn");
+    });
+  };
+
   const onEditSubmit = async (submitData: any) => {
     await UserRepository.updateUserInfo({
       ...submitData,
       imageFile: submitData.imageFile && submitData.imageFile[0],
     }).then((result) => {
       //notice表示
-      setIsNoticeOpen(true);
-      setNoticeMessage(result.message);
-      setNoticeColor(result.success);
+      setIsProfileNoticeOpen(true);
+      setProfileNoticeMessage(result.message);
+      setProfileNoticeColor(result.success);
 
       //userProfileの状態と認証されている自分のrecoil stateを更新
       if (result.data) {
@@ -86,7 +108,7 @@ export const UserProfile = (): JSX.Element => {
 
       setTimeout(
         () => {
-          setIsNoticeOpen(false);
+          setIsProfileNoticeOpen(false);
         },
         result.success ? 2000 : 4000
       );
@@ -96,7 +118,28 @@ export const UserProfile = (): JSX.Element => {
   if (isLoading || !profileUser) return <Loading />;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-28 text-[16px] pb-20">
+    <div className="flex flex-col items-center justify-center gap-28 text-[16px] pb-20 w-full">
+      <button
+        hidden={!isMyself}
+        onClick={() => setIsConfirmOpen(true)}
+        className="absolute top-[70px] sm:top-[20px] right-[20px] flex items-center gap-2 rounded-md p-2 border-2"
+      >
+        <p className="font-bold text-red-400">ログアウト</p>
+        <PiSignOutBold />
+      </button>
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        setIsOpen={setIsConfirmOpen}
+        modalTitle="ログアウトしますか？"
+        onClickEvent={onSignOut}
+      />
+      {/* ログアウト失敗/成功notice */}
+      <SuccessOrFailureModal
+        isOpen={isSignOutNoticeOpen}
+        closeModal={closeSignOutNotice}
+        modalMessage={signOutNoticeMessage}
+        modalBgColor={signOutNoticeColor!}
+      />
       <form
         onSubmit={handleSubmit(onEditSubmit)}
         className="flex flex-col gap-20 w-3/4 sm:w-1/2 md:w-1/3"
@@ -228,10 +271,10 @@ export const UserProfile = (): JSX.Element => {
 
         {/* 成功/失敗notice */}
         <SuccessOrFailureModal
-          isOpen={isNoticeOpen}
-          closeModal={closeNotice}
-          modalMessage={noticeMessage}
-          modalBgColor={noticeColor!}
+          isOpen={isProfileNoticeOpen}
+          closeModal={closeProfileNotice}
+          modalMessage={profileNoticeMessage}
+          modalBgColor={profileNoticeColor!}
         />
       </form>
       {/* userが作成している募集 */}
