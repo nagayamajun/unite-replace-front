@@ -1,5 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PersonIcon } from "../atoms/PersonIcon";
+import { useRecoilValue } from "recoil";
+import { UserState, UserStateType } from "@/global-states/atoms";
 
 type Props = {
   uid: string;
@@ -17,11 +20,16 @@ export const UserCard = ({
   github,
   graduateYear,
 }: Props) => {
+  const myself = useRecoilValue<UserStateType>(UserState);
+
   return (
     <>
       <div className="font-caveat group group relative mb-2 h-full w-100 border overflow-hidden rounded-3xl bg-white lg:mb-3">
         <div className="flex justify-center">
-          <Image src="/avatar.gif" width={50} height={50} alt="avatar" />
+          <PersonIcon
+            originalIconImageSrc={myself?.imageUrl}
+            originalIconImageAlt={`${myself?.name}のアイコン`}
+          />
         </div>
         <div className="flex flex-col justify-center ">
           <p className="m-auto p-1">{name ? name : "No Name"}</p>

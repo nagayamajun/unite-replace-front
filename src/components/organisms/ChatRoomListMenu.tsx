@@ -1,9 +1,9 @@
 import { useChatRoomList } from "@/hooks/useChatRoomList";
 import { ChatRoom } from "@/types/chatRoom";
 import { Menu, Transition } from "@headlessui/react";
-import Image from "next/image";
 import Link from "next/link";
 import { Fragment, ReactElement } from "react";
+import { PersonIcon } from "../atoms/PersonIcon";
 
 type Props = {
   children: ReactElement;
@@ -24,7 +24,7 @@ export const ChatRoomListMenu = ({ children }: Props) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute z-10 right-2 mt-2 sm:right-0 sm:left-11 w-80 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute z-10 right-1 mt-2 sm:right-0 sm:left-11 w-56 sm:w-80 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {roomList?.map((room: ChatRoom) => (
             <Menu.Item key={room.id} as={Fragment}>
               {({ active }) => (
@@ -34,12 +34,9 @@ export const ChatRoomListMenu = ({ children }: Props) => {
                     active && "bg-[#0000001a]"
                   }`}
                 >
-                  <Image
-                    src={room.interlocutorImageUrl ?? "/avatar.gif"}
-                    alt="対話相手のロゴ"
-                    width={40}
-                    height={40}
-                    className="rounded-full border border-black"
+                  <PersonIcon
+                    originalIconImageSrc={room.interlocutorImageUrl}
+                    originalIconImageAlt={`${room.interlocutorName}のアイコン`}
                   />
                   <div>
                     <p className="min-h-[19px] text-[16px] font-black text-black leading-[19px]">
