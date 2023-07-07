@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { FocusEventHandler, ReactNode } from "react";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
 type ValidationRulus = {
@@ -14,6 +14,8 @@ type PlainTextAreaProps = {
   registerLabel: string;
   errors?: FieldErrors<FieldValues>
   rules?: ValidationRulus
+  onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
+  defaultValue?: string
 }
 
 //バリデーションを作成する
@@ -22,9 +24,11 @@ export const PlainTextArea = ({
   labelText,
   placeholder,
   register,
+  onBlur,
   registerLabel,
   errors,
-  rules
+  rules,
+  defaultValue,
 }: PlainTextAreaProps): JSX.Element => {
 
   return (
@@ -34,6 +38,7 @@ export const PlainTextArea = ({
         <textarea
           id="textarea"
           placeholder={placeholder}
+          defaultValue={defaultValue}
           className="border border-gray-300 h-32 rounded-md shadow-sm w-full outline-green-500 text-sm p-2"
           {...(register && register(registerLabel ?? "",
             rules

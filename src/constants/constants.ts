@@ -11,7 +11,19 @@ export const MAIL_USED_IN_PROVIDER_EXISTS =
   "選択した認証プロバイダで使用されているメールアドレスが、本サービスですでに登録済みである可能性があります。";
 
 export const FAIL_TO_PUSH_LIKE = "いいねを押すことに失敗しました。";
-export const FAIL_TO_DELETE_LIKE = "いいねを取り消すことに失敗しました。"
+export const FAIL_TO_DELETE_LIKE = "いいねを取り消すことに失敗しました。";
 
 export const SUCCESS_IN_UPDATE_USER = "ユーザー情報が更新されました。";
 export const FAIL_TO_UPDATE_USER = "ユーザー情報の更新に失敗しました。";
+
+export const SUCCESS_TO_APPROVE_PARTICIPANT = "承認に成功しました。";
+export const FAIL_TO_APPROVE_PARTICIPANT = "承認に失敗しました。"
+
+export const SUCCESS_TO_REJECT_PARTICIPANT = "拒否に成功しました。";
+export const FAIL_TO_REJECT_PARTICIPANT = "拒否に失敗しました。"
+
+export const SUCCESS_TO_UPDATE_RECRUIT = "募集情報を更新しました。"
+export const FAIL_TO_UPDATE_RECRUIT = "募集情報の更新に失敗しました。"
+
+export const SUCCESS_TO_DELETE_RECRUIT = "募集を削除しました。"
+export const FAIL_TO_DELETE_RECRUIT = "募集の削除に失敗しました。"

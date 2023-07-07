@@ -2,6 +2,7 @@ import { FormRecruitData } from "@/components/templetes/user/AddRecruit";
 import { Recruit } from "@/types/recruit";
 import { axiosInstance } from "@/libs/axios";
 import { ConfirmModal } from "@/types/confirmModal";
+import { FAIL_TO_DELETE_RECRUIT, FAIL_TO_UPDATE_RECRUIT, SUCCESS_TO_DELETE_RECRUIT, SUCCESS_TO_UPDATE_RECRUIT } from "@/constants/constants";
 
 export const recruitRepository = {
   //募集の一覧取得
@@ -102,5 +103,43 @@ export const recruitRepository = {
       return { message: "募集作成に失敗しました。", success: false };
     }
   },
+
+  //募集情報の編集
+  async editRecruit(
+    id: string,
+    input: FormRecruitData,
+  ): Promise<ConfirmModal> {
+    try {
+      await axiosInstance.put(`/user-recruit/${id}`, input);
+      return {
+        success: true,
+        message: SUCCESS_TO_UPDATE_RECRUIT
+      }
+    } catch (error) {
+      const isTypeSafeError = error instanceof Error;
+      return {
+        success: false,
+        message: `${FAIL_TO_UPDATE_RECRUIT} ${isTypeSafeError ? error.message : ""}`
+      }
+    }
+  },
+
   //募集の削除
+  async deleteRecruit(id: string): Promise<ConfirmModal> {
+    try {
+      await axiosInstance.delete(`/user-recruit/${id}`)
+      return {
+        success: true,
+        message: SUCCESS_TO_DELETE_RECRUIT
+      }
+    } catch (error) {
+      const isTypeSafeError = error instanceof Error
+      return {
+        success: false,
+        message: `${FAIL_TO_DELETE_RECRUIT}\n${isTypeSafeError ? error.message : ""}`
+      }
+    }
+  }
+
+
 };
