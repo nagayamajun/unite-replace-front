@@ -1,12 +1,13 @@
 import { UserState } from "@/global-states/atoms";
 import { Menu, Transition } from "@headlessui/react";
-import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
 import { useRecoilValue } from "recoil";
 import { ChatRoomListMenu } from "./ChatRoomListMenu";
+import { PiChatCircleDotsThin } from "react-icons/pi";
+import { PersonIcon } from "../atoms/PersonIcon";
 
-export const Header = (): JSX.Element => {
+export const MobileHeader = (): JSX.Element => {
   const userStateVal = useRecoilValue(UserState);
   const menuLinks = [
     { href: `/profiles/user/${userStateVal?.id}`, label: "マイページへ" },
@@ -30,10 +31,10 @@ export const Header = (): JSX.Element => {
             </p>
           </Link>
         </div>
-        <div className="flex col">
+        <div className="flex">
           <ChatRoomListMenu>
-            <div className="flex justify-center items-center mr-2">
-              <Image src="/chat.gif" alt="Logo" width={40} height={40} />
+            <div className="flex justify-center items-center p-2">
+              <PiChatCircleDotsThin size={36} />
             </div>
           </ChatRoomListMenu>
           <div className="flex items-center">
@@ -45,12 +46,10 @@ export const Header = (): JSX.Element => {
             </p>
             <Menu>
               <Menu.Button>
-                <Image
-                  src={userStateVal?.imageUrl ?? "/avatar.gif"}
-                  alt="Logo"
-                  width={50}
-                  height={50}
-                  className="border rounded-full"
+                <PersonIcon
+                  originalIconImageSrc={userStateVal?.imageUrl}
+                  originalIconImageAlt={`${userStateVal?.name}のアイコン`}
+                  originalIconClassName="rounded-full border border-black w-40 h-40"
                 />
               </Menu.Button>
               <Transition
@@ -62,7 +61,7 @@ export const Header = (): JSX.Element => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute right-3 mt-14 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute z-20 right-3 mt-14 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   {menuLinks.map((link) => (
                     <Menu.Item key={link.href} as={Fragment}>
                       {({ active }) => (

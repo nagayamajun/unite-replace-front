@@ -1,5 +1,4 @@
 import { UserState, UserStateType } from "@/global-states/atoms";
-import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
@@ -22,6 +21,7 @@ import { useRelatedRecruitsByUserId } from "@/hooks/useRelatedRecruitsByUserId";
 import { PiSignOutBold } from "react-icons/pi";
 import { authRepository } from "@/modules/auth/auth.repository";
 import { ConfirmModal } from "@/components/organisms/ConfirmModal";
+import { PersonIcon } from "@/components/atoms/PersonIcon";
 
 export const UserProfile = (): JSX.Element => {
   const router = useRouter();
@@ -119,6 +119,7 @@ export const UserProfile = (): JSX.Element => {
 
   return (
     <div className="flex flex-col items-center justify-center gap-28 text-[16px] pb-20 w-full">
+      {/* ログアウトボタン */}
       <button
         hidden={!isMyself}
         onClick={() => setIsConfirmOpen(true)}
@@ -140,18 +141,19 @@ export const UserProfile = (): JSX.Element => {
         modalMessage={signOutNoticeMessage}
         modalBgColor={signOutNoticeColor!}
       />
+      {/* プロフィール */}
       <form
         onSubmit={handleSubmit(onEditSubmit)}
         className="flex flex-col gap-20 w-3/4 sm:w-1/2 md:w-1/3"
       >
         <div className="mt-20 flex flex-col items-center gap-2">
           {/* アイコン */}
-          <Image
-            src={profileUser.imageUrl ?? "/avatar.gif"}
-            alt="人物アイコン"
-            width={900}
-            height={900}
-            className="rounded-full border border-black w-60 h-60"
+          <PersonIcon
+            originalIconImageSrc={profileUser.imageUrl}
+            originalIconImageAlt={`${profileUser.name}のアイコン`}
+            originalIconClassName="rounded-full border border-black w-40 h-40"
+            defaultIconFill="gray"
+            defaultIconClassName="w-40 h-40 rounded-full bg-white border border-black p-2 color-black-100"
             onClick={() => isMyself && setIsImageOpen(true)}
           />
           <EditProfileModal
