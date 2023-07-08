@@ -27,3 +27,5 @@ export const FAIL_TO_UPDATE_RECRUIT = "募集情報の更新に失敗しまし�
 
 export const SUCCESS_TO_DELETE_RECRUIT = "募集を削除しました。"
 export const FAIL_TO_DELETE_RECRUIT = "募集の削除に失敗しました。"
+export const SUCCESS_IN_SIGN_OUT = "ログアウトしました。";
+export const FAIL_TO_SIGN_OUT = "ログアウトに失敗しました。";

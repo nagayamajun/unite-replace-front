@@ -89,10 +89,10 @@ export const OwnRecruitDetail: React.FC = ()  => {
     <div className="h-full flex justify-center items-center sm:bg-gray-100">
       <div className="flex flex-col items-center w-4/5 sm:w-base md:w-sm  bg-white rounded-sm">
         <div className="h-20 sm:h-40 w-full flex flex-col justify-center items-center bg-gradient-to-r from-green-300 to-pink-300 text-white rounded-sm rounded-b-none relative">
-          {/* 削除ボタン */}
+          {/* 削除ボタン
           <button onClick={deleteRecruit} className="absolute top-4 right-4 text-red-500">
             <AiFillDelete size={30} />
-          </button>
+          </button> */}
           {/* ハッカソン名 */}
           <h1 className="text-3xl sm:text-4xl font-bold text-center">{recruit.hackthonName}</h1>
         </div>
@@ -174,12 +174,24 @@ export const OwnRecruitDetail: React.FC = ()  => {
           {
             recruit?.product.length !== 0 ? (
               <div className="w-4/5 flex flex-row items-center justify-between">
-                <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 px-4 py-4 rounded-md text-white font-semibold">募集情報を編集する</Link>
+                <div className="flex flex-row w-1/2">
+                  <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 px-4 py-4 rounded-md text-white font-semibold">募集情報を編集する</Link>
+                  {/* 削除ボタン */}
+                  <button onClick={deleteRecruit} className="ml-5 text-gray-400">
+                    <AiFillDelete size={25} />
+                  </button>
+                </div>
                 <Link href={`/product/${recruit.product[0]?.id}`} className="bg-green-400 hover:bg-green-500 px-6 py-4 rounded-md text-white font-semibold">Productページへ</Link>
               </div>
             ) : (
               <div className="w-4/5 flex flex-row items-center justify-between">
-                <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 px-2 py-2 rounded-md text-white font-semibold">募集情報を編集する</Link>
+                <div className="flex flex-row w-1/2">
+                  <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 px-2 py-2 rounded-md text-white font-semibold">募集情報を編集する</Link>
+                  {/* 削除ボタン */}
+                  <button onClick={deleteRecruit} className="ml-5 text-gray-400">
+                    <AiFillDelete size={25} />
+                  </button>
+                </div>
                 <Link href={`/product/uploadProduct?recruitId=${recruit?.id}`} className="bg-green-400 hover:bg-green-500 px-2 py-2 rounded-md text-white font-semibold">UPLOADする</Link>
               </div>
             )
@@ -198,4 +210,4 @@ export const OwnRecruitDetail: React.FC = ()  => {
 }
 
  //リファクタ
- //募集人数を動的に変更
+ //募集人数を動的に変更 -> 承認したら募集人数を一人減らす

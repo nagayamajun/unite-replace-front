@@ -106,7 +106,7 @@ export const SignUp = () => {
 
       <div className="flex justify-center">
         <p className="text-sm sm:text-base">アカウンントをお持ちの方　</p>
-        <Link href="/signUp" className="font-bold">
+        <Link href="/signIn" className="font-bold">
           ログイン
         </Link>
       </div>

@@ -1,8 +1,10 @@
 import {
   FAIL_TO_SIGN_IN,
+  FAIL_TO_SIGN_OUT,
   FAIL_TO_SIGN_UP,
   MAIL_USED_IN_PROVIDER_EXISTS,
   SUCCESS_IN_SIGN_IN,
+  SUCCESS_IN_SIGN_OUT,
   SUCCESS_IN_SIGN_UP,
 } from "@/constants/constants";
 import { axiosInstance, setAuthToken } from "@/libs/axios";
@@ -185,12 +187,18 @@ export const authRepository = {
   },
 
   //サインアウトする
-  async logOut(): Promise<void> {
+  async logOut() {
     try {
       await signOut(auth);
-    } catch (error) {
-      alert("サインアウトに失敗しました。");
-      window.location.reload();
+
+      return { success: true, message: SUCCESS_IN_SIGN_OUT };
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
+
+      return {
+        success: false,
+        message: `${FAIL_TO_SIGN_OUT}\n${isTypeSafeError ? error.message : ""}`,
+      };
     }
   },
 };
