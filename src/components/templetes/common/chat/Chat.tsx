@@ -13,6 +13,7 @@ import { ChatRoom } from "@/types/chatRoom";
 import Link from "next/link";
 import { isoToJstString } from "@/utils/date";
 import { ChatRepository } from "@/modules/chat/chat.repository";
+import { PersonIcon } from "@/components/atoms/PersonIcon";
 
 export const ChatPage = (): JSX.Element => {
   const socket = io(`${process.env.NEXT_PUBLIC_API_BASE_URL}`, {
@@ -87,12 +88,9 @@ export const ChatPage = (): JSX.Element => {
               room.id === roomId && "bg-[#0000001a]"
             }`}
           >
-            <Image
-              src={room.interlocutorImageUrl ?? "/avatar.gif"}
-              alt="対話相手のロゴ"
-              width={40}
-              height={40}
-              className="rounded-full border border-black"
+            <PersonIcon
+              originalIconImageSrc={room.interlocutorImageUrl}
+              originalIconImageAlt={`${room.interlocutorName}のアイコン`}
             />
             <div>
               <p className="min-h-[19px] text-[16px] font-black leading-[19px]">
@@ -138,12 +136,9 @@ export const ChatPage = (): JSX.Element => {
                 room.id === roomId && "bg-[#0000001a]"
               }`}
             >
-              <Image
-                src={room.interlocutorImageUrl ?? "/avatar.gif"}
-                alt="対話相手のロゴ"
-                width={40}
-                height={40}
-                className="rounded-full border border-black"
+              <PersonIcon
+                originalIconImageSrc={room.interlocutorImageUrl}
+                originalIconImageAlt={`${room.interlocutorName}のアイコン`}
               />
               <div>
                 <p className="min-h-[19px] text-[16px] font-black leading-[19px]">
@@ -172,14 +167,15 @@ export const ChatPage = (): JSX.Element => {
                 : { alignSelf: "start" }
             }
           >
-            <Image
-              src={chat.senderImage ?? "/avatar.gif"}
-              alt="人物アイコンのロゴ"
-              width={40}
-              height={40}
-              className={`${
+            <PersonIcon
+              originalIconImageSrc={chat.senderImage}
+              originalIconImageAlt={`${chat.senderName}のアイコン`}
+              originalIconClassName={`${
                 sender?.id === chat.senderId ? "hidden" : ""
               } rounded-full border border-black w-[40px] h-[40px]`}
+              defaultIconClassName={`${
+                sender?.id === chat.senderId ? "hidden" : ""
+              } rounded-full border border-black w-[40px] h-[40px] p-1`}
             />
             <div className="bg-white rounded-xl flex-col gap-[8px]">
               <p

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { PersonIcon } from "../atoms/PersonIcon";
+import { PiChatCircleDotsThin } from "react-icons/pi";
 
 export const CorporateHeaderLine = (): JSX.Element => {
   const router = useRouter();
@@ -25,10 +27,10 @@ export const CorporateHeaderLine = (): JSX.Element => {
           </Link>
           <div className="flex mr-[4%]">
             <Link href={`/corporation/chat/${arbitraryRoomId}`}>
-              <Image src="/chat.gif" alt="Logo" width={90} height={90} />
+              <PiChatCircleDotsThin size={36} />
             </Link>
             <Link href="#">
-              <Image src="/avatar.gif" alt="Logo" width={90} height={90} />
+              <PersonIcon />
             </Link>
           </div>
         </div>
