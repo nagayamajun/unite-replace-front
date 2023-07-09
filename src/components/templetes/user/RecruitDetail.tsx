@@ -18,6 +18,15 @@ export const RecruitDetail: React.FC = () => {
   const { id } = router.query;
   const [ recruit, setRecruit ] = useState<Recruit>();
 
+  const [ isParticipant, setIsParticipant ] = useState<boolean>()
+  //いいねをしているかしていないかの判定に利用する
+  const isLiked = recruit?.userToRecruitLikes?.some((like) => like.userId === user?.id);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [color, setColor] = useState<boolean>();
+  const closeModal = () => setIsOpen(false);
+
   useEffect(() => {
     (async () => {
       const fetchedRecruit = await recruitRepository.getRecruitById(id as string)
@@ -25,22 +34,19 @@ export const RecruitDetail: React.FC = () => {
     })()
   }, [])
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
-  const isParticipant = recruit?.userRecruitParticipant?.some(participant => participant.userId == user?.id);
-  //いいねをしているかしていないかの判定に利用する
-  const isLiked = recruit?.userToRecruitLikes?.some((like) => like.userId === user?.id);
+  useEffect(() => {
+    const checkParticipant = recruit?.userRecruitParticipant?.some(
+      participant => participant.userId === user?.id
+    );
+    setIsParticipant(checkParticipant);
+  }, [recruit]);
 
   const applyForJoin = async() => {
     await userRecruitParticipantRepository.applyForJoin(recruit?.id as string);
-    router.reload()
+    setIsParticipant(true)
   }
 
   const onApplyFor = async () => {
-    if (!recruit?.id) throw new Error('recruitIdが確認できません')
-
     UserRecruitApplicationRepository.applyFor(recruit?.id!)
       .then((applicationWithRoomId) => {
         router.push(`/chat/${applicationWithRoomId.roomId}`);
@@ -57,7 +63,7 @@ export const RecruitDetail: React.FC = () => {
       });
   };
 
-  if (isLiked === undefined) return <Loading/>
+  if (isLiked === undefined || isParticipant === undefined) return <Loading/>
 
   return (
     <div className="h-full min-h-screen flex justify-center items-center sm:bg-gray-100  text-gray-600">

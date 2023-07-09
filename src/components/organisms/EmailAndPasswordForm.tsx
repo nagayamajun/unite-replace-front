@@ -9,9 +9,7 @@ export const EmailAndPasswordForm: React.FC<Props> = ({ onSubmit, buttonText }):
 
   const { handleSubmit, register, formState: {errors}} = useForm()
   return (
-
-    <>
-      <form className="flex-col sm:w-1/2 w-3/5" onSubmit={handleSubmit(onSubmit)}>
+      <form className="flex-col w-full" onSubmit={handleSubmit(onSubmit)}>
         <AuthInput
           labelText="メールアドレス"
           placeholder="example@gmail.com"
@@ -41,7 +39,6 @@ export const EmailAndPasswordForm: React.FC<Props> = ({ onSubmit, buttonText }):
           </button>
         </div>
       </form>
-    </>
   )
 }
 
