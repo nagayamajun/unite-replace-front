@@ -1,4 +1,7 @@
+import { FAIL_TO_APPROVE_PARTICIPANT, FAIL_TO_REJECT_PARTICIPANT, SUCCESS_TO_APPROVE_PARTICIPANT, SUCCESS_TO_REJECT_PARTICIPANT } from "@/constants/constants";
 import { axiosInstance } from "@/libs/axios";
+import { ConfirmModal } from "@/types/confirmModal";
+import { type } from "os";
 
 export const userRecruitParticipantRepository = {
   //参加依頼を送る
@@ -22,20 +25,34 @@ export const userRecruitParticipantRepository = {
     }
   },
 
-  async  approveParticipant(id: string) {
+  async  approveParticipant(id: string): Promise<ConfirmModal> {
     try {
       await axiosInstance.put(`/user-recruit-participant/${id}/approve`)
-      return{ message: '承認しました。'}
-    } catch (error) {
-      throw new Error(`承認することができませんでした。${error}`)
+      return {
+        message: `${SUCCESS_TO_APPROVE_PARTICIPANT}`,
+        success: true
+      }
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
+      return {
+        success: false,
+        message: `${FAIL_TO_APPROVE_PARTICIPANT}\n${isTypeSafeError ? error.message : ""}`
+      }
     }
   },
 
-  async rejectParticipant(id: string) {
+  async rejectParticipant(id: string): Promise<ConfirmModal> {
     try {
       await axiosInstance.delete(`/user-recruit-participant/${id}/reject`)
+      return {
+        message: `${SUCCESS_TO_REJECT_PARTICIPANT}`,
+        success: true
+      }
     } catch (error) {
-      throw new Error(`拒否することができませんでした。 ${error}`)
+      const isTypeSafeError = error instanceof Error
+      return {
+        message: `${FAIL_TO_REJECT_PARTICIPANT}\n${isTypeSafeError ? error.message : ""}`
+      }
     }
   }
 };
