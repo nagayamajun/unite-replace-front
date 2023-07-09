@@ -9,6 +9,8 @@ import {
 } from "@/constants/constants";
 import { axiosInstance, setAuthToken } from "@/libs/axios";
 import { auth } from "@/libs/firebase";
+import { GithubUtils } from "@/libs/github";
+import { ConfirmModal } from "@/types/confirmModal";
 import {
   GithubAuthProvider,
   GoogleAuthProvider,
@@ -17,16 +19,29 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
+import { UserRepository } from "../user/user.repository";
+import { User } from "@/types/user";
 
 export const authRepository = {
   //学生ユーザーのメール・パスワードでのログイン
   async signInWithEmail(
     email: string,
     password: string
-  ): Promise<{ success: boolean; message: string } | undefined> {
+  ): Promise<ConfirmModal> {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      return { success: true, message: SUCCESS_IN_SIGN_IN };
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const token = await userCredential.user.getIdToken();
+      setAuthToken(token);
+
+      //このメソッドの呼び出し先で現在のuserレコードにnameが登録されているかどうかを確認するために取得
+      const user = await UserRepository.findUserByFirebaseUID();
+
+      return { success: true, message: SUCCESS_IN_SIGN_IN, data: user as User };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
 
@@ -41,7 +56,7 @@ export const authRepository = {
   async signUpWithEmailAndPassword(
     email: string,
     password: string
-  ): Promise<any> {
+  ): Promise<ConfirmModal> {
     try {
       const customToken = (
         await axiosInstance
@@ -71,7 +86,10 @@ export const authRepository = {
   },
 
   //これがcorporationのサインイン？
-  async signUpWithEmail(email: string, password: string): Promise<any> {
+  async signUpWithEmail(
+    email: string,
+    password: string
+  ): Promise<ConfirmModal> {
     try {
       //customTokenはサーバーサイドで発行されたトークンを返す。
       const customToken = (
@@ -102,7 +120,7 @@ export const authRepository = {
     email: string,
     password: string,
     sharedPassword: string
-  ): Promise<any> {
+  ): Promise<ConfirmModal> {
     try {
       //customTokenはサーバーサイドで発行されたトークンを返す。
       const customToken = (
@@ -135,21 +153,30 @@ export const authRepository = {
   },
 
   //学生ユーザーGoogle認証
-  async signInWithGoogle(): Promise<{ success: boolean; message: string }> {
+  async signInWithGoogle(): Promise<ConfirmModal> {
     const provider = new GoogleAuthProvider();
+
     try {
       const userCredential = await signInWithPopup(auth, provider).catch(() => {
         throw new Error(MAIL_USED_IN_PROVIDER_EXISTS);
       });
+
       const idToken = await userCredential.user.getIdToken();
       setAuthToken(idToken);
-      await axiosInstance
-        .post("/user/create-with-google-or-github")
-        .catch((error) => {
-          throw error.response.data;
-        });
 
-      return { success: true, message: SUCCESS_IN_SIGN_IN };
+      const createdUser = (
+        await axiosInstance
+          .post("/user/sign-in-with-google-or-github")
+          .catch((error) => {
+            throw error.response.data;
+          })
+      ).data;
+
+      return {
+        success: true,
+        message: SUCCESS_IN_SIGN_IN,
+        isCreated: !!createdUser,
+      };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
 
@@ -161,21 +188,42 @@ export const authRepository = {
   },
 
   //学生ユーザーGitHub認証
-  async signInWithGithub() {
+  async signInWithGithub(): Promise<ConfirmModal> {
     const provider = new GithubAuthProvider();
+
     try {
       const userCredential = await signInWithPopup(auth, provider).catch(() => {
         throw new Error(MAIL_USED_IN_PROVIDER_EXISTS);
       });
+
+      const signedCredential =
+        GithubAuthProvider.credentialFromResult(userCredential);
+      //github apiに接続するためのアクセストークンを取得
+      const githubAccessToken = signedCredential?.accessToken;
+
+      //github apiからユーザーのアカウント情報取得
+      const githubInfo = await GithubUtils.getAuthenticatedUser(
+        githubAccessToken
+      );
+
       const idToken = await userCredential.user.getIdToken();
       setAuthToken(idToken);
-      await axiosInstance
-        .post("/user/create-with-google-or-github")
-        .catch((error) => {
-          throw error.response.data;
-        });
 
-      return { success: true, message: SUCCESS_IN_SIGN_IN };
+      const createdUser = (
+        await axiosInstance
+          .post("/user/sign-in-with-google-or-github", {
+            githubAccount: githubInfo.html_url,
+          })
+          .catch((error) => {
+            throw error.response.data;
+          })
+      ).data;
+
+      return {
+        success: true,
+        message: SUCCESS_IN_SIGN_IN,
+        isCreated: !!createdUser,
+      };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
 
@@ -187,7 +235,7 @@ export const authRepository = {
   },
 
   //サインアウトする
-  async logOut() {
+  async logOut(): Promise<ConfirmModal> {
     try {
       await signOut(auth);
 
