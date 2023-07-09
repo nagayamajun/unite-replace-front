@@ -1,11 +1,11 @@
-import Image from "next/image";
 import { MouseEventHandler, ReactElement } from "react";
+import { AiFillEdit } from "react-icons/ai";
 
 type FormFieldProps = {
   labelText?: string;
   children: ReactElement;
   editable: boolean;
-  onCLick: MouseEventHandler<HTMLImageElement>;
+  onCLick: MouseEventHandler<HTMLButtonElement>;
 };
 
 export const FormField = ({
@@ -18,14 +18,13 @@ export const FormField = ({
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <p>{labelText}</p>
-        <Image
-          src="/pen.gif"
-          alt="鉛筆のロゴ"
-          width={60}
-          height={60}
+        <button
+          type="button"
           onClick={onCLick}
           className={editable ? "" : "hidden"}
-        />
+        >
+          <AiFillEdit className="text-xl" />
+        </button>
       </div>
       {children}
     </div>
