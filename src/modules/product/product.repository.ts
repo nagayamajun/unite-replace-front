@@ -10,6 +10,14 @@ export type submitProductDate = {
 };
 
 export const ProductRepositry = {
+  //全ての募集を取得する
+  async getAllProducts() {
+    const allProducts = ( await axiosInstance.get("/product").catch((error) => {
+      throw new Error("成果物の全件取得に失敗しました")
+    })).data
+    return allProducts
+  },
+
   //自分の作成したproduct全件取得
   async getMyProducts() {
     const myProducts = (

@@ -1,24 +1,40 @@
 import { authRepository } from "@/modules/auth/auth.repository";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { AuthInput } from "@/components/atoms/AuthInput";
+import { useState } from "react";
+import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
 
 export const CorporateSignIn = () => {
   const router = useRouter();
   const { handleSubmit, register, formState: {errors}} = useForm();
+  //モーダル関係
+  const [isOpen, setIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [color, setColor] = useState<boolean>();
+  const closeModal = () => setIsOpen(false);
 
-  const onSubmit = () => {
-    //今度実装する箇所
-    console.log("submit")
+  const onSubmit = async(data: any) => {
+    await authRepository.employeeSignInWithEmail(data.email, data.password, data.sharedPassword)
+    .then((result) => {
+      if (result) {
+        setIsOpen(true);
+        setModalMessage(result.message);
+        setColor(result.success);
+
+        setTimeout(
+          () => {
+            setIsOpen(false);
+            if (result.success) {
+              router.push("/corporation");
+            }
+          },
+          result.success ? 2000 : 4000
+        );
+      }
+    });
   }
-
-  const onClick = (data: any) => {
-    //ここは
-    authRepository.signUpWithEmail(data.email, data.password)
-      .then(() => router.push('/corporation/inputInfo'));
-  };
 
   return (
      <div className="w-full h-screen">
@@ -69,29 +85,13 @@ export const CorporateSignIn = () => {
           </div>
         </div>
       </div>
-     </div>
-  )
-}
-    // <div className="flex flex-col items-center h-screen mt-5">
-    //   <EmailAndPasswordForm
-    //     onSubmit={onSubmit}
-    //     buttonText="新規登録"
-    //   />
-
-    //   <div className="flex col items-center justify-center sm:w-1/2 w-3/5 ">
-
-
-    //   <div className="flex justify-center">
-    //       <p className="text-sm sm:text-base">アカウンントをお持ちの方　</p>
-    //       <Link href="/signUp" className="font-bold">
-    //         ログイン
-    //       </Link>
-    //   </div>
-
-      {/* <SuccessOrFailureModal
+          
+      <SuccessOrFailureModal
         isOpen={isOpen}
         closeModal={closeModal}
         modalMessage={modalMessage}
         modalBgColor={color!}
-      /> */}
-  // </div>
+      />
+     </div>
+  )
+}

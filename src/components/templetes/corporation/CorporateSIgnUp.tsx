@@ -2,7 +2,7 @@ import { authRepository } from "@/modules/auth/auth.repository";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { AuthInput } from "@/components/atoms/AuthInput";
 import { useState } from "react";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
@@ -14,33 +14,34 @@ type FormData = {
 }
 
 export const CorporateSignUp = () => {
+  const router = useRouter();
   //モーダル関係
   const [isOpen, setIsOpen] = useState(false);
   const [modalMessage ,setModalMessage] = useState("");
   const [color, setColor] = useState<boolean>();
   const closeModal = () => setIsOpen(false)
-  const router = useRouter();
   const { handleSubmit, register, formState: {errors}} = useForm();
 
-  const onSubmit = ({email, password, sharedPassword}: FormData) => {
+  const onSubmit: SubmitHandler<any> = ({email, password, sharedPassword}: FormData) => {
     authRepository.employeeSignUpWithEmail(email, password, sharedPassword).then(result => {
       if(result) {
-      setIsOpen(true)
-      setModalMessage(result.success)
-      setColor(result.success)
+        setIsOpen(true)
+        setModalMessage(result.success)
+        setColor(result.success)
 
-      setTimeout(() => {
-        setIsOpen(false)
-        if(!result.success) return router.reload()
-        router.push('/corporation')
-      })
+        setTimeout(() => {
+          setIsOpen(false)
+          router.push('/corporation/corporateSignIn')
+        },
+        result.success ? 2000 : 4000
+        )
       }
     })
   }
 
   return (
      <div className="w-full h-screen">
-      {/* <div className="flex flex-col h-full items-center justify-center">
+      <div className="flex flex-col h-full items-center justify-center">
         <div className="flex flex-col w-2/3 bg-gray-50 rounded-lg p-10">
           <div className="font-bold text-center">企業様従業員アカウント作成</div>
           <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
@@ -93,7 +94,7 @@ export const CorporateSignUp = () => {
         closeModal={closeModal}
         modalMessage={modalMessage}
         modalBgColor={color!}
-      /> */}
+      />
      </div>
   )
 }
