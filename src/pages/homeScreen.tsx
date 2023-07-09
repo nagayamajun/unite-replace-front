@@ -15,6 +15,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       recruitsArray,
     },
+    revalidate: 60
   };
 };
 

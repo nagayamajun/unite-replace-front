@@ -3,6 +3,9 @@ import { User } from "@/types/user";
 import { FieldValue } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
+import { PersonIcon } from "../atoms/PersonIcon";
+import { useRecoilValue } from "recoil";
+import { UserState, UserStateType } from "@/global-states/atoms";
 
 type Props = {
   id: string
