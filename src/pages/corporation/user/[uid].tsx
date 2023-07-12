@@ -1,16 +1,10 @@
 import { UserDetailPage } from "@/components/templetes/corporation/UserDetail";
-import { CorporateLayout } from "@/components/templetes/layouts/CorporateLayout";
+import { EmployeeLayout } from "@/components/templetes/layouts/EmployeeLayout";
 import { ReactElement } from "react";
 
-const UserDetail = (): JSX.Element => {
-  return (
-    <>
-      <UserDetailPage />
-    </>
-  );
-};
+const UserDetail = (): JSX.Element => <UserDetailPage />
 
 UserDetail.getLayout = function getLayout(page: ReactElement) {
-  return <CorporateLayout>{page}</CorporateLayout>
+  return <EmployeeLayout>{page}</EmployeeLayout>
 }
 export default UserDetail;

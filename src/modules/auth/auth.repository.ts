@@ -3,12 +3,14 @@ import {
   FAIL_TO_SIGN_OUT,
   FAIL_TO_SIGN_UP,
   MAIL_USED_IN_PROVIDER_EXISTS,
+  PASSWORS_DONOT_MATCH,
   SUCCESS_IN_SIGN_IN,
   SUCCESS_IN_SIGN_OUT,
   SUCCESS_IN_SIGN_UP,
 } from "@/constants/constants";
 import { axiosInstance, setAuthToken } from "@/libs/axios";
-import { auth } from "@/libs/firebase";
+import { auth, corporateAuth } from "@/libs/firebase";
+import { ConfirmModal } from "@/types/confirmModal";
 import {
   GithubAuthProvider,
   GoogleAuthProvider,
@@ -17,6 +19,8 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
+import { employeeRepository } from "../employee/employee.repository";
+
 
 export const authRepository = {
   //学生ユーザーのメール・パスワードでのログイン
@@ -70,34 +74,33 @@ export const authRepository = {
     }
   },
 
-  //これがcorporationのサインイン？
-  async signUpWithEmail(email: string, password: string): Promise<any> {
+  //従業員のメール・パスワード・共有パスワードでのログイン
+  async employeeSignInWithEmail(email: string, password: string, sharedPassword: string): Promise<ConfirmModal  | any> {
     try {
-      //customTokenはサーバーサイドで発行されたトークンを返す。
-      const customToken = (
-        await axiosInstance.post("/user", { email, password })
-      ).data.token;
-      //userCredentialはサーバーサイドのtokenを利用してfirebaseにログイン
-      const userCredential = await signInWithCustomToken(auth, customToken);
-      //firebaseのIDtokenを取得
+      const userCredential = await signInWithEmailAndPassword(corporateAuth, email, password);
       const idToken = await userCredential.user.getIdToken();
-      //axiosInstanceにtoken設定
       setAuthToken(idToken);
 
-      return { success: true, message: SUCCESS_IN_SIGN_UP };
+      //従業員がsharedPasswordを持った企業に所属している確認する
+      const employee = await employeeRepository.getEmployeeByFirebaseUID();
+      
+      if (employee.belongToCorporation.sharedPassword !== sharedPassword) return {
+        sucess: false, message: PASSWORS_DONOT_MATCH
+      }
+
+      return { success: true, message: SUCCESS_IN_SIGN_IN };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
-
       return {
         success: false,
-        message: `失敗しました。再度お試しください。\n${
+        message: `FAIL_TO_SIGN_IN\n${
           isTypeSafeError ? error.message : ""
         }`,
       };
     }
   },
 
-  //企業側メールパスワード企業共有パスワードを用いて認証する。
+  //企業側従業員メールパスワード企業共有パスワードを用いてサインアップ。
   async employeeSignUpWithEmail(
     email: string,
     password: string,
@@ -114,7 +117,7 @@ export const authRepository = {
       ).data.token;
       //userCredentialはサーバーサイドのtokenを利用してfirebaseにログイン
       const userCredential = await signInWithCustomToken(
-        auth,
+        corporateAuth,
         customToken
       ).catch((err) => {
         throw new Error(err);
@@ -123,7 +126,7 @@ export const authRepository = {
       const idToken = await userCredential.user.getIdToken();
       setAuthToken(idToken);
 
-      return { success: true, message: "一旦成功" };
+      return { success: true, message: SUCCESS_IN_SIGN_UP };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
 

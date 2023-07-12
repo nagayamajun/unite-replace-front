@@ -1,7 +1,13 @@
+import { Employee } from "./employee";
+
 export type Corporation = {
-  uid: string;
-  corporation_name?: string;
-  introduction?: string;
-  phone_number?: number;
-  room_ids?: string[];
+  id: string
+  email: string  
+  sharedPassword?: string     
+  name?: string
+  imageUrl?: string
+  DescriptionOfBusiness?: string
+  location?: string
+  phoneNumber?: string           
+  employees?: Employee[]
 };
