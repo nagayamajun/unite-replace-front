@@ -23,10 +23,11 @@ export const CorporateSignUp = () => {
   const { handleSubmit, register, formState: {errors}} = useForm();
 
   const onSubmit: SubmitHandler<any> = ({email, password, sharedPassword}: FormData) => {
-    authRepository.employeeSignUpWithEmail(email, password, sharedPassword).then(result => {
+    authRepository.employeeSignUpWithEmail(email, password, sharedPassword)
+    .then((result) => {
       if(result) {
         setIsOpen(true)
-        setModalMessage(result.success)
+        setModalMessage(result.message)
         setColor(result.success)
 
         setTimeout(() => {
@@ -66,7 +67,7 @@ export const CorporateSignUp = () => {
             />
             <AuthInput
               labelText="企業パスワード"
-              buttonType="sharedPxassword"
+              buttonType="password"
               placeholder="企業パスワードをご入力ください"
               register={register}
               registerLabel="sharedPassword"

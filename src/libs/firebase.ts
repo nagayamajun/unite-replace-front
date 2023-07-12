@@ -7,6 +7,12 @@ import {
   apiKey,
   appId,
   authDomain,
+  corporateApiKey,
+  corporateAppId,
+  corporateAuthDomain,
+  corporateMessagingSenderId,
+  corporateProjectId,
+  corporateStorageKey,
   databaseURL,
   messagingSenderId,
   mesurementId,
@@ -27,12 +33,12 @@ const firebaseConfig = {
 
 //従業員のfirebase情報
 const corporateFirebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_CORPORATE_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_CORPORATE_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_CORPORATE_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_CORPORATE_FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_CORPORATE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_CORPORATE_FIREBASE_APP_ID
+  apiKey: corporateApiKey,
+  authDomain: corporateAuthDomain,
+  projectId: corporateProjectId,
+  storageBucket: corporateStorageKey,
+  messagingSenderId: corporateMessagingSenderId,
+  appId: corporateAppId,
 };
 
 export const app = initializeApp(firebaseConfig, 'user');
