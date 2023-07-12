@@ -1,11 +1,7 @@
 import { Recruit } from "@/types/recruit";
 import { User } from "@/types/user";
-import { FieldValue } from "firebase/firestore";
-import Image from "next/image";
 import Link from "next/link";
 import { PersonIcon } from "../atoms/PersonIcon";
-import { useRecoilValue } from "recoil";
-import { UserState, UserStateType } from "@/global-states/atoms";
 
 type Props = {
   id: string
@@ -32,12 +28,16 @@ export const ProductCard = ({
       <div className="flex flex-col space-y-1">
         <div className="text-sm">関連した人</div>
         <div className="flex flex-row items-center space-x-4">
-          <Image src={imageUrl ? imageUrl : "/avatar.gif"} alt="Image Description" width={50} height={50} className="border border-gray-200 rounded-full"/>
+          <PersonIcon 
+            originalIconImageSrc={imageUrl}
+          />
           <div>{name}</div>
         </div>
         { participants?.map((participant) => (  
           <div key={participant.id} className="flex flex-row items-center space-x-4">
-            <Image src={participant?.imageUrl ? participant.imageUrl : "/avatar.gif"} alt="Image Description" width={50} height={50} className="border border-gray-200 rounded-full"/>
+            <PersonIcon
+              originalIconImageAlt={participant.imageUrl}
+            />
             <div>{participant.name}</div>
           </div>
         ))}
