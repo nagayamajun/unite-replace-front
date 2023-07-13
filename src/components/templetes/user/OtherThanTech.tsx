@@ -82,6 +82,7 @@ export const OtherThanTechPage = (): JSX.Element => {
         />
         <PlainInput
           labelText="年齢"
+          inputType="number"
           placeholder="数字のみで年齢をご記入ください"
           defaultValue={userState?.age}
           register={register}
