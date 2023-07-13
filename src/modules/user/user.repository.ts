@@ -5,6 +5,7 @@ import {
   FAIL_TO_UPDATE_USER,
   SUCCESS_IN_UPDATE_USER,
 } from "@/constants/constants";
+import { ConfirmModal } from "@/types/confirmModal";
 
 export const UserRepository = {
   //全件取得
@@ -55,7 +56,7 @@ export const UserRepository = {
   //更新
   async updateUserInfo(
     submitData: any
-  ): Promise<{ data: User | null; success: boolean; message: string }> {
+  ): Promise<ConfirmModal & { data: User | null }> {
     try {
       const user = (
         await axiosInstance.put("/user/update-by-firebase-uid", submitData, {

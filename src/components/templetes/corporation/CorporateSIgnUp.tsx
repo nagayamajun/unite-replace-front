@@ -26,7 +26,7 @@ export const CorporateSignUp = () => {
     authRepository.employeeSignUpWithEmail(email, password, sharedPassword).then(result => {
       if(result) {
       setIsOpen(true)
-      setModalMessage(result.success)
+      setModalMessage(result.message)
       setColor(result.success)
 
       setTimeout(() => {

@@ -6,6 +6,7 @@ import { EmailAndPasswordForm } from "@/components/organisms/EmailAndPasswordFor
 import { useState } from "react";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
 import { useAuth } from "@/hooks/useAuth";
+import { ConfirmModal } from "@/types/confirmModal";
 
 type FormData = {
   email: string;
@@ -24,46 +25,45 @@ export const SignIn: React.FC = (): JSX.Element => {
 
   const onSubmit = ({ email, password }: FormData) => {
     authRepository.signInWithEmail(email, password).then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message);
-        setColor(result.success);
+      setIsOpen(true);
+      setModalMessage(result.message);
+      setColor(result.success);
 
-        setTimeout(
-          () => {
-            setIsOpen(false);
-            if (result.success) {
-              router.push("/homeScreen");
-            }
-          },
-          result.success ? 2000 : 4000
-        );
-      }
+      setTimeout(
+        () => {
+          setIsOpen(false);
+          if (result.success && !result.data.name) {
+            router.push("/profiles/user/otherThanTech");
+            return;
+          }
+          if (result.success) {
+            router.push("/homeScreen");
+          }
+        },
+        result.success ? 2000 : 4000
+      );
     });
   };
 
-  const onClickGoogleOrGithub = (
-    promise: Promise<{
-      success: boolean;
-      message: string;
-    }>
-  ) => {
-    promise.then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message);
-        setColor(result.success);
+  const onClickGoogleOrGithub = (promise: Promise<ConfirmModal>) => {
+    promise.then((result: ConfirmModal) => {
+      setIsOpen(true);
+      setModalMessage(result.message);
+      setColor(result.success);
 
-        setTimeout(
-          () => {
-            setIsOpen(false);
-            if (result.success) {
-              router.push("/homeScreen");
-            }
-          },
-          result.success ? 2000 : 4000
-        );
-      }
+      setTimeout(
+        () => {
+          setIsOpen(false);
+          if (result.success && result.isCreated) {
+            router.push("/profiles/user/otherThanTech");
+            return;
+          }
+          if (result.success) {
+            router.push("/homeScreen");
+          }
+        },
+        result.success ? 2000 : 4000
+      );
     });
   };
 

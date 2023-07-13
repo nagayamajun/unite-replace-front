@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { AuthButton } from "../../atoms/AuthButton";
+import { ConfirmModal } from "@/types/confirmModal";
 
 type FormData = {
   email: string;
@@ -33,7 +34,7 @@ export const SignUp = () => {
             () => {
               setIsOpen(false);
               if (result.success) {
-                router.push("/signIn");
+                router.push("/profiles/user/otherThanTech");
               }
             },
             result.success ? 2000 : 4000
@@ -42,12 +43,7 @@ export const SignUp = () => {
       });
   };
 
-  const onClickGoogleOrGithub = (
-    promise: Promise<{
-      success: boolean;
-      message: string;
-    }>
-  ) => {
+  const onClickGoogleOrGithub = (promise: Promise<ConfirmModal>) => {
     promise.then((result) => {
       if (result) {
         setIsOpen(true);
@@ -57,8 +53,12 @@ export const SignUp = () => {
         setTimeout(
           () => {
             setIsOpen(false);
+            if (result.success && result.isCreated) {
+              router.push("/profiles/user/otherThanTech");
+              return;
+            }
             if (result.success) {
-              router.push("/profiles/otherThanTech");
+              router.push("/homeScreen");
             }
           },
           result.success ? 2000 : 4000
