@@ -6,9 +6,10 @@ export type User = {
   age?: string;
   prefecture?: string;
   university?: string;
+  undergraduate?: string;
   graduateYear?: string;
-  self_publicity?: string;
-  career_vision?: string;
+  selfPublicity?: string;
+  careerVision?: string;
   position?: string;
   development_experience?: boolean;
   internship_experience?: boolean;

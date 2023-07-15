@@ -22,12 +22,19 @@ import { PiSignOutBold } from "react-icons/pi";
 import { authRepository } from "@/modules/auth/auth.repository";
 import { ConfirmModal } from "@/components/organisms/ConfirmModal";
 import { PersonIcon } from "@/components/atoms/PersonIcon";
+import Image from "next/image";
 
 export const UserProfile = (): JSX.Element => {
   const router = useRouter();
   const { id: userId } = router.query;
 
-  const { register, handleSubmit, control, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
 
@@ -73,6 +80,9 @@ export const UserProfile = (): JSX.Element => {
 
   const onSignOut = async () => {
     await authRepository.logOut().then((result) => {
+      setMyselfState(null);
+      localStorage.clear();
+
       //notice表示
       setIsSignOutNoticeOpen(true);
       setSignOutNoticeMessage(result.message);
@@ -176,6 +186,8 @@ export const UserProfile = (): JSX.Element => {
             onBlur={handleSubmit(onEditSubmit)}
             register={register}
             registerLabel="name"
+            rules={{ required: "必須項目です" }}
+            errors={errors}
             defaultValue={profileUser.name}
             disabled={!isMyself}
             labelFont="text-base"
@@ -215,21 +227,52 @@ export const UserProfile = (): JSX.Element => {
         >
           <GraduationYearRadio
             control={control}
+            defaultValue={profileUser.graduateYear}
             defaultChipColor={"bg-gray-100"}
           />
         </EditProfileModal>
         {/* GtHubアカウント */}
-        <PlainInput
-          labelText="GitHubアカウント名"
-          placeholder="https://github.com/<hoge> の<hoge>の部分"
-          onBlur={handleSubmit(onEditSubmit)}
-          register={register}
-          registerLabel="githubAccount"
-          defaultValue={profileUser.githubAccount}
-          disabled={!isMyself}
-          labelFont="text-base"
-          inputFont="text-sm sm:text-base"
-        />
+        {isMyself ? (
+          <PlainInput
+            labelText="GitHubアカウント"
+            placeholder="(例) https://github.com/[username]"
+            onBlur={handleSubmit(onEditSubmit)}
+            register={register}
+            registerLabel="githubAccount"
+            defaultValue={profileUser.githubAccount}
+            disabled={!isMyself}
+            labelFont="text-base"
+            inputFont="text-sm sm:text-base"
+          />
+        ) : (
+          <div className="flex flex-col gap-4 mb-4 w-full">
+            <label htmlFor="nameInput" className="">
+              GitHubアカウント
+            </label>
+            {profileUser.githubAccount ? (
+              <Link
+                href={profileUser.githubAccount ?? ""}
+                target="_blank"
+                className="ml-10 w-12 h-12"
+              >
+                <Image
+                  src="/github-mark.png"
+                  alt="GitHubロゴ"
+                  width={240}
+                  height={240}
+                />
+              </Link>
+            ) : (
+              <Image
+                src="/github-mark.png"
+                alt="GitHubロゴ"
+                width={240}
+                height={240}
+                className="ml-10 w-12 h-12 opacity-10"
+              />
+            )}
+          </div>
+        )}
         {/* プログラミングスキル */}
         <FormField
           labelText="プログラミングスキル"

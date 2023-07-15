@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { AuthButton } from "../../atoms/AuthButton";
+import { ConfirmModal } from "@/types/confirmModal";
 
 type FormData = {
   email: string;
@@ -33,7 +34,7 @@ export const SignUp = () => {
             () => {
               setIsOpen(false);
               if (result.success) {
-                router.push("/signIn");
+                router.push("/profiles/user/otherThanTech");
               }
             },
             result.success ? 2000 : 4000
@@ -42,12 +43,7 @@ export const SignUp = () => {
       });
   };
 
-  const onClickGoogleOrGithub = (
-    promise: Promise<{
-      success: boolean;
-      message: string;
-    }>
-  ) => {
+  const onClickGoogleOrGithub = (promise: Promise<ConfirmModal>) => {
     promise.then((result) => {
       if (result) {
         setIsOpen(true);
@@ -57,8 +53,12 @@ export const SignUp = () => {
         setTimeout(
           () => {
             setIsOpen(false);
+            if (result.success && result.isCreated) {
+              router.push("/profiles/user/otherThanTech");
+              return;
+            }
             if (result.success) {
-              router.push("/profiles/otherThanTech");
+              router.push("/homeScreen");
             }
           },
           result.success ? 2000 : 4000
@@ -68,9 +68,14 @@ export const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen mt-5">
+    <div className="flex flex-col justify-center items-center h-screen">
+      <div className="flex flex-col items-center w-4/5 sm:w-base">
+      <h1 className="text-2xl sm:text-3xl font-bold">
+          <span className="text-green-700">U</span>N
+          <span className="text-pink-400">I</span>TE
+        </h1>
       <EmailAndPasswordForm onSubmit={onSubmit} buttonText="新規登録" />
-      <div className="flex sm:w-1/2 w-3/5 my-6">
+      <div className="flex  w-full my-6">
         <div className="h-0 w-1/3 border-b border-black mt-3"></div>
         <div className="flex justify-center items-center w-1/3">
           <p>または</p>
@@ -78,7 +83,7 @@ export const SignUp = () => {
         <div className="h-0 w-1/3 border-b border-black mt-3"></div>
       </div>
 
-      <div className="flex col items-center justify-center sm:w-1/2 w-3/5 ">
+      <div className="flex col items-center justify-center w-full ">
         <div className="w-full ">
           <AuthButton
             src="/home.png"
@@ -101,7 +106,7 @@ export const SignUp = () => {
 
       <div className="flex justify-center">
         <p className="text-sm sm:text-base">アカウンントをお持ちの方　</p>
-        <Link href="/signUp" className="font-bold">
+        <Link href="/signIn" className="font-bold">
           ログイン
         </Link>
       </div>
@@ -112,6 +117,7 @@ export const SignUp = () => {
         modalMessage={modalMessage}
         modalBgColor={color!}
       />
+    </div>
     </div>
   );
 };
