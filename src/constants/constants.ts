@@ -31,3 +31,7 @@ export const SUCCESS_TO_DELETE_RECRUIT = "募集を削除しました。"
 export const FAIL_TO_DELETE_RECRUIT = "募集の削除に失敗しました。"
 export const SUCCESS_IN_SIGN_OUT = "ログアウトしました。";
 export const FAIL_TO_SIGN_OUT = "ログアウトに失敗しました。";
+
+export const FAIL_TO__GET_USER_INFO = "ユーザー情報の取得に失敗しました。"
+
+export const PASSWORS_DONOT_MATCH = "共有パスワードが一致しないか存在しません。"

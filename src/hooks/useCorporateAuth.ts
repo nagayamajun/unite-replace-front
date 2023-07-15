@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/libs/firebase";
+import { auth, corporateAuth } from "@/libs/firebase";
 import { useRouter } from "next/router";
 import { UserStateType } from "@/global-states/atoms";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -16,28 +16,25 @@ import { employeeRepository } from "@/modules/employee/employee.repository";
 
 export const useCorporateAuth = () => {
   const router = useRouter();
-  const [corporation, setCorporation] = useRecoilState<CorporationStateType>(CorporationState);
+  const [employee, setEmployee] = useRecoilState<CorporationStateType>(CorporationState);
 
-  //apiは作成している
-  // useEffect(() => {
-  //   const unsub = onAuthStateChanged(auth, async (authCorporation) => {
-  //     if (authCorporation) {
-  //       // const token = await authCorporation.getIdToken();
-  //       // setAuthToken(token);
-  //       // const employee = await employeeRepository.findEmployeeByFirebaseUID()
+  useEffect(() => {
+    const unsub = onAuthStateChanged(corporateAuth, async (authEmployee) => {
+      if (authEmployee) {
+        const token = await authEmployee.getIdToken();
+        setAuthToken(token);
 
-  //       // if (employee) {
-  //       //   setCorporation(employee)
-  //       // }
-  //       //
-  //     } else {
-  //       // resetStatus();
-  //       //Authコンポーネントにpush
-  //       router.push('/corporation/corporateSignIn');
-  //     }
-  //   });
-  //   return () => unsub();
-  // }, []);
+        const employee = await employeeRepository.getEmployeeByFirebaseUID();
+        if(employee) {
+          setEmployee(employee)
+        }
+      } else {
+        router.push("/corporation/corporateSignIn")
+      }
+    })
+    return () => unsub();
 
-  // return corporation;
+  }, [])
+
+  return employee
 };

@@ -1,47 +1,48 @@
-import { FieldValue } from "firebase/firestore";
-import Image from "next/image";
+import { Recruit } from "@/types/recruit";
+import { User } from "@/types/user";
 import Link from "next/link";
 import { PersonIcon } from "../atoms/PersonIcon";
-import { useRecoilValue } from "recoil";
-import { UserState, UserStateType } from "@/global-states/atoms";
 
 type Props = {
-  genre: string;
-  detailInfo: string;
-  filePath: string;
-  user_id: string;
-  createDate: FieldValue;
+  id: string
+  headline: string;
+  recruit: Recruit;
 };
 export const ProductCard = ({
-  genre,
-  detailInfo,
-  filePath,
-  user_id,
-  createDate,
+  id,
+  headline,
+  recruit,
 }: Props) => {
-  const myself = useRecoilValue<UserStateType>(UserState);
+  const { name, imageUrl } = recruit.recruiter as User;
+  const participantsInfo = recruit.userRecruitParticipant;
+  const participants = participantsInfo?.filter((res) => res.isApproved).map((res) => res.user);
+
+  
 
   return (
-    <>
-      <div className="group group relative mb-2 h-full w-100 border overflow-hidden rounded-3xl bg-white lg:mb-3 font-caveat">
-        <div className="flex justify-center">
-          <PersonIcon
-            originalIconImageSrc={myself?.imageUrl}
-            originalIconImageAlt={`${myself?.name}のアイコン`}
-          />
-        </div>
-        <div className="flex flex-col justify-center ">
-          <p className="m-auto p-1">{genre ? `種類: ${genre}` : "No Genre"}</p>
-          <p className="m-auto p-1">
-            {detailInfo ? `詳細: ${detailInfo}` : "No DetailInfo"}
-          </p>
-          <Link href={filePath} className="flex justify-center">
-            <p className="table bg-green-50 rounded-lg p-3">
-              完成品の動画/画像リンク取得
-            </p>
-          </Link>
-        </div>
+    <Link href={`/corporation/product/${id}`} className="flex flex-col bg-white rounded-md shadow-sm p-5 space-y-4 hover:bg-blue-50">
+      <div className="flex flex-col space-y-1">
+        <div className="text-sm">Product名</div>
+        <div className="font-semibold text-lg">{headline}</div>
       </div>
-    </>
+      <div className="flex flex-col space-y-1">
+        <div className="text-sm">関連した人</div>
+        <div className="flex flex-row items-center space-x-4">
+          <PersonIcon 
+            originalIconImageSrc={imageUrl}
+          />
+          <div>{name}</div>
+        </div>
+        { participants?.map((participant) => (  
+          <div key={participant.id} className="flex flex-row items-center space-x-4">
+            <PersonIcon
+              originalIconImageAlt={participant.imageUrl}
+            />
+            <div>{participant.name}</div>
+          </div>
+        ))}
+      </div>
+    </Link>
   );
 };
+
