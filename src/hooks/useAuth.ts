@@ -14,17 +14,22 @@ export const useAuth = (): UserStateType => {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (authUser) => {
-      if (authUser) {
-        const token = await authUser.getIdToken();
-        setAuthToken(token);
-        
-        const user = await UserRepository.findUserByFirebaseUID();
-        if (user) {
-          setUser(user);
-        }
-      } else {
+      //操作者がfirebase上でログインしている状態でなければ、サインインページにリダイレクト
+      if (!authUser) {
         router.push("/signIn");
+        return;
       }
+
+      const token = await authUser.getIdToken();
+      setAuthToken(token);
+
+      const user = await UserRepository.findUserByFirebaseUID();
+      //firebase上でログインしている操作者がDBのuserレコード上では見つからなかった場合も、サインインページにリダイレクト
+      if (!user) {
+        router.push("/signIn");
+        return;
+      }
+      setUser(user);
     });
     return () => unsub();
   }, []);
