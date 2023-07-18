@@ -1,5 +1,4 @@
 import { APPLY_FIRST_MESSAGE } from "@/constants/constants";
-import { CorporationState } from "@/global-states/employeeAtom";
 import { ChatRepository } from "@/modules/chat/chat.repository";
 import { CorporationRepositry } from "@/modules/corporation/corporation.repository";
 import { UserRepository } from "@/modules/user/user.repository";
@@ -8,13 +7,14 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { User } from "../../../types/user";
 import { Loading } from "../common/Loading";
+import { EmployeeState } from "@/global-states/employeeAtom";
 
 export const UserDetailPage = (): JSX.Element => {
   const router = useRouter();
   const { uid } = router.query;
-  const corporationStateVal = useRecoilValue(CorporationState);
+  const corporationStateVal = useRecoilValue(EmployeeState);
   const [corporationState, setCorporationState] =
-    useRecoilState(CorporationState);
+    useRecoilState(EmployeeState);
   const [user, setUser] = useState<User>();
 
   // useEffect(() => {

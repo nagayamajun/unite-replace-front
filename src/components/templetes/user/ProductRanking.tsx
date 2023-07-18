@@ -18,7 +18,7 @@ export const ProductRanking = () => {
       <h1>ranking</h1>
       {topTenProducts.map((product) => {
         return (
-          <section>
+          <section key={product.id}>
             <p>プロダクト名</p>
             <div>{product?.headline}</div>
           </section>
