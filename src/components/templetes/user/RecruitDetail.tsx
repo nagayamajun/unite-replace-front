@@ -1,4 +1,3 @@
-import { LikeButton } from "@/components/atoms/LikeButton";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
 import { UserState } from "@/global-states/atoms";
 import { recruitRepository } from "@/modules/recruit/recruit.repository";
@@ -9,6 +8,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { Loading } from "../common/Loading";
+import { RecruitLikeButton } from "@/components/atoms/RecruitLikeButton";
 
 
 export const RecruitDetail: React.FC = () => {
@@ -117,7 +117,7 @@ export const RecruitDetail: React.FC = () => {
               )}
             </div>
             <div className="flex flex-row justify-between sm:justify-end items-center w-full sm:w-1/2">
-              <LikeButton 
+              <RecruitLikeButton
                 recruitId={recruit?.id as string} 
                 isPropsLiked={isLiked} 
               />

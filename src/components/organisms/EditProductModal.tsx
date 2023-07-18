@@ -1,4 +1,4 @@
-import { ProductRepositry } from "@/modules/product/product.repository";
+import { productRepository } from "@/modules/product/product.repository";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import { Dispatch, Fragment, SetStateAction } from "react";
@@ -22,7 +22,7 @@ export const EditProductModal = ({
 
     const router = useRouter();
     const onEditSubmit = async (submitData: any) => {
-        let product = await ProductRepositry.editProductInfo(productId ,submitData);
+        let product = await productRepository.editProductInfo(productId ,submitData);
         router.reload()
         setIsOpen(false)
     }

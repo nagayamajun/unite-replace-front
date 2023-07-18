@@ -1,11 +1,6 @@
-import { CorporationState } from "@/global-states/corporateAtom";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { CiViewList } from "react-icons/ci";
 import { MdOutlineManageAccounts } from "react-icons/md";
-import { useRecoilValue } from "recoil";
 
 export const CorporateSideBar = (): JSX.Element => {
 

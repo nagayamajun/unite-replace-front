@@ -1,5 +1,5 @@
 import { UserState } from "@/global-states/atoms"
-import { ProductRepositry } from "@/modules/product/product.repository"
+import { productRepository } from "@/modules/product/product.repository"
 import { Product } from "@/types/product"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -13,10 +13,10 @@ export const MyProductAndRelatedProduct = () => {
   useEffect(() => {
     (async () => {
       await Promise.all([
-        ProductRepositry.getMyProducts().then((res) => {
+        productRepository.getMyProducts().then((res) => {
           setMyProducts(res)
         }),
-        ProductRepositry.getRelatedProduct().then((res) => {
+        productRepository.getRelatedProduct().then((res) => {
           setRelatedProducts(res)
         })
       ])
@@ -32,13 +32,13 @@ export const MyProductAndRelatedProduct = () => {
         ) : (
           myProducts?.map((myProduct, index) => {
             //自分の作成したコメントがあるかをチェックする
-            const hasCommnet = myProduct.comment?.some((comment) => comment.userId === user?.id);
+            const hasComment = myProduct.comment?.some((comment) => comment.userId === user?.id);
 
             return (
               <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
                 <div className="flex flex-col items-center sm:flex-row">
                   <p className="font-semibold mb-2 sm:mb-0 sm:mr-10">{myProduct.headline}</p>
-                  { hasCommnet ? (
+                  { hasComment ? (
                     <p className="mb-2 sm:mb-0 text-sm sm:text-base">comment登録済み</p>
                   ) : (
                     <p className="text-red-400 text-sm mb-2 sm:mb-0 sm:text-base">commentを追加してください</p>
@@ -64,13 +64,13 @@ export const MyProductAndRelatedProduct = () => {
         ) : (
           relatedProducts?.map((relatedProduct, index) => {
             //自分の作成したコメントがあるかをチェックする
-            const hasCommnet = relatedProduct.comment?.some((comment) => comment.userId === user?.id);
+            const hasComment = relatedProduct.comment?.some((comment) => comment.userId === user?.id);
 
             return (
               <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
                 <div className="flex flex-col items-center sm:flex-row">
                   <p className="font-semibold mr-10">{relatedProduct.headline}</p>
-                  { hasCommnet ? (
+                  { hasComment ? (
                     <p className="mb-2 sm:mb-0 text-sm sm:text-base">comment登録済み</p>
                   ) : (
                     <p className="text-red-400 text-sm mb-2 sm:mb-0 sm:text-base">commentを追加してください</p>

@@ -1,4 +1,5 @@
 import { Comment } from "./comment"
+import { EmployeeProductLike } from "./employeeToProductLike"
 import { Recruit } from "./recruit"
 
 export type Product = {
@@ -9,5 +10,6 @@ export type Product = {
   comment?: Comment[]
   recruit?: Recruit
   createdAt: Date,
-  updatedAt?: Date
+  updatedAt?: Date,
+  employeeToProductLikes?: EmployeeProductLike[]
 }

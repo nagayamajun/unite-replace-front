@@ -1,5 +1,5 @@
 import { APPLY_FIRST_MESSAGE } from "@/constants/constants";
-import { CorporationState } from "@/global-states/corporateAtom";
+import { CorporationState } from "@/global-states/employeeAtom";
 import { ChatRepository } from "@/modules/chat/chat.repository";
 import { CorporationRepositry } from "@/modules/corporation/corporation.repository";
 import { UserRepository } from "@/modules/user/user.repository";

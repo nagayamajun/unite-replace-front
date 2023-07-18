@@ -1,9 +1,9 @@
 import { EmployeeLayout } from "@/components/templetes/layouts/EmployeeLayout";
-import { EditProduct } from "@/components/templetes/user/EditProduct";
+import { EditProduct, Path } from "@/components/templetes/user/EditProduct";
 import { ReactElement } from "react";
 
 
-const EditProductPage = () =>  <EditProduct />
+const EditProductPage = () =>  <EditProduct path={Path.CorporationPath} />
 
 
 EditProductPage.getLayout = (page: ReactElement) => (

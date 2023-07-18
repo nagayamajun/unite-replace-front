@@ -2,7 +2,7 @@ import { PlainInput } from "@/components/atoms/PlainInput"
 import { PlainTextArea } from "@/components/atoms/PlainTextarea"
 import { SubmitButton } from "@/components/atoms/SubmitButton";
 import { SuccessOrFailureModal } from "@/components/organisms/SuccessOrFailureModal";
-import { ProductRepositry, submitProductDate } from "@/modules/product/product.repository";
+import { productRepository, submitProductDate } from "@/modules/product/product.repository";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
@@ -34,7 +34,9 @@ export const UploadProduct = () => {
       file: data.file[0]
     }
 
-    await ProductRepositry.createProduct(submitDate)
+    console.log('checkする',submitDate)
+
+    await productRepository.createProduct(submitDate)
       .then(result => {
         if(result) {
           setIsOpen(true)

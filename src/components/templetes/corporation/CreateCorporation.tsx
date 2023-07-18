@@ -93,7 +93,7 @@ export const CreateCorporation = () => {
           labelText="企業説明"
           placeholder="企業様の詳細情報をご記入ください。"
           register={register}
-          registerLabel="DescriptionOfBusiness"
+          registerLabel="descriptionOfBusiness"
           rules={{required: "必須項目です。"}}
           errors={errors}
         />

@@ -1,11 +1,10 @@
-import { FormField } from "@/components/atoms/FormField";
 import { PlainInput } from "@/components/atoms/PlainInput";
 import { PlainTextArea } from "@/components/atoms/PlainTextarea";
 import { AddCommentModal } from "@/components/organisms/AddCommentModal";
 import { EditCommentModal } from "@/components/organisms/EditCommentModal";
 import { EditProductModal } from "@/components/organisms/EditProductModal";
 import { UserState } from "@/global-states/atoms";
-import { ProductRepositry } from "@/modules/product/product.repository";
+import { productRepository } from "@/modules/product/product.repository";
 import { Product } from "@/types/product"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -13,17 +12,29 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { ProductFormField } from "@/components/atoms/ProductFormField";
 import { Loading } from "../common/Loading";
+import { ProductLikeButton } from "@/components/atoms/ProductLikeButton";
+import { EmployeeState } from "@/global-states/employeeAtom";
 
-export const EditProduct = () => {
+export enum Path {
+  CorporationPath,
+  UserPath,
+}
+
+type Props = {
+  path: Path
+}
+
+export const EditProduct = ({ path }: Props) => {
   const router = useRouter();
   const { id } = router.query;
   const user = useRecoilValue(UserState);
+  const employee = useRecoilValue(EmployeeState)
   const [ product, setProduct ] = useState<Product>();
 
   const { register, handleSubmit, control } = useForm();
   const [isOpen, setIsOpen] = useState(false);
   const [ isDetailOpen, setIsDetailOpen ] = useState(false);
-  const [ isheadline, setIsHeadline ] = useState(false);
+  const [ isHeadline, setIsHeadline ] = useState(false);
   const [ isComment, setIsComment ] = useState(false);
 
   const closeModal = () => {
@@ -32,18 +43,26 @@ export const EditProduct = () => {
 
   useEffect(() =>{
     (async () => {
-      const fetchedProduct = await ProductRepositry.getProductById(id as string)
+      if(path === Path.UserPath) {
+      const fetchedProduct = await productRepository.getProductById(id as string);
       setProduct(fetchedProduct);
+      } else {
+        const fetchedProduct = await productRepository.getProductByCorporateId(id as string);
+        setProduct(fetchedProduct);
+      }
+      
     })()
   },[])
 
-  if (product === undefined) return <Loading /> 
+    //いいねをしているかしていないかの判定に利用する
+    const isLiked = product?.employeeToProductLikes?.some((like) => like.employeeId === employee?.id);
+
+  if (product === undefined || isLiked === undefined) return <Loading /> 
 
   return (
     <div className="flex flex-col w-full h-full min-h-screen justify-center items-center text-gray-600 bg-gray-100">
       <div className="flex flex-col rounded-lg items-center w-4/5 sm:w-base md:w-sm gap-14 mb-10 bg-white">
         <div className="flex justify-center items-center w-4/5 mt-10">
-          {/* <img src={product?.url} className="object-contain w-full h-full rounded-sm"/> */}
           <video src={product?.url} controls className="w-full h-60"></video>
         </div>
         <div className=" flex flex-col items-center w-4/5 gap-5">
@@ -55,7 +74,7 @@ export const EditProduct = () => {
           />
 
           <EditProductModal
-            isOpen={isheadline}
+            isOpen={isHeadline}
             setIsOpen={setIsHeadline}
             handleSubmit={handleSubmit}
             productId={id as string}
@@ -91,26 +110,29 @@ export const EditProduct = () => {
 
           {/* プロダクト参加者のアイコンを一覧表示したい。それぞれのユーザーのプロフィールに飛ぶことができる */}
 
-          
           <div className="flex flex-col items-start w-full gap-5 mb-10 border-t border-gray-400 pt-5">
             <div className="flex flex-row justify-between w-full">
               <div className="bg-green-500 text-white p-2 rounded-md text-left">個人アピールポイント一覧</div>
-              <div>
-                {!product?.comment || (product?.comment.length === 0) || !product?.comment.some((comment) => comment.userId === user?.id) ? (
-                <button
-                  onClick={() => setIsOpen(true)}
-                  className="py-2 px-6 rounded-md text-white font-bold bg-green-500 hover:bg-green-600"
-                >
-                  Comment作成
-                </button>
-              ) : (
-                product?.comment.map((comment) => (
-                  <div key={comment.id}>
-                    {comment.userId === user?.id && <p>作成済み</p>}
-                  </div>
-                ))
-            )}
-              </div>
+              {/* userの時のみコメントを作成できる */}
+              { path === Path.UserPath && (
+                <div>
+                  {!product?.comment || (product?.comment.length === 0) || !product?.comment.some((comment) => comment.userId === user?.id) ? (
+                    <button
+                      onClick={() => setIsOpen(true)}
+                      className="py-2 px-6 rounded-md text-white font-bold bg-green-500 hover:bg-green-600"
+                    >
+                      Comment作成
+                    </button>
+                  ) : (
+                    product?.comment.map((comment) => (
+                      <div key={comment.id}>
+                        {comment.userId === user?.id && <p>作成済み</p>}
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+
             </div>
             { !product?.comment && <div className="p-2 rounded-md text-white font-bold bg-red-500">※アピールポイントを追加してください</div>}
             {product?.comment?.map((comment, index) => {
@@ -153,6 +175,14 @@ export const EditProduct = () => {
               )
             })}
           </div>
+
+          { path === Path.CorporationPath && (
+            <ProductLikeButton 
+              productId={product.id as string}
+              isPropsLiked={isLiked}
+            />
+          )}
+
         </div>
       </div>
 
@@ -165,3 +195,4 @@ export const EditProduct = () => {
     </div>
   )
 }
+
