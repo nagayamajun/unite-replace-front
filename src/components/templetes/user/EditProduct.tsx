@@ -5,7 +5,7 @@ import { EditCommentModal } from "@/components/organisms/EditCommentModal";
 import { EditProductModal } from "@/components/organisms/EditProductModal";
 import { UserState } from "@/global-states/atoms";
 import { productRepository } from "@/modules/product/product.repository";
-import { Product } from "@/types/product"
+import { Product, PathToProductPage } from "@/types/product"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,13 +15,9 @@ import { Loading } from "../common/Loading";
 import { ProductLikeButton } from "@/components/atoms/ProductLikeButton";
 import { EmployeeState } from "@/global-states/employeeAtom";
 
-export enum Path {
-  CorporationPath,
-  UserPath,
-}
 
 type Props = {
-  path: Path
+  path: PathToProductPage
 }
 
 export const EditProduct = ({ path }: Props) => {
@@ -43,7 +39,7 @@ export const EditProduct = ({ path }: Props) => {
 
   useEffect(() =>{
     (async () => {
-      if(path === Path.UserPath) {
+      if(path === PathToProductPage.UserPath) {
       const fetchedProduct = await productRepository.getProductById(id as string);
       setProduct(fetchedProduct);
       } else {
@@ -114,7 +110,7 @@ export const EditProduct = ({ path }: Props) => {
             <div className="flex flex-row justify-between w-full">
               <div className="bg-green-500 text-white p-2 rounded-md text-left">個人アピールポイント一覧</div>
               {/* userの時のみコメントを作成できる */}
-              { path === Path.UserPath && (
+              { path === PathToProductPage.UserPath && (
                 <div>
                   { !product?.comment?.some((comment) => comment.userId === user?.id) ? (
                     <button
@@ -176,7 +172,7 @@ export const EditProduct = ({ path }: Props) => {
             })}
           </div>
 
-          { path === Path.CorporationPath && (
+          { path === PathToProductPage.CorporationPath && (
             <ProductLikeButton 
               productId={product.id as string}
               isPropsLiked={isLiked}

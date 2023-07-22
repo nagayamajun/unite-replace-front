@@ -22,9 +22,8 @@ export const EditProductModal = ({
 
     const router = useRouter();
     const onEditSubmit = async (submitData: any) => {
-        let product = await productRepository.editProductInfo(productId ,submitData);
-        router.reload()
-        setIsOpen(false)
+        await productRepository.editProductInfo(productId ,submitData);
+        router.reload();
     }
 
     return (

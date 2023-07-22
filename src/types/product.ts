@@ -5,11 +5,16 @@ import { Recruit } from "./recruit"
 export type Product = {
   id: string,
   headline: string,
-  url: string //firesotreに保存したfileのurl
+  url: string
   detail: string,
   comment?: Comment[]
   recruit?: Recruit
   createdAt: Date,
   updatedAt?: Date,
   employeeToProductLikes?: EmployeeProductLike[]
+}
+
+export enum PathToProductPage {
+  CorporationPath,
+  UserPath,
 }
