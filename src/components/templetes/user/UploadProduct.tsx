@@ -34,8 +34,6 @@ export const UploadProduct = () => {
       file: data.file[0]
     }
 
-    console.log('checkする',submitDate)
-
     await productRepository.createProduct(submitDate)
       .then(result => {
         if(result) {

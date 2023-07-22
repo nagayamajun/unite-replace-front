@@ -116,7 +116,7 @@ export const EditProduct = ({ path }: Props) => {
               {/* userの時のみコメントを作成できる */}
               { path === Path.UserPath && (
                 <div>
-                  {!product?.comment || (product?.comment.length === 0) || !product?.comment.some((comment) => comment.userId === user?.id) ? (
+                  { !product?.comment?.some((comment) => comment.userId === user?.id) ? (
                     <button
                       onClick={() => setIsOpen(true)}
                       className="py-2 px-6 rounded-md text-white font-bold bg-green-500 hover:bg-green-600"

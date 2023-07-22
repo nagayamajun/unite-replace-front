@@ -12,14 +12,8 @@ export const MyProductAndRelatedProduct = () => {
 
   useEffect(() => {
     (async () => {
-      await Promise.all([
-        productRepository.getMyProducts().then((res) => {
-          setMyProducts(res)
-        }),
-        productRepository.getRelatedProduct().then((res) => {
-          setRelatedProducts(res)
-        })
-      ])
+      await productRepository.getMyProducts().then(res => setMyProducts(res));
+      await productRepository.getRelatedProduct().then(res => setRelatedProducts(res));
     })()
   }, [])
 

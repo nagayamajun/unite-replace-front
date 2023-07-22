@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Dispatch, Fragment, SetStateAction } from "react";
 import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 
-type EditProductMOadlProps = {
+type EditProductModalProps = {
     isOpen: boolean;
     setIsOpen: Dispatch<SetStateAction<boolean >> ;
     children: any;
@@ -18,7 +18,7 @@ export const EditProductModal = ({
     children, 
     handleSubmit,
     productId
-}: EditProductMOadlProps) => {
+}: EditProductModalProps) => {
 
     const router = useRouter();
     const onEditSubmit = async (submitData: any) => {
