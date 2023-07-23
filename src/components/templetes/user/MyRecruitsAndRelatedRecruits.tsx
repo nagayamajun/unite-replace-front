@@ -12,14 +12,8 @@ export const MyRecruitsAndRelatedRecruits = () => {
 
   useEffect(() => {
     (async () => {
-      await Promise.all([
-        recruitRepository.getMyRecruitsbyFirebaseUID().then((res) => {
-          setMyRecruits(res)
-        }),
-        recruitRepository.getRelatedRecruitbyUserId().then((res) => {
-          setRelatedRecruit(res)
-        })
-      ])
+      await recruitRepository.getMyRecruitsbyFirebaseUID().then(res => setMyRecruits(res));
+      await recruitRepository.getRelatedRecruitbyUserId().then(res =>  setRelatedRecruit(res));
     })()
   }, [])
 

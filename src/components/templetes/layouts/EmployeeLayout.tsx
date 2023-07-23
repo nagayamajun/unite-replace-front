@@ -1,10 +1,10 @@
 import { ReactNode, useEffect, useState } from "react"
 import { CorporateSideBar } from "@/components/organisms/CorporateSidebar"
 import { useRecoilValue } from "recoil"
-import { CorporationState, CorporationStateType } from "@/global-states/corporateAtom"
 import { useCorporateAuth } from "@/hooks/useCorporateAuth"
 import { axiosInstance } from "@/libs/axios"
 import { Loading } from "../common/Loading"
+import { EmployeeState, EmployeeStateType } from "@/global-states/employeeAtom"
 
 
 type Props = {
@@ -12,13 +12,13 @@ type Props = {
 }
 
 export const EmployeeLayout = ({children}: Props) => {
-  const employee = useRecoilValue<CorporationStateType>(CorporationState);
-  const [isLoading, setIsloading] = useState(true);
+  const employee = useRecoilValue<EmployeeStateType>(EmployeeState);
+  const [isLoading, setIsLoading] = useState(true);
   const auth = useCorporateAuth();
 
   useEffect(() => {
     if (employee && axiosInstance.defaults.headers.common["Authorization"]) {
-      setIsloading(false);
+      setIsLoading(false);
     }
   },[auth])
   
