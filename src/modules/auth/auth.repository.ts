@@ -3,7 +3,7 @@ import {
   FAIL_TO_SIGN_OUT,
   FAIL_TO_SIGN_UP,
   MAIL_USED_IN_PROVIDER_EXISTS,
-  PASSWORS_DONOT_MATCH,
+  PASSWORD_DO_NOT_MATCH,
   SUCCESS_IN_SIGN_IN,
   SUCCESS_IN_SIGN_OUT,
   SUCCESS_IN_SIGN_UP,
@@ -99,7 +99,7 @@ export const authRepository = {
       const employee = await employeeRepository.getEmployeeByFirebaseUID();
       
       if (employee.belongToCorporation.sharedPassword !== sharedPassword) return {
-        sucess: false, message: PASSWORS_DONOT_MATCH
+        sucess: false, message: PASSWORD_DO_NOT_MATCH
       }
 
       return { success: true, message: SUCCESS_IN_SIGN_IN };

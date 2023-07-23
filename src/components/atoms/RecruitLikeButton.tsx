@@ -12,7 +12,7 @@ type LikeButtonProps = {
   isPropsLiked: boolean
 }
 
-export const LikeButton = ({ recruitId, isPropsLiked }: LikeButtonProps) => {
+export const RecruitLikeButton = ({ recruitId, isPropsLiked }: LikeButtonProps) => {
   const router = useRouter();
 
   //モーダル関係

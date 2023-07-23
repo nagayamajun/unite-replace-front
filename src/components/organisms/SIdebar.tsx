@@ -3,11 +3,11 @@ import Link from "next/link";
 import { useRecoilValue } from "recoil";
 import { CiViewList } from "react-icons/ci";
 import { IoIosCreate } from "react-icons/io";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillFund } from "react-icons/ai";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { ChatRoomListMenu } from "./ChatRoomListMenu";
-import Image from "next/image";
 import { PiChatCircleDotsThin } from "react-icons/pi";
+
 
 export const SideBar = (): JSX.Element => {
   const userStateVal = useRecoilValue(UserState);
@@ -35,6 +35,11 @@ export const SideBar = (): JSX.Element => {
       label: "成果物一覧",
       icon: <CiViewList />,
     },
+    {
+      href: "/product/productRanking",
+      label: "ランキング",
+      icon: <AiFillFund />
+    }
     // {href: '/', label: 'お問合せ'},
     // {href: '/', label: 'ログアウト'},
   ];

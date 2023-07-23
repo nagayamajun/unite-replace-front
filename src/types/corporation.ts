@@ -6,7 +6,7 @@ export type Corporation = {
   sharedPassword?: string     
   name?: string
   imageUrl?: string
-  DescriptionOfBusiness?: string
+  descriptionOfBusiness?: string
   location?: string
   phoneNumber?: string           
   employees?: Employee[]
