@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
-import { UserLayout } from "@/components/templetes/layouts/UserLayout"
-import { ProductRanking } from "@/components/templetes/user/ProductRanking";
+import { UserLayout } from "@/components/layouts/Layout/UserLayout"
+import { ProductRanking } from "@/features/ranking/components/templates/ProductRanking";
 
 const ProductRankingPage = () => <ProductRanking />
 

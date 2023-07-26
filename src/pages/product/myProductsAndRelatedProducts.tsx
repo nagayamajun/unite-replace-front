@@ -1,5 +1,5 @@
-import { UserLayout } from "@/components/templetes/layouts/UserLayout"
-import { MyProductAndRelatedProduct } from "@/components/templetes/user/MyProductAndRelatedProduct"
+import { UserLayout } from "@/components/layouts/Layout/UserLayout"
+import { MyProductAndRelatedProduct } from "@/features/product/components/templates/MyProductAndRelatedProduct"
 import { ReactElement } from "react"
 
 const MyProductsAndRelatedProductsPage = () => {

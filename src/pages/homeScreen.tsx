@@ -1,8 +1,8 @@
-import { UserLayout } from "@/components/templetes/layouts/UserLayout";
-import { HomeScreen } from "@/components/templetes/user/HomeScreen";
-import { filteredRecruitAtomState } from "@/global-states/filteredRecruits";
-import { recruitAtomState } from "@/global-states/recruitAtom";
-import { recruitRepository } from "@/modules/recruit/recruit.repository";
+import { UserLayout } from "@/components/layouts/Layout/UserLayout";
+import { HomeScreen } from "@/features/recruit/components/templates/HomeScreen";
+import { filteredRecruitAtomState } from "@/features/recruit/stores/filteredRecruits";
+import { recruitAtomState } from "@/features/recruit/stores/recruitAtom";
+import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { ReactElement, useEffect } from "react";
 import { useSetRecoilState } from "recoil";

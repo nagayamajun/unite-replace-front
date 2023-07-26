@@ -1,4 +1,4 @@
-import { OtherThanTechPage } from "@/components/templetes/user/OtherThanTech";
+import { OtherThanTechPage } from "@/features/user/components/templates/OtherThanTech";
 
 const OtherThanTech = (): JSX.Element => <OtherThanTechPage />;
 

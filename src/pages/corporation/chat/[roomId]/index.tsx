@@ -1,5 +1,5 @@
-import { ChatPage } from "@/components/templetes/common/chat/Chat";
-import { EmployeeLayout } from "@/components/templetes/layouts/EmployeeLayout";
+import { ChatPage } from "@/features/chat/components/templates/Chat";
+import { EmployeeLayout } from "@/components/layouts/Layout/EmployeeLayout";
 import { ReactNode } from "react";
 import { useRecoilValue } from "recoil";
 

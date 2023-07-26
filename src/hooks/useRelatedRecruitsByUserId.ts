@@ -1,5 +1,5 @@
-import { recruitRepository } from "@/modules/recruit/recruit.repository";
-import { Recruit } from "@/types/recruit";
+import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
+import { Recruit } from "@/features/recruit/types/recruit";
 import { useEffect, useState } from "react";
 
 export const useRelatedRecruitsByUserId = (userId: string) => {

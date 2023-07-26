@@ -1,6 +1,6 @@
-import { UserLayout } from "@/components/templetes/layouts/UserLayout";
-import { EditProduct } from "@/components/templetes/user/EditProduct";
-import { PathToProductPage } from "@/types/product";
+import { UserLayout } from "@/components/layouts/Layout/UserLayout";
+import { EditProduct } from "@/features/product/components/templates/EditProduct";
+import { PathToProductPage } from "@/features/product/types/product";
 import { ReactElement } from "react";
 
 
