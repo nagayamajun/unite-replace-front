@@ -1,8 +1,6 @@
-import { Loading } from "@/components/organisms/Loading/Loading";
 import { UserState } from "@/stores/atoms";
 import {  useRecoilValue } from "recoil";
 import { RecruitCard } from "../Card/RecruitCard";
-import { useRecruits } from "@/hooks/useRecruits";
 import { recruitAtomState } from "@/features/recruit/stores/recruitAtom";
 import { filteredRecruitAtomState } from "@/features/recruit/stores/filteredRecruits";
 import Link from "next/link";
@@ -44,7 +42,7 @@ export const RecruitList = (): JSX.Element => {
           })}
       </div>
 
-      <Link href={"/addRecruit"} className="text-white text-4xl font-bold fixed bottom-0 right-0 mr-10 mb-10 bg-green-400 h-14 w-14 sm:w-20 sm:h-20 rounded-full flex col items-center justify-center">
+      <Link href={"/recruit/addRecruit"} className="text-white text-4xl font-bold fixed bottom-0 right-0 mr-10 mb-10 bg-green-400 h-14 w-14 sm:w-20 sm:h-20 rounded-full flex col items-center justify-center">
         +
       </Link>
     </div>

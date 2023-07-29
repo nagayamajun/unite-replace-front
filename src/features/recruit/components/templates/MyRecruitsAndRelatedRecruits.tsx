@@ -10,7 +10,6 @@ import { useMyRecruits } from "../../hooks/useMyRecruits"
 
 
 export const MyRecruitsAndRelatedRecruits = () => {
-  const { myRecruits } = useMyRecruits();
   return (
     <div className="flex flex-col items-center justify-start h-screen space-y-10">
       {/* 自分で作成した募集 */}
