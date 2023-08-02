@@ -1,5 +1,5 @@
-import { UserLayout } from "@/components/templetes/layouts/UserLayout";
-import { UserProfile } from "@/components/templetes/user/UserProfile";
+import { UserLayout } from "@/components/layouts/Layout/UserLayout";
+import { UserProfile } from "@/features/user/components/templates/UserProfile";
 import { ReactElement } from "react";
 
 const UserProfilePage = (): JSX.Element => <UserProfile />;

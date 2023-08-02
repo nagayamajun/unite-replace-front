@@ -1,6 +1,6 @@
-import { UserRepository } from "@/modules/user/user.repository";
+import { UserRepository } from "@/features/user/modules/user/user.repository";
 import { useEffect, useState } from "react"
-import { User } from "../types/user"
+import { User } from "../features/user/types/user"
 
 export const useUser = () => {
   const [users, setUser] = useState<User[]>([]);

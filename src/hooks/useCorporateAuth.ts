@@ -4,8 +4,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { corporateAuth } from "@/libs/firebase";
 import { useRouter } from "next/router";
 import { setAuthToken } from "@/libs/axios";
-import { employeeRepository } from "@/modules/employee/employee.repository";
-import { EmployeeState, EmployeeStateType } from "@/global-states/employeeAtom";
+import { employeeRepository } from "@/features/auth/modules/employee/employee.repository";
+import { EmployeeState, EmployeeStateType } from "@/stores/employeeAtom";
 
 
 export const useCorporateAuth = () => {

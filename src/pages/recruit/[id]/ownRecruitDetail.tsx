@@ -1,5 +1,5 @@
-import { UserLayout } from "@/components/templetes/layouts/UserLayout";
-import { OwnRecruitDetail } from "@/components/templetes/user/OwnRecruitDetail";
+import { UserLayout } from "@/components/layouts/Layout/UserLayout";
+import { OwnRecruitDetail } from "@/features/recruit/components/templates/OwnRecruitDetail";
 import { ReactElement } from "react";
 
 

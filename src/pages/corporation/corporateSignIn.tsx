@@ -1,4 +1,4 @@
-import { CorporateSignIn } from "@/components/templetes/corporation/CorporateSignIn"
+import { CorporateSignIn } from "@/features/auth/components/templates/CorporateSignIn"
 
 const corporateSignIn = () => {
   return <CorporateSignIn />

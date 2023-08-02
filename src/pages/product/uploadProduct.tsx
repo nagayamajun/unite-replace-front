@@ -1,5 +1,5 @@
-import { UserLayout } from "@/components/templetes/layouts/UserLayout";
-import { UploadProduct } from "@/components/templetes/user/UploadProduct"
+import { UserLayout } from "@/components/layouts/Layout/UserLayout";
+import { UploadProduct } from "@/features/product/components/templates/UploadProduct"
 import { ReactElement } from "react";
 
 

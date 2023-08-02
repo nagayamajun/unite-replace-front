@@ -1,4 +1,4 @@
-import { CreateCorporation } from "@/components/templetes/corporation/CreateCorporation"
+import { CreateCorporation } from "@/features/corporation/components/templates/CreateCorporation"
 
 const CreateCorporationPage = () => {
   return (

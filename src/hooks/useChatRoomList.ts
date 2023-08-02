@@ -1,5 +1,5 @@
-import { ChatRoomRepository } from "@/modules/chatRoom/chatRoom.repository";
-import { ChatRoom } from "@/types/chatRoom";
+import { ChatRoomRepository } from "@/features/chat/modules/chatRoom/chatRoom.repository";
+import { ChatRoom } from "@/features/chat/types/chatRoom";
 import { useEffect, useState } from "react";
 
 export const useChatRoomList = () => {

@@ -1,5 +1,5 @@
-import { UserLayout } from "@/components/templetes/layouts/UserLayout"
-import { LikedRecruitList } from "@/components/templetes/user/LikedRecruitList";
+import { UserLayout } from "@/components/layouts/Layout/UserLayout"
+import { LikedRecruitList } from "@/features/recruit/components/templates/LikedRecruitList";
 import { ReactElement } from "react"
 
 const LikedRecruitListPage = () => (

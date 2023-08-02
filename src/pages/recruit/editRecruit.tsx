@@ -1,5 +1,5 @@
-import { UserLayout } from "@/components/templetes/layouts/UserLayout"
-import { EditRecruit } from "@/components/templetes/user/EditRecruit"
+import { UserLayout } from "@/components/layouts/Layout/UserLayout"
+import { EditRecruit } from "@/features/recruit/components/templates/EditRecruit"
 import { ReactElement } from "react"
 
 const EditRecruitPage = () => <EditRecruit />

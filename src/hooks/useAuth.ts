@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { UserState } from "@/global-states/atoms";
+import { UserState } from "@/stores/atoms";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/libs/firebase";
 import { useRouter } from "next/router";
-import { UserStateType } from "@/global-states/atoms";
-import { UserRepository } from "@/modules/user/user.repository";
+import { UserStateType } from "@/stores/atoms";
+import { UserRepository } from "@/features/user/modules/user/user.repository";
 import { setAuthToken } from "@/libs/axios";
 
 export const useAuth = (): UserStateType => {
