@@ -1,4 +1,4 @@
-import { SkillPage } from "@/components/templetes/user/Skill";
+import { SkillPage } from "@/features/user/components/templates/Skill";
 
 const Skill = (): JSX.Element => <SkillPage />;
 

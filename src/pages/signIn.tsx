@@ -1,5 +1,5 @@
 
-import { SignIn } from "@/components/templetes/user/SignIn"
+import { SignIn } from "@/features/auth/components/templates/SignIn"
 
 const signIn = () => {
   return <SignIn />

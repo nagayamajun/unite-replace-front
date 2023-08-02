@@ -1,6 +1,6 @@
-import { ChatPage } from "@/components/templetes/common/chat/Chat";
-import { UserLayout } from "@/components/templetes/layouts/UserLayout";
-import { UserState } from "@/global-states/atoms";
+import { ChatPage } from "@/features/chat/components/templates/Chat";
+import { UserLayout } from "@/components/layouts/Layout/UserLayout";
+import { UserState } from "@/stores/atoms";
 import { ReactElement } from "react";
 import { useRecoilValue } from "recoil";
 

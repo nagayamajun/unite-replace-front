@@ -1,5 +1,5 @@
-import { ProductList } from "@/components/organisms/ProductList"
-import { EmployeeLayout } from "@/components/templetes/layouts/EmployeeLayout";
+import { ProductList } from "@/features/product/components/organisms/List/AllProductList"
+import { EmployeeLayout } from "@/components/layouts/Layout/EmployeeLayout";
 
 import { ReactNode } from "react";
 

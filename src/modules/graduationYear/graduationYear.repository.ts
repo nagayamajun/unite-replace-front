@@ -1,6 +1,6 @@
 import { db } from "@/libs/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { GraduationYear } from "../../types/graduationYear";
+import { GraduationYear } from "../../features/user/types/graduationYear";
 
 export const GraduationYearRepository = {
   async findMany(): Promise<GraduationYear[]> {
