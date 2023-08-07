@@ -17,18 +17,20 @@ export const RecruitList = (): JSX.Element => {
   const filteredRecruits = recruits.filter((recruit) => {
     const name = router.query.name as string;
     const skills = router.query.skills as ProgramingSkill[];
-
-    if (name && skills?.length > 0) {
-      return (
-        recruit.hackthonName?.includes(name) &&
-        recruit.programingSkills.some((skill) => skills.includes(skill))
-      );
-    } else if (name) {
-      return recruit.hackthonName?.includes(name);
-    } else if (skills?.length) {
-      return recruit.programingSkills.some((skill) => skills.includes(skill));
+  
+    switch (true) {
+      case !!name && skills?.length > 0:
+        return (
+          recruit.hackthonName?.includes(name) &&
+          recruit.programingSkills.some((skill) => skills.includes(skill))
+        );
+      case !!name:
+        return recruit.hackthonName?.includes(name);
+      case skills?.length > 0:
+        return recruit.programingSkills.some((skill) => skills.includes(skill));
+      default:
+        return true;
     }
-    return true;
   });
 
 
