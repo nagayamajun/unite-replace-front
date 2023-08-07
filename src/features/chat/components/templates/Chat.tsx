@@ -23,6 +23,7 @@ export const ChatPage = (): JSX.Element => {
       ),
     },
   });
+
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
   const [isLoading, setIsLoading] = useState<boolean>(false);

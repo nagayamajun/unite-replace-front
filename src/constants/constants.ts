@@ -19,24 +19,28 @@ export const SUCCESS_IN_UPDATE_USER = "ユーザー情報が更新されまし�
 export const FAIL_TO_UPDATE_USER = "ユーザー情報の更新に失敗しました。";
 
 export const SUCCESS_TO_APPROVE_PARTICIPANT = "承認に成功しました。";
-export const FAIL_TO_APPROVE_PARTICIPANT = "承認に失敗しました。"
+export const FAIL_TO_APPROVE_PARTICIPANT = "承認に失敗しました。";
 
 export const SUCCESS_TO_REJECT_PARTICIPANT = "拒否に成功しました。";
-export const FAIL_TO_REJECT_PARTICIPANT = "拒否に失敗しました。"
+export const FAIL_TO_REJECT_PARTICIPANT = "拒否に失敗しました。";
 
-export const SUCCESS_TO_UPDATE_RECRUIT = "募集情報を更新しました。"
-export const FAIL_TO_UPDATE_RECRUIT = "募集情報の更新に失敗しました。"
+export const SUCCESS_TO_UPDATE_RECRUIT = "募集情報を更新しました。";
+export const FAIL_TO_UPDATE_RECRUIT = "募集情報の更新に失敗しました。";
 
-export const SUCCESS_TO_DELETE_RECRUIT = "募集を削除しました。"
-export const FAIL_TO_DELETE_RECRUIT = "募集の削除に失敗しました。"
+export const SUCCESS_TO_DELETE_RECRUIT = "募集を削除しました。";
+export const FAIL_TO_DELETE_RECRUIT = "募集の削除に失敗しました。";
 export const SUCCESS_IN_SIGN_OUT = "ログアウトしました。";
 export const FAIL_TO_SIGN_OUT = "ログアウトに失敗しました。";
 
-export const FAIL_TO__GET_USER_INFO = "ユーザー情報の取得に失敗しました。"
+export const FAIL_TO__GET_USER_INFO = "ユーザー情報の取得に失敗しました。";
 
-export const PASSWORD_DO_NOT_MATCH = "共有パスワードが一致しないか存在しません。"
+export const PASSWORD_DO_NOT_MATCH =
+  "共有パスワードが一致しないか存在しません。";
 
-export const FAIL_TO_GET_PRODUCT = "productの取得に失敗しました。"
-export const FAIL_TO_UPDATE_PRODUCT = "product情報の更新に失敗しました"
-export const SUCCESS_TO_CREATE_PRODUCT = "productを作成しました。"
-export const FAIL_TO_CREATE_PRODUCT = "productの作成に失敗しました。\n再度やり直してください"
+export const FAIL_TO_GET_PRODUCT = "productの取得に失敗しました。";
+export const FAIL_TO_UPDATE_PRODUCT = "product情報の更新に失敗しました";
+export const SUCCESS_TO_CREATE_PRODUCT = "productを作成しました。";
+export const FAIL_TO_CREATE_PRODUCT =
+  "productの作成に失敗しました。\n再度やり直してください";
+
+export const FAIL_TO_SEND_SCOUT = "スカウトに失敗しました";
