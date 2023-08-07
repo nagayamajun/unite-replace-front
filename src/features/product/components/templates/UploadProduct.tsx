@@ -6,6 +6,7 @@ import { productRepository, submitProductDate } from "@/features/product/modules
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
+import { Loading } from "@/components/organisms/Loading/Loading";
 
 export const UploadProduct = () => {
   const { register, handleSubmit } = useForm();
@@ -18,7 +19,10 @@ export const UploadProduct = () => {
   const [color, setColor] = useState<boolean>();
   const closeModal = () => setIsOpen(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const onSubmit = async (data: any) => {
+    setIsLoading(true)
     const file = data.file[0];
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
@@ -37,6 +41,7 @@ export const UploadProduct = () => {
     await productRepository.createProduct(submitDate)
       .then(result => {
         if(result) {
+          setIsLoading(false)
           setIsOpen(true)
           setModalMessage(result.message)
           setColor(result.success);
@@ -45,7 +50,7 @@ export const UploadProduct = () => {
             setIsOpen(false)
             if (!result.success) return router.reload();
             router.push("/homeScreen")
-          }, 2000)
+          }, 4000)
         }
       })
   }
@@ -58,6 +63,8 @@ export const UploadProduct = () => {
 
     return allowedExtensions.includes(extension);
   };
+
+  // if(isLoading) return <Loading message={'アップロード中です。このままお待ちください'}/>
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen">
@@ -83,7 +90,8 @@ export const UploadProduct = () => {
           registerLabel="detail"
         />
         <SubmitButton
-          innerText="アップロードする"
+          innerText={isLoading ? 'アップロード中です' : 'アップロードする'}
+          disabled={isLoading}
         />
       </form>
 

@@ -14,7 +14,7 @@ export const SideBar = (): JSX.Element => {
 
   const menuLinks = [
     { href: `/homeScreen`, label: "募集一覧", icon: <CiViewList /> },
-    { href: `/addRecruit`, label: "募集を作成", icon: <IoIosCreate /> },
+    { href: `/recruit/addRecruit`, label: "募集を作成", icon: <IoIosCreate /> },
     {
       href: `/profiles/user/${userStateVal?.id}`,
       label: "マイページへ",

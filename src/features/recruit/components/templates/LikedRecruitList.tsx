@@ -21,6 +21,7 @@ export const LikedRecruitList = (): JSX.Element => {
                   headline={recruit.headline}
                   programingSkills={recruit.programingSkills}
                   hackthonName={recruit.hackthonName}
+                  recruiter={recruit.recruiter}
                 />
               );
           })}

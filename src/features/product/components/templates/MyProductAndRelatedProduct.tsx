@@ -21,7 +21,7 @@ export const MyProductAndRelatedProduct = () => {
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-start h-screen space-y-10">
+    <div className="flex flex-col items-center w-full h-screen space-y-10">
       {/* 自分で作成したProduct */}
       <MyProductList />
       {/* 関連したProduct */}

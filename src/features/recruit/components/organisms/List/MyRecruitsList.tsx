@@ -8,10 +8,10 @@ export const MyRecruitsList = (): JSX.Element => {
 
   if (myRecruits === undefined) <Loading />
   return (
-    <div className="w-80 sm:w-sm mt-10 sm:mt-20 p-5 bg-gray-100 sm:bg-white rounded-lg shadow-md">
+    <div className="w-80 sm:w-sm md:w-md mt-10 sm:mt-20 p-5 bg-gray-100 sm:bg-white rounded-lg shadow-md">
       <h1 className="text-center mb-5 font-bold text-lg">自分の作成した募集一覧</h1>
       {myRecruits?.length === 0 ? (
-        <p className="text-center font-bold text-red-400">There are no my recruits.</p>
+        <p className="text-center font-bold text-red-400">まだ作成していません。</p>
       ) : (
         myRecruits?.map((myRecruit, index) => {
           const hasApprovedApplicants = myRecruit.userRecruitParticipant?.some(participant => participant.isApproved === false);
