@@ -25,31 +25,36 @@ export const NarrowSearch = () => {
 
   //条件でフィルターをかける関数
   const filterRecruit = (name?: string, skills?: ProgramingSkill[]) => {
-      if(name && skills?.length! > 0) {
+    switch (true) {
+      case name && skills?.length! > 0:
         router.push({
           pathname: '/homeScreen',
           query: {
             name: name,
-            skills:skills
-          }
-        })
-      } else if(name) {
+            skills: skills,
+          },
+        });
+        break;
+      case !!name:
         router.push({
           pathname: '/homeScreen',
           query: {
             name: name,
-          }
-        })
-      } else if(skills?.length! > 0) {
+          },
+        });
+        break;
+      case skills?.length! > 0:
         router.push({
           pathname: '/homeScreen',
           query: {
-            skills:skills
-          }
-        })
-      } else {
-        router.push('/homeScreen')
-      }
+            skills: skills,
+          },
+        });
+        break;
+      default:
+        router.push('/homeScreen');
+        break;
+    }
   };
 
   return (
