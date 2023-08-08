@@ -23,6 +23,7 @@ export const ChatPage = (): JSX.Element => {
       ),
     },
   });
+
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -77,7 +78,6 @@ export const ChatPage = (): JSX.Element => {
 
   return (
     <div className="flex min-h-screen w-full h-full sm:flex-row justify-end sm:justify-start items-start bg-white">
-      <div className="flex-col fle"></div>
       {/* いろんな人とのやりとりリスト */}
       <div className="hidden min-h-screen h-full sm:flex sm:w-[24%] flex-col overflow-y-auto border border-r-gray-700 ">
         {roomList?.map((room: ChatRoom) => (
@@ -92,7 +92,7 @@ export const ChatPage = (): JSX.Element => {
               originalIconImageSrc={room.interlocutorImageUrl}
               originalIconImageAlt={`${room.interlocutorName}のアイコン`}
             />
-            <div>
+            <div className="mt-4">
               <p className="min-h-[19px] text-[16px] font-black leading-[19px]">
                 {room.interlocutorName}
               </p>
@@ -158,8 +158,10 @@ export const ChatPage = (): JSX.Element => {
         {chatHistories.map((chat: ChatMessage) => (
           <div
             key={`${String(chat.createdAt)}`}
-            className={`w-1/2 min-w-[100%] xs:min-w-[80%] p-[16px] flex gap-[8px] ${
-              sender?.id === chat.senderId ? "justify-end" : "justify-start"
+            className={`max-w-[100%] xs:min-w-[80%] p-[16px] flex gap-[8px] ${
+              sender?.id === chat.senderId
+                ? "justify-end ml-8"
+                : "justify-start mr-8"
             }`}
             style={
               sender?.id === chat.senderId
@@ -175,9 +177,9 @@ export const ChatPage = (): JSX.Element => {
               } rounded-full border border-black w-[40px] h-[40px]`}
               defaultIconClassName={`${
                 sender?.id === chat.senderId ? "hidden" : ""
-              } rounded-full border border-black w-[40px] h-[40px] p-1`}
+              } rounded-full border border-black min-w-[40px] min-h-[40px] p-1`}
             />
-            <div className="bg-white rounded-xl flex-col gap-[8px]">
+            <div className="max-w-full bg-white rounded-xl flex-col gap-[8px]">
               <p
                 className={`${
                   sender?.id === chat.senderId ? "hidden" : ""
@@ -194,7 +196,7 @@ export const ChatPage = (): JSX.Element => {
                   {isoToJstString(chat.createdAt.toString(), "yyyy/MM/dd")}
                 </p>
                 <p
-                  className={`p-[8px] rounded-xl text-[16px] ${
+                  className={`p-[8px] rounded-xl text-[16px] w-full whitespace-normal break-words ${
                     sender?.id === chat.senderId
                       ? "bg-[#8DE055] rounded-tr-none"
                       : "bg-[#0000001a] rounded-tl-none"
