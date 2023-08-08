@@ -23,7 +23,9 @@ import { authRepository } from "@/features/auth/modules/auth/auth.repository";
 import { ConfirmModal } from "@/components/organisms/Modal/ConfirmModal";
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
 import Image from "next/image";
-import { useMyRecruits } from "@/features/recruit/hooks/useMyRecruits";
+import { useRecruitsByRecruiterId } from "@/features/recruit/hooks/useRecruitsByRecruiterId";
+import { EmployeeState, EmployeeStateType } from "@/stores/employeeAtom";
+import { ScoutRepository } from "../../modules/scout/scout.repository";
 
 export const UserProfile = (): JSX.Element => {
   const router = useRouter();
@@ -39,15 +41,19 @@ export const UserProfile = (): JSX.Element => {
 
   const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
 
-  const mySelf = useRecoilValue<UserStateType>(UserState);
+  //操作userとプロフィール主userの情報取得
+  const operatorUser = useRecoilValue<UserStateType>(UserState);
+  const isMyself = operatorUser?.id === userId;
   const setMyselfState = useSetRecoilState<UserStateType>(UserState);
   const {
     certainUser: profileUser,
     setCertainUser: setProfileUser,
     error,
-  } = useCertainUser(userId as string);
+  } = useCertainUser(userId as string | undefined);
   const { relatedRecruits } = useRelatedRecruitsByUserId(userId as string);
-  const { myRecruits } = useMyRecruits();
+  const { recruitsByRecruiterId } = useRecruitsByRecruiterId(userId as string);
+
+  const operatorEmployee = useRecoilValue<EmployeeStateType>(EmployeeState);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -66,8 +72,6 @@ export const UserProfile = (): JSX.Element => {
   const [profileNoticeMessage, setProfileNoticeMessage] = useState("");
   const [profileNoticeColor, setProfileNoticeColor] = useState<boolean>();
   const closeProfileNotice = () => setIsProfileNoticeOpen(false);
-
-  const isMyself = mySelf?.id === userId;
 
   useEffect(() => {
     setIsLoading(true);
@@ -126,19 +130,37 @@ export const UserProfile = (): JSX.Element => {
     });
   };
 
+  const onScoutFromEmployee = async () => {
+    await ScoutRepository.sendScout(userId as string)
+      .then((scoutWithRoomId) => {
+        router.push(`/chat/${scoutWithRoomId.roomId}`);
+      })
+      .catch((error) => {
+        //notice表示
+        setIsProfileNoticeOpen(true);
+        setProfileNoticeMessage(error.message);
+        setProfileNoticeColor(false);
+
+        setTimeout(() => {
+          setIsProfileNoticeOpen(false);
+        }, 2000);
+      });
+  };
+
   if (isLoading || !profileUser) return <Loading />;
 
   return (
     <div className="flex flex-col items-center justify-center gap-28 text-[16px] pb-20 w-full">
       {/* ログアウトボタン */}
-      <button
-        hidden={!isMyself}
-        onClick={() => setIsConfirmOpen(true)}
-        className="absolute top-[70px] sm:top-[20px] right-[20px] flex items-center gap-2 rounded-md p-2 border-2"
-      >
-        <p className="font-bold text-red-400">ログアウト</p>
-        <PiSignOutBold />
-      </button>
+      <div className={isMyself ? "" : "hidden"}>
+        <button
+          onClick={() => setIsConfirmOpen(true)}
+          className="absolute top-[70px] sm:top-[20px] right-[20px] flex items-center gap-2 rounded-md p-2 border-2"
+        >
+          <p className="font-bold text-red-400">ログアウト</p>
+          <PiSignOutBold />
+        </button>
+      </div>
       <ConfirmModal
         isOpen={isConfirmOpen}
         setIsOpen={setIsConfirmOpen}
@@ -323,72 +345,87 @@ export const UserProfile = (): JSX.Element => {
           modalBgColor={profileNoticeColor!}
         />
       </form>
-      {/* userが作成している募集 */}
-      <div className="flex flex-col gap-6 w-3/4 sm:w-1/2 overflow-scroll">
-        <p>作成した募集</p>
-        <div className="flex gap-4 overflow-scroll">
-          {myRecruits && myRecruits.length > 0 ? (
-            myRecruits.map((recruit: Recruit, index: number) => (
-              //以降をcomponentに切り出したい
-              <Fragment key={recruit.id}>
-                <RecruitCard
-                  id={recruit.id}
-                  createdAt={recruit.createdAt}
-                  headline={recruit.headline}
-                  programingSkills={recruit.programingSkills}
-                  hackthonName={recruit.hackthonName}
-                />
-              </Fragment>
-            ))
-          ) : (
-            <p className="text-gray-500 my-16 w-full text-center">
-              募集がありません。
-            </p>
-          )}
-        </div>
-        <div className="flex justify-end">
-          <Link
-            hidden={!isMyself}
-            href={`/profiles/${profileUser.id}/myRecruitsAndRelatedRecruits`}
-            target="_blank"
-          >
-            もっと見る ＞
-          </Link>
-        </div>
-      </div>
-      {/* userが参加確定した募集 */}
-      <div className="flex flex-col gap-6 w-3/4 sm:w-1/2 overflow-scroll">
-        <p>参加する/参加した募集</p>
-        <div className="flex gap-4 overflow-scroll">
-          {relatedRecruits && relatedRecruits.length > 0 ? (
-            relatedRecruits.map((recruit: Recruit, index: number) => (
-              //以降をcomponentに切り出したい
-              <Fragment key={recruit.id}>
-                <RecruitCard
-                  id={recruit.id}
-                  createdAt={recruit.createdAt}
-                  headline={recruit.headline}
-                  programingSkills={recruit.programingSkills}
-                  hackthonName={recruit.hackthonName}
-                />
-              </Fragment>
-            ))
-          ) : (
-            <p className="text-gray-500 my-16 w-full text-center">
-              募集がありません。
-            </p>
-          )}
-        </div>
-        <div className="flex justify-end">
-          <Link
-            hidden={!isMyself}
-            href={`/profiles/${profileUser.id}/myRecruitsAndRelatedRecruits`}
-            target="_blank"
-          >
-            もっと見る ＞
-          </Link>
-        </div>
-      </div>
+
+      {/* 操作ユーザーがプロフィール主の場合のみ以下を表示 */}
+      {isMyself && (
+        <>
+          {/* userが作成している募集 */}
+          <div className="flex flex-col gap-6 w-3/4 sm:w-1/2 overflow-scroll">
+            <p>作成した募集</p>
+            <div className="flex gap-4 overflow-scroll">
+              {recruitsByRecruiterId && recruitsByRecruiterId.length > 0 ? (
+                recruitsByRecruiterId.map((recruit: Recruit, index: number) => (
+                  //以降をcomponentに切り出したい
+                  <Fragment key={recruit.id}>
+                    <RecruitCard
+                      id={recruit.id}
+                      createdAt={recruit.createdAt}
+                      headline={recruit.headline}
+                      programingSkills={recruit.programingSkills}
+                      hackthonName={recruit.hackthonName}
+                    />
+                  </Fragment>
+                ))
+              ) : (
+                <p className="text-gray-500 my-16 w-full text-center">
+                  募集がありません。
+                </p>
+              )}
+            </div>
+            <div className="flex justify-end">
+              <Link
+                hidden={!isMyself}
+                href={`/profiles/${profileUser.id}/myRecruitsAndRelatedRecruits`}
+                target="_blank"
+              >
+                もっと見る ＞
+              </Link>
+            </div>
+          </div>
+          {/* userが参加確定した募集 */}
+          <div className="flex flex-col gap-6 w-3/4 sm:w-1/2 overflow-scroll">
+            <p>参加する/参加した募集</p>
+            <div className="flex gap-4 overflow-scroll">
+              {relatedRecruits && relatedRecruits.length > 0 ? (
+                relatedRecruits.map((recruit: Recruit, index: number) => (
+                  //以降をcomponentに切り出したい
+                  <Fragment key={recruit.id}>
+                    <RecruitCard
+                      id={recruit.id}
+                      createdAt={recruit.createdAt}
+                      headline={recruit.headline}
+                      programingSkills={recruit.programingSkills}
+                      hackthonName={recruit.hackthonName}
+                    />
+                  </Fragment>
+                ))
+              ) : (
+                <p className="text-gray-500 my-16 w-full text-center">
+                  募集がありません。
+                </p>
+              )}
+            </div>
+            <div className="flex justify-end">
+              <Link
+                hidden={!isMyself}
+                href={`/profiles/${profileUser.id}/myRecruitsAndRelatedRecruits`}
+                target="_blank"
+              >
+                もっと見る ＞
+              </Link>
+            </div>
+          </div>
+        </>
+      )}
+
+      {operatorEmployee && (
+        <button
+          onClick={onScoutFromEmployee}
+          className="fixed right-20 bottom-16 ml-5 bg-green-500 text-white px-6 py-2 rounded-md"
+        >
+          スカウトする (話を聞いてみる)
+        </button>
+      )}
     </div>
   );
 };
