@@ -64,10 +64,11 @@ export const EditRecruit = () => {
   }
 
   return(
-    <div className=" min-h-screen w-96 space-y-6 my-12">
+    <div className="flex flex-col items-center min-h-screen w-full space-y-6 my-12">
       <h2 className="text-center font-bold ">募集情報編集</h2>
       <form
        onSubmit={handleSubmit(onEditSubmit)}
+       className="flex flex-col w-96 sm:w-sm"
       >
         <PlainInput
           labelText="ハッカソン名"

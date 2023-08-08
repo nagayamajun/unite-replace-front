@@ -7,10 +7,10 @@ export const RelatedRecruitsList = () => {
   if (relatedRecruits === undefined) <Loading />
 
   return (
-    <div className="w-80 sm:w-sm mt-10 sm:mt-20 p-5 bg-gray-100 sm:bg-white rounded-lg shadow-md">
+    <div className="w-80 sm:w-sm md:w-md mt-10 sm:mt-20 p-5 sm:bg-white rounded-lg shadow-md">
       <h1 className="text-center mb-5 font-bold text-lg">参加する/参加した募集一覧</h1>
       {relatedRecruits?.length === 0? (
-        <p className="text-center font-bold text-red-400">There are no related recruits.</p>
+        <p className="text-center font-bold text-red-400">まだ作成していません。</p>
       ) : (
         relatedRecruits?.map((relatedRecruit, index) => {
           return (

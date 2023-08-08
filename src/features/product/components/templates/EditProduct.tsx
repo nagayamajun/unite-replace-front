@@ -56,7 +56,7 @@ export const EditProduct = ({ path }: Props) => {
   if (product === undefined || isLiked === undefined) return <Loading /> 
 
   return (
-    <div className="flex flex-col w-full h-full min-h-screen justify-center items-center text-gray-600 bg-gray-100">
+    <div className="flex flex-col w-full h-full min-h-screen justify-center items-center text-gray-600 ">
       <div className="flex flex-col rounded-lg items-center w-4/5 sm:w-base md:w-sm gap-14 mb-10 bg-white">
         <div className="flex justify-center items-center w-4/5 mt-10">
           <video src={product?.url} controls className="w-full h-60"></video>
