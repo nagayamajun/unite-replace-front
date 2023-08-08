@@ -12,14 +12,13 @@ import { useRecruit } from "../../hooks/useRecruit";
 
 export const OwnRecruitDetail: React.FC = ()  => {
   const router = useRouter();
+  const { recruit } = useRecruit();
   
   //モーダル関係
   const [isOpen, setIsOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [color, setColor] = useState<boolean>();
   const closeModal = () => setIsOpen(false);
-
-  const { recruit } = useRecruit();
 
   if (recruit === undefined) return <Loading />
 
@@ -75,9 +74,9 @@ export const OwnRecruitDetail: React.FC = ()  => {
   }
 
   return (
-    <div className="h-full flex justify-center items-center sm:bg-gray-100">
-      <div className="flex flex-col items-center w-4/5 sm:w-base md:w-sm  bg-white rounded-sm">
-        <div className="h-20 sm:h-40 w-full flex flex-col justify-center items-center bg-gradient-to-r from-green-300 to-pink-300 text-white rounded-sm rounded-b-none relative">
+    <div className="h-full w-full flex justify-center items-center bg-white">
+      <div className="flex flex-col items-center w-4/5 sm:w-sm md:w-md lg:w-lg bg-white rounded-md">
+        <div className="h-20 sm:h-40 w-full flex flex-col justify-center items-center bg-gradient-to-r from-green-300 to-pink-300 text-white rounded-md relative">
           {/* 削除ボタン
           <button onClick={deleteRecruit} className="absolute top-4 right-4 text-red-500">
             <AiFillDelete size={30} />
@@ -86,7 +85,7 @@ export const OwnRecruitDetail: React.FC = ()  => {
           <h1 className="text-3xl sm:text-4xl font-bold text-center">{recruit.hackthonName}</h1>
         </div>
 
-        <div className="w-full sm:w-4/5 flex flex-col">
+        <div className="w-full flex flex-col">
           <div className="flex items-center justify-center h-20 sm:h-24 border-b border-gray-200 text-lg">
             {recruit.headline}
           </div>
@@ -160,26 +159,26 @@ export const OwnRecruitDetail: React.FC = ()  => {
         <div className="flex items-center justify-center w-full my-10">
           {
             recruit?.product.length !== 0 ? (
-              <div className="w-4/5 flex flex-row items-center justify-between">
+              <div className="w-full flex flex-row items-center justify-between">
                 <div className="flex flex-row w-1/2">
-                  <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 px-4 py-4 rounded-md text-white font-semibold">募集情報を編集する</Link>
+                  <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 px-4 py-4 rounded-md text-white">募集情報を編集する</Link>
                   {/* 削除ボタン */}
                   <button onClick={deleteRecruit} className="ml-5 text-gray-400">
                     <AiFillDelete size={25} />
                   </button>
                 </div>
-                <Link href={`/product/${recruit.product[0]?.id}`} className="bg-green-400 hover:bg-green-500 px-6 py-4 rounded-md text-white font-semibold">Productページへ</Link>
+                <Link href={`/product/${recruit.product[0]?.id}`} className="bg-green-400 hover:bg-green-500 px-6 py-4 rounded-md text-white">Productページへ</Link>
               </div>
             ) : (
-              <div className="w-4/5 flex flex-row items-center justify-between">
+              <div className="w-full flex flex-row items-center justify-between">
                 <div className="flex flex-row w-1/2">
-                  <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 px-2 py-2 rounded-md text-white font-semibold">募集情報を編集する</Link>
+                  <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 p-2 rounded-md text-white  text-xs sm:text-base">募集情報を編集する</Link>
                   {/* 削除ボタン */}
                   <button onClick={deleteRecruit} className="ml-5 text-gray-400">
-                    <AiFillDelete size={25} />
+                    <AiFillDelete size={20} />
                   </button>
                 </div>
-                <Link href={`/product/uploadProduct?recruitId=${recruit?.id}`} className="bg-green-400 hover:bg-green-500 px-2 py-2 rounded-md text-white font-semibold">UPLOADする</Link>
+                <Link href={`/product/uploadProduct?recruitId=${recruit?.id}`} className="bg-green-400 hover:bg-green-500 p-2 rounded-md text-white ">UPLOADする</Link>
               </div>
             )
           }

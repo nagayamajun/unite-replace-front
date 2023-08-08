@@ -1,12 +1,11 @@
-import { filteredRecruitAtomState } from "@/features/recruit/stores/filteredRecruits";
 import { recruitAtomState } from "@/features/recruit/stores/recruitAtom";
 import { ProgramingSkill } from "@/features/user/types/programingSkill";
-import { Recruit } from "@/features/recruit/types/recruit";
 import { useForm } from "react-hook-form"
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { PlainInput } from "../../../../../components/molecules/Input/PlainInput";
 import { SkillSelect } from "../../../../user/components/molecules/Select/SkillSelect";
 import { SubmitButton } from "../../../../../components/molecules/Button/SubmitButton";
+import { useRouter } from "next/router";
 
 type FiltteringData = {
   hackthonName?: string;
@@ -15,32 +14,52 @@ type FiltteringData = {
 
 export const NarrowSearch = () => {
 
+
+  const router = useRouter();
   const { handleSubmit, register, formState: {errors}, control } = useForm();
   const recruits = useRecoilValue(recruitAtomState);
-  const [filteredRecruits, setFilteredRecruits] = useRecoilState(filteredRecruitAtomState);
-
+  
   const onSubmit = ({hackthonName, programingSkills}: FiltteringData) => {
     filterRecruit(hackthonName, programingSkills)
   }
 
   //条件でフィルターをかける関数
   const filterRecruit = (name?: string, skills?: ProgramingSkill[]) => {
-    let alterRecruitList = recruits.filter((recruit) => {
-      if(name && skills?.length! > 0) {
-        return recruit.hackthonName?.includes(name) && recruit.programingSkills?.some((skill) => skills?.includes(skill));
-      } else if(name || skills?.length! > 0) {
-        return (name && recruit.hackthonName?.includes(name)) || (skills && recruit.programingSkills?.some((skill) => skills.includes(skill)));
-      } else {
-        return recruits
-      }
-    });
-    setFilteredRecruits([...alterRecruitList]);
-    alterRecruitList = [];
+    switch (true) {
+      case name && skills?.length! > 0:
+        router.push({
+          pathname: '/homeScreen',
+          query: {
+            name: name,
+            skills: skills,
+          },
+        });
+        break;
+      case !!name:
+        router.push({
+          pathname: '/homeScreen',
+          query: {
+            name: name,
+          },
+        });
+        break;
+      case skills?.length! > 0:
+        router.push({
+          pathname: '/homeScreen',
+          query: {
+            skills: skills,
+          },
+        });
+        break;
+      default:
+        router.push('/homeScreen');
+        break;
+    }
   };
 
   return (
     <div className="bg-white pt-5 px-10">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full sm:w-3/4">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full sm:w-3/4 md:w-3/5">
         <div>
           <p className=" sm:text-2xl text-gray-600 mb-1">条件検索</p>
           <PlainInput

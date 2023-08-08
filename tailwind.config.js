@@ -24,9 +24,9 @@ module.exports = {
       width: {
         "100": "100px",
         'base': '500px',
-        'sm': '640px',
-        'md': '768px',
-        'lg': '1024px',
+        'sm': '440px',
+        'md': '560px',
+        'lg': '770px',
         'xl': '1280px',
       }
     },

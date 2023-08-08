@@ -33,7 +33,7 @@ export const UserLayout = ({ children }: Props) => {
 
       <div className="hidden sm:flex sm:flex-row">
         <SideBar />
-        <div className="flex-grow bg-gray-100 flex items-center justify-center">
+        <div className="flex flex-grow w-auto bg-gray-50 ">
           {children}
         </div>
       </div>

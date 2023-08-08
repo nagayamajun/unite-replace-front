@@ -11,10 +11,10 @@ export const MyProductList = (): JSX.Element => {
   if (user === undefined && myProducts === undefined) <Loading />
 
   return (
-    <div className="flex flex-col w-80 sm:w-base md:w-sm mt-10 sm:mt-20 p-5 bg-gray-100 sm:bg-white rounded-lg shadow-md">
+    <div className="flex flex-col w-80 sm:w-sm md:w-md mt-10 sm:mt-20 p-5 sm:bg-white rounded-lg shadow-md">
       <h1 className="text-center mb-5 font-bold text-lg">自分の作成した作品一覧</h1>
       {myProducts?.length === 0 ? (
-        <p className="text-center font-bold text-red-400">There are no my recruits.</p>
+        <p className="text-center font-bold text-red-400">まだ作成していません。</p>
       ) : (
         myProducts?.map((myProduct, index) => {
           //自分の作成したコメントがあるかをチェックする
