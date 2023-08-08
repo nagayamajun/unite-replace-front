@@ -15,10 +15,10 @@ type PersonIconProps = {
 export const PersonIcon = ({
   originalIconImageSrc,
   originalIconImageAlt = "人物アイコン",
+  originalIconClassName = "rounded-full border border-black",
   defaultIconSize = 36,
   defaultIconFill = "gray",
   defaultIconClassName = "rounded-full bg-white border border-black p-1 color-black-100",
-  originalIconClassName = "rounded-full border border-black",
   onClick,
 }: PersonIconProps): JSX.Element => (
   <>

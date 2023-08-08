@@ -49,7 +49,7 @@ export const MobileHeader = (): JSX.Element => {
                 <PersonIcon
                   originalIconImageSrc={userStateVal?.imageUrl}
                   originalIconImageAlt={`${userStateVal?.name}のアイコン`}
-                  originalIconClassName="rounded-full border border-black w-40 h-40"
+                  originalIconClassName="rounded-full border border-black w-12 h-12"
                 />
               </Menu.Button>
               <Transition
