@@ -18,6 +18,9 @@ export const FAIL_TO_DELETE_LIKE = "いいねを取り消すことに失敗し�
 export const SUCCESS_IN_UPDATE_USER = "ユーザー情報が更新されました。";
 export const FAIL_TO_UPDATE_USER = "ユーザー情報の更新に失敗しました。";
 
+export const FAIL_TO_GET_PARTICIPANT =
+  "応募参加者を取得することができませんでした。";
+
 export const SUCCESS_TO_APPROVE_PARTICIPANT = "承認に成功しました。";
 export const FAIL_TO_APPROVE_PARTICIPANT = "承認に失敗しました。";
 
