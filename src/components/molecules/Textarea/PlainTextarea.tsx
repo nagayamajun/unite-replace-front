@@ -13,9 +13,10 @@ type PlainTextAreaProps = {
   defaultValue?: string;
   register?: UseFormRegister<FieldValues>;
   registerLabel: string;
+  disabled?: boolean;
   errors?: FieldErrors<FieldValues>;
   rules?: ValidationRulus;
-  onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
+  onBlur?: FocusEventHandler<HTMLTextAreaElement> | undefined;
 };
 
 //バリデーションを作成する
@@ -27,6 +28,7 @@ export const PlainTextArea = ({
   register,
   onBlur,
   registerLabel,
+  disabled,
   errors,
   rules,
 }: PlainTextAreaProps): JSX.Element => (
@@ -38,8 +40,10 @@ export const PlainTextArea = ({
       id="textarea"
       placeholder={placeholder}
       defaultValue={defaultValue}
+      disabled={disabled}
       className="border border-gray-300 h-32 rounded-md shadow-sm w-full outline-green-500 text-sm p-2"
       {...(register && register(registerLabel ?? "", rules))}
+      onBlur={onBlur}
     ></textarea>
     {errors && errors[registerLabel] && (
       <p className="text-xs font-ligh text-red-500">
