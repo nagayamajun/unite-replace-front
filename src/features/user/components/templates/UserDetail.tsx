@@ -1,6 +1,6 @@
 import { APPLY_FIRST_MESSAGE } from "@/constants/constants";
 import { ChatRepository } from "@/features/chat/modules/chat/chat.repository";
-import { CorporationRepositry } from "@/features/corporation/modules/corporation/corporation.repository";
+import { CorporationRepository } from "@/features/corporation/modules/corporation/corporation.repository";
 import { UserRepository } from "@/features/user/modules/user/user.repository";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -13,8 +13,7 @@ export const UserDetailPage = (): JSX.Element => {
   const router = useRouter();
   const { uid } = router.query;
   const corporationStateVal = useRecoilValue(EmployeeState);
-  const [corporationState, setCorporationState] =
-    useRecoilState(EmployeeState);
+  const [corporationState, setCorporationState] = useRecoilState(EmployeeState);
   const [user, setUser] = useState<User>();
 
   // useEffect(() => {
@@ -38,7 +37,7 @@ export const UserDetailPage = (): JSX.Element => {
   //     roomId,
   //     APPLY_FIRST_MESSAGE
   //   );
-  //   await CorporationRepositry.update(corporationStateVal?.uid, {
+  //   await CorporationRepository.update(corporationStateVal?.uid, {
   //     ...corporationStateVal,
   //     room_ids: corporationStateVal.room_ids
   //       ? [...corporationStateVal.room_ids, roomId]
