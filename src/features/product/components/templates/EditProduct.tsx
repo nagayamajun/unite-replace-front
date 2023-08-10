@@ -17,6 +17,7 @@ import { UserCard } from "@/features/user/components/organisms/Card/UserCard";
 import { useProductWithApprovedUserRecruitParticipants } from "../../hooks/useProductWithApprovedUserRecruitParticipants";
 import { ProductFormSkillsField } from "../molecules/Fierld/ProductFormSkillsField";
 import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
+import { useIsRelatedUserByRecruitId } from "../../hooks/useIsRelatedUserByRecruitId";
 
 type Props = {
   path: PathToProductPage;
@@ -31,6 +32,7 @@ export const EditProduct = ({ path }: Props): JSX.Element => {
   const { product } = useProductWithApprovedUserRecruitParticipants(
     id as string
   );
+  const { isRelatedUser } = useIsRelatedUserByRecruitId(product?.recruitId);
 
   const {
     register,
@@ -74,6 +76,7 @@ export const EditProduct = ({ path }: Props): JSX.Element => {
           <ProductFormField
             labelText="プロダクト名"
             input={product?.name}
+            editable={isRelatedUser}
             onCLick={() => setIsNameOpen(true)}
           />
           <EditProductModal
@@ -115,6 +118,7 @@ export const EditProduct = ({ path }: Props): JSX.Element => {
           <ProductFormField
             labelText="技術選定理由"
             input={product.reasonForSkillSelection}
+            editable={isRelatedUser}
             onCLick={() => setIsReasonForSkillSelectionOpen(true)}
           />
           <EditProductModal
@@ -135,6 +139,7 @@ export const EditProduct = ({ path }: Props): JSX.Element => {
           <ProductFormField
             labelText="開発背景"
             input={product.developmentBackground}
+            editable={isRelatedUser}
             onCLick={() => setIsDevelopmentBackgroundOpen(true)}
           />
           <EditProductModal
@@ -155,6 +160,7 @@ export const EditProduct = ({ path }: Props): JSX.Element => {
           <ProductFormField
             labelText="プロダクト概要"
             input={product?.overview}
+            editable={isRelatedUser}
             onCLick={() => setIsOverviewOpen(true)}
           />
           <EditProductModal

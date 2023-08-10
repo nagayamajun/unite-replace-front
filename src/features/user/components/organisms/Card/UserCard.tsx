@@ -1,21 +1,17 @@
 import Link from "next/link";
 import { PersonIcon } from "../../../../../components/molecules/Icon/PersonIcon";
-import { useRecoilValue } from "recoil";
-import { UserState, UserStateType } from "@/stores/atoms";
 import { User } from "@/features/user/types/user";
 
 type Props = {
   user: User;
 };
 export const UserCard = ({ user }: Props) => {
-  const myself = useRecoilValue<UserStateType>(UserState);
-
   return (
     <div className="font-caveat group group px-8 py-4 relative mb-2 h-full w-full border overflow-hidden rounded-3xl bg-white lg:mb-3">
       <div className="flex justify-center">
         <PersonIcon
-          originalIconImageSrc={myself?.imageUrl}
-          originalIconImageAlt={`${myself?.name}のアイコン`}
+          originalIconImageSrc={user?.imageUrl}
+          originalIconImageAlt={`${user?.name}のアイコン`}
         />
       </div>
       <div className="flex flex-col justify-center ">

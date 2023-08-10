@@ -1,6 +1,7 @@
 import {
   FAIL_TO_APPROVE_PARTICIPANT,
   FAIL_TO_GET_PARTICIPANT,
+  FAIL_TO_JUDGE_WHETHER_RELATED_USER,
   FAIL_TO_REJECT_PARTICIPANT,
   SUCCESS_TO_APPROVE_PARTICIPANT,
   SUCCESS_TO_REJECT_PARTICIPANT,
@@ -52,6 +53,24 @@ export const userRecruitParticipantRepository = {
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`${FAIL_TO_GET_PARTICIPANT}\n${error.message}`);
+      }
+      throw error;
+    }
+  },
+
+  async isRelatedUserByRecruitId(recruitId: string) {
+    try {
+      const isRelatedUser = (
+        await axiosInstance.get(
+          `/user-recruit-participant/is-related-user-by-recruit-id/${recruitId}`
+        )
+      ).data;
+      return isRelatedUser;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          `${FAIL_TO_JUDGE_WHETHER_RELATED_USER}\n${error.message}`
+        );
       }
       throw error;
     }

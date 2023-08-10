@@ -12,6 +12,7 @@ export type Product = {
   developmentBackground: string;
   overview: string;
   url: string;
+  recruitId: string;
   comment?: Comment[];
   recruit?: Recruit;
   createdAt: Date;
