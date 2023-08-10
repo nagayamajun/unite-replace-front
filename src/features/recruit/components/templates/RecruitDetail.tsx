@@ -11,6 +11,9 @@ import { Loading } from "../../../../components/organisms/Loading/Loading";
 import { RecruitLikeButton } from "@/features/recruit/components/molecules/Button/RecruitLikeButton";
 import { useRecruit } from "../../hooks/useRecruit";
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
+import { SkillSelect } from "@/features/user/components/molecules/Select/SkillSelect";
+import { SelectedSkillsList } from "@/components/molecules/SkillList/SelectedSkillsList";
+import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 
 
 export const RecruitDetail: React.FC = () => {
@@ -59,52 +62,52 @@ export const RecruitDetail: React.FC = () => {
   if (isLiked === undefined || isParticipant === undefined) return <Loading/>
 
   return (
-    <div className="h-full min-h-screen w-full flex justify-center items-center sm:bg-white  text-gray-600">
+    <div className="h-full min-h-screen w-full flex justify-center items-center text-gray-600">
       <div className="flex flex-col items-center w-4/5 sm:w-sm md:w-md  lg:w-lg bg-white rounded-md">
-        <div className="h-20 sm:h-40 w-full flex flex-col justify-center items-center bg-gradient-to-r from-green-300 to-pink-300 text-white rounded-md ">
+        <div className="h-24 sm:h-40 w-full flex flex-col justify-center items-center bg-gradient-to-r from-green-300 to-pink-300 text-white rounded-md gap-y-4">
           {/* ハッカソン名 */}
-          <h1 className="text-3xl sm:text-4xl font-bold text-center">{recruit?.hackthonName}</h1>
+          <p className="text-3xl sm:text-4xl font-bold text-center">{recruit?.hackthonName}</p>
+          <p className="text-xl text-center">{recruit?.headline}</p>
         </div>
 
-        <div className="w-full  flex flex-col">
-          <div className="flex items-center justify-center h-20 sm:h-24 border-b border-gray-200 text-lg">
-            {recruit?.headline}
-          </div>
+        <div className="w-full  flex flex-col gap-y-10">
           {/* プログラミングスキル */}
-          <div className="flex flex-col justify-start items-start border-b pl-5 m-2 sm:pl-0 pb-5">
-            <p className="my-2 font-semibold">募集スキル</p>
-            <div className="break-all flex-row flex flex-wrap">
-              {recruit?.programingSkills?.map((skill, index) => (
-                  <p key={index} className="bg-gray-50 border rounded-2xl m-1 px-3 overflow-hidden text-overflow-ellipsis">{skill}</p>
-              ))}
-            </div>
+          <div className="border border-gray-300 p-2 mx-2 mt-10 rounded-lg">
+            <SelectedSkillsList
+              selectedSkillsDescription="募集スキル"
+              selectedSkills={recruit?.programingSkills}
+              descriptionFontSize="text-base font-semibold"
+              skillIconHSize={40}
+              skillIconWSize={40}
+            />
           </div>
-          <div className="flex flex-col sm:flex-row justify-between border-b pl-5 sm:pl-0 m-2 pb-5">
-            <div className="mb-2 w-full">
+
+          <div className="flex flex-col sm:flex-row justify-between border border-gray-300 rounded-lg px-2 py-4 mx-2">
+            <div className="mb-2 w-full ">
               <p className="font-semibold">開発期間</p>
               <div>{recruit?.developmentPeriod}</div>
             </div>
             <div className="w-full">
               <p className="font-semibold">募集人数</p>
-              <div><span className="bg-green-400 p-1 rounded-md text-white">{recruit?.numberOfApplicants}</span> 人</div>
+              <div><span className="p-1 rounded-md font-semibold">{recruit?.numberOfApplicants}</span> 人</div>
             </div>
           </div>
 
-          <div className="border-b pl-5 sm:pl-0 m-2 pb-7">
-            {/* 募集の詳細 */}
+          {/* 募集の詳細 */}
+          <div className="m-2">
             <p className="font-semibold mb-2">詳細</p>
-            <div className="leading-snug border border-gray-200 rounded p-3">{recruit?.details}</div>
+            <div className="leading-snug border border-gray-300 rounded-lg p-3" style={{ overflowWrap: 'break-word' }}>{recruit?.details}</div>
           </div>
 
-          <div className="border-b pl-5 sm:pl-0 m-2 pb-5">
+          <div className="m-2">
             <p className="font-semibold mb-2">ハッカソンURL</p>
-            <div className="leading-snug border border-gray-200 rounded p-2">{recruit?.hackathonUrl}</div>
+            <div className="leading-snug border border-gray-300 rounded-lg p-3" style={{ overflowWrap: 'break-word' }}>{recruit?.hackathonUrl}</div>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between mt-5">
+          <div className="flex flex-col sm:flex-row  justify-between mt-5 p-2">
             <div className="flex items-center w-full sm:w-1/2 mb-5 sm:mb-0">
               {isParticipant ? <p className="text-red-500">*参加を申請しました</p> : (
-                <button onClick={applyForJoin} className="bg-green-500 text-white px-6 py-2 rounded-sm">
+                <button onClick={applyForJoin} className="bg-green-500 text-white px-6 py-2 rounded">
                   参加を申請する
                 </button>
               )}
@@ -114,9 +117,8 @@ export const RecruitDetail: React.FC = () => {
                 recruitId={recruit?.id as string} 
                 isPropsLiked={isLiked} 
               />
-              <button onClick={onApplyFor} className="ml-5 bg-green-500 text-white px-6 py-2 rounded-sm">話を聞く</button>
+              <button onClick={onApplyFor} className="ml-5 bg-green-500 text-white px-6 py-2 rounded">話を聞く</button>
             </div>
-            
           </div>
         </div>
       </div>
