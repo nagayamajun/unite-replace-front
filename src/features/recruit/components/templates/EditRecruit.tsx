@@ -10,7 +10,7 @@ import { PlainSelectInput } from "@/components/molecules/Input/PlainSelectInput"
 import { FormField } from "@/components/molecules/FormField/FormField";
 import { EditProfileModal } from "@/features/user/components/organisms/Modal/EditProfileModal";
 import Select from "react-select";
-import { ProgramingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
+import { ProgrammingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
 import { FormRecruitData } from "./AddRecruit";
 import { ConfirmModal } from "@/types/confirmModal";
 import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
@@ -161,7 +161,7 @@ export const EditRecruit = () => {
               render={({ field }) => (
                 <Select
                   isMulti
-                  options={ProgramingSkillOptions}
+                  options={ProgrammingSkillOptions}
                   onChange={(selectedSkills) => {
                     field.onChange(selectedSkills.map((skill) => skill.value));
                   }}

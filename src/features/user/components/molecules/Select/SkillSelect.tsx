@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
 import Select from "react-select";
 import { FormRecruitData } from "../../../../recruit/components/templates/AddRecruit";
-import { ProgramingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
+import { ProgrammingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
 
 type ValidationRulus = {
   required?: boolean | string;
@@ -33,12 +33,12 @@ export const SkillSelect = ({ labelText, placepholder, control, rules, errors, r
             className="text-xs sm:text-sm text-gray-500"
             placeholder={placepholder}
             isMulti
-            options={ProgramingSkillOptions}
+            options={ProgrammingSkillOptions}
             onChange={(selected) => {
               onChange(selected.map((item) => item.value));
             }}
             onBlur={onBlur}
-            value={ProgramingSkillOptions.filter((option) => value.includes(option.value))}
+            value={ProgrammingSkillOptions.filter((option) => value.includes(option.value))}
           />
         )}
       />
