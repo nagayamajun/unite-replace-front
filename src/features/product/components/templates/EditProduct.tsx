@@ -30,16 +30,16 @@ export const EditProduct = ({ path }: Props) => {
   const [ product, setProduct ] = useState<Product>();
 
   const { register, handleSubmit, control, formState: { errors },} = useForm();
-  const [isOpen, setIsOpen] = useState(false);
-  const [ isName, setIsName ] = useState(false);
-  const [isSkills, setIsSkills] = useState(false);
-  const [isReasonForSkillSelection, setIsReasonForSkillSelection] = useState(false);
-  const [ isDevelopmentBackground, setIsDevelopmentBackground ] = useState(false);
-  const [ isOverview, setIsOverview ] = useState(false);
-  const [ isComment, setIsComment ] = useState(false);
+  const [ isModalOpen, setIsModalOpen ] = useState(false);
+  const [ isNameOpen, setIsNameOpen ] = useState(false);
+  const [isSkillsOpen, setIsSkillsOpen] = useState(false);
+  const [isReasonForSkillSelectionOpen, setIsReasonForSkillSelectionOpen] = useState(false);
+  const [ isDevelopmentBackgroundOpen, setIsDevelopmentBackgroundOpen ] = useState(false);
+  const [ isOverviewOpen, setIsOverviewOpen ] = useState(false);
+  const [ isCommentOpen, setIsCommentOpen ] = useState(false);
 
   const closeModal = () => {
-    setIsOpen(false);
+    setIsModalOpen(false);
   }
 
   useEffect(() =>{
@@ -71,11 +71,11 @@ export const EditProduct = ({ path }: Props) => {
           <ProductFormField 
             labelText='プロダクト名'
             input={product?.name}
-            onCLick={() => setIsName(true)}
+            onCLick={() => setIsNameOpen(true)}
           />
           <EditProductModal
-            isOpen={isName}
-            setIsOpen={setIsName}
+            isOpen={isNameOpen}
+            setIsOpen={setIsNameOpen}
             handleSubmit={handleSubmit}
             productId={id as string}
           >
@@ -91,11 +91,11 @@ export const EditProduct = ({ path }: Props) => {
           <ProductFormSkillsField 
             labelText='スキル'
             skills={product?.skills}
-            onCLick={() => setIsSkills(true)}
+            onCLick={() => setIsSkillsOpen(true)}
           />
           <EditProductModal
-            isOpen={isSkills}
-            setIsOpen={setIsSkills}
+            isOpen={isSkillsOpen}
+            setIsOpen={setIsSkillsOpen}
             handleSubmit={handleSubmit}
             productId={id as string}
           >
@@ -112,11 +112,11 @@ export const EditProduct = ({ path }: Props) => {
           <ProductFormField
             labelText="技術選定理由"
             input={product.reasonForSkillSelection}
-            onCLick={() => setIsReasonForSkillSelection(true)}
+            onCLick={() => setIsReasonForSkillSelectionOpen(true)}
           />
           <EditProductModal
-            isOpen={isReasonForSkillSelection}
-            setIsOpen={setIsReasonForSkillSelection}
+            isOpen={isReasonForSkillSelectionOpen}
+            setIsOpen={setIsReasonForSkillSelectionOpen}
             handleSubmit={handleSubmit}
             productId={id as string}
           >
@@ -132,11 +132,11 @@ export const EditProduct = ({ path }: Props) => {
           <ProductFormField
             labelText="開発背景"
             input={product.developmentBackground}
-            onCLick={() => setIsDevelopmentBackground(true)}
+            onCLick={() => setIsDevelopmentBackgroundOpen(true)}
           />
           <EditProductModal
-            isOpen={isDevelopmentBackground}
-            setIsOpen={setIsDevelopmentBackground}
+            isOpen={isDevelopmentBackgroundOpen}
+            setIsOpen={setIsDevelopmentBackgroundOpen}
             handleSubmit={handleSubmit}
             productId={id as string}
           >
@@ -152,11 +152,11 @@ export const EditProduct = ({ path }: Props) => {
           <ProductFormField
             labelText="プロダクト概要"
             input={product?.overview}
-            onCLick={() => setIsOverview(true)}
+            onCLick={() => setIsOverviewOpen(true)}
           />
           <EditProductModal
-            isOpen={isOverview}
-            setIsOpen={setIsOverview}
+            isOpen={isOverviewOpen}
+            setIsOpen={setIsOverviewOpen}
             handleSubmit={handleSubmit}
             productId={id as string}
           >
@@ -178,7 +178,7 @@ export const EditProduct = ({ path }: Props) => {
                 <div>
                   { !product?.comment?.some((comment) => comment.userId === user?.id) ? (
                     <button
-                      onClick={() => setIsOpen(true)}
+                      onClick={() => setIsModalOpen(true)}
                       className="py-2 px-6 rounded-md text-white font-bold bg-green-500 hover:bg-green-600"
                     >
                       Comment作成
@@ -204,11 +204,11 @@ export const EditProduct = ({ path }: Props) => {
                         <ProductFormField
                           labelText={comment.user.name}
                           input={comment.content}
-                          onCLick={() => setIsComment(true)}
+                          onCLick={() => setIsCommentOpen(true)}
                         />
                         <EditCommentModal
-                          isOpen={isComment}
-                          setIsOpen={setIsComment}
+                          isOpen={isCommentOpen}
+                          setIsOpen={setIsCommentOpen}
                           commentId={comment.id}
                           handleSubmit={handleSubmit}
                         >
@@ -247,10 +247,10 @@ export const EditProduct = ({ path }: Props) => {
       </div>
 
       <AddCommentModal
-        isOpen={isOpen}
+        isOpen={isModalOpen}
         closeModal={closeModal}
         productId={product?.id!}
-        setIsOpen={setIsOpen}
+        setIsOpen={setIsModalOpen}
       />
     </div>
   )
