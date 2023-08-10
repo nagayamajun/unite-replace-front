@@ -4,6 +4,7 @@ import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 type ValidationRulus = {
   required?: boolean | string;
   minLength?: number | { value: number; message: string };
+  maxLength?: number | { value: number; message: string };
   pattern?: RegExp | { value: RegExp; message: string };
 };
 

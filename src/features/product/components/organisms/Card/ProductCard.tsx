@@ -5,12 +5,12 @@ import { PersonIcon } from "../../../../../components/molecules/Icon/PersonIcon"
 
 type Props = {
   id: string
-  headline: string;
+  name: string;
   recruit: Recruit;
 };
 export const ProductCard = ({
   id,
-  headline,
+  name: productName,
   recruit,
 }: Props) => {
   const { name, imageUrl } = recruit.recruiter as User;
@@ -23,7 +23,7 @@ export const ProductCard = ({
     <Link href={`/corporation/product/${id}`} className="flex flex-col bg-white rounded-md shadow-sm p-5 space-y-4 hover:bg-blue-50">
       <div className="flex flex-col space-y-1">
         <div className="text-sm">Product名</div>
-        <div className="font-semibold text-lg">{headline}</div>
+        <div className="font-semibold text-lg">{productName}</div>
       </div>
       <div className="flex flex-col space-y-1">
         <div className="text-sm">関連した人</div>
