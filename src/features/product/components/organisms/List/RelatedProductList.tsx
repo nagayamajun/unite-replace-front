@@ -24,7 +24,7 @@ export const RelatedProductList = (): JSX.Element => {
           return (
             <div key={index} className="flex flex-col sm:flex-row sm:justify-between p-3 sm:p-4 my-3 rounded-md border border-gray-300">
               <div className="flex flex-col items-center sm:flex-row">
-                <p className="font-semibold mr-10">{relatedProduct.headline}</p>
+                <p className="font-semibold mr-10">{relatedProduct.name}</p>
                 { hasComment ? (
                   <p className="mb-2 sm:mb-0 text-sm sm:text-base">comment登録済み</p>
                 ) : (
