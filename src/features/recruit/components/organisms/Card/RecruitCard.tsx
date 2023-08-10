@@ -1,5 +1,8 @@
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
+import { SelectedSkillsList } from "@/components/molecules/SkillList/SelectedSkillsList";
+import { ProgrammingSkill, ProgrammingSkillIcons } from "@/features/user/types/programingSkill";
 import { User } from "@/features/user/types/user";
+import Image from "next/image";
 import Link from "next/link";
 
 type RecruitCardProps = {
@@ -7,14 +10,13 @@ type RecruitCardProps = {
   id: string;
   createdAt: Date;
   headline: string;
-  programingSkills: string[];
+  programingSkills: ProgrammingSkill[];
   hackthonName?: string;
   recruiter?: User
 };
 
 export const RecruitCard = ({
   id,
-  createdAt,
   headline,
   programingSkills,
   hackthonName,
@@ -40,20 +42,12 @@ export const RecruitCard = ({
       </div>
     </div>
     {/* 募集スキル */}
-    <div className="flex flex-col">
-      <p className="text-sm">募集スキル</p>
-      <div className="flex col">
-        {programingSkills?.map((skill, index) => (
-          <div key={index} className="flex flex-wrap justify-start line-clamp-1">
-            <span className="text-gray-500 inline-flex items-center gap-1.5 py-1 px-2  mx-1 my-3  text-sm rounded-full border-2 border-gray-500 ">
-              {skill}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
+    <SelectedSkillsList
+      selectedSkills={programingSkills}
+      selectedSkillsDescription="募集スキル"
+    />
 
-    <div className="flex justify-between">
+    <div className="flex justify-between mt-auto">
       <div className=" flex col items-center">
         <p className="text-sm mr-3 mb-2 sm:mb-0 sm:text-base">募集主: {recruiter?.name}</p>
         <PersonIcon 

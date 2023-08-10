@@ -4,7 +4,7 @@ import { SkillSelect } from "@/features/user/components/molecules/Select/SkillSe
 import { SubmitButton } from "@/components/molecules/Button/SubmitButton";
 import { useAuth } from "@/hooks/useAuth";
 import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
-import { ProgramingSkill } from "@/features/user/types/programingSkill";
+import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -14,7 +14,7 @@ export type FormRecruitData = {
   hackthonName: string;
   headline: string;
   details: string;
-  programingSkills: ProgramingSkill[];
+  programingSkills: ProgrammingSkill[];
   developmentPeriod: string;
   hackathonUrl: String;
   numberOfApplicants: number; //募集人数

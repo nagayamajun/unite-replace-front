@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import { useRecoilState } from "recoil";
 import { SubmitButton } from "../../../../components/molecules/Button/SubmitButton";
-import { ProgramingSkill } from "@/features/user/types/programingSkill";
+import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { useAuth } from "@/hooks/useAuth";
 import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { UserRepository } from "@/features/user/modules/user/user.repository";
@@ -29,7 +29,7 @@ export const SkillPage = (): JSX.Element => {
   const closeNotice = () => setIsNoticeOpen(false);
 
   //enum型からスキルオブジェクト作成
-  const options = Object.values(ProgramingSkill).map((skill) => ({
+  const options = Object.values(ProgrammingSkill).map((skill) => ({
     value: skill,
     label: skill,
   }));
