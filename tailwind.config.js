@@ -16,7 +16,8 @@ module.exports = {
       },
       fontFamily: {
         "caveat": ["Caveat", "cursive"],
-        "zen": ["Zen Maru Gothic", "sans-serif"]
+        "zen": ["Zen Maru Gothic", "sans-serif"],
+        "m-plus": ['"M PLUS Rounded 1c"', "sans-serif"]
       },
       margin: {
         "200": "200px",

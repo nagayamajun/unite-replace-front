@@ -17,7 +17,7 @@ const Document = () => {
           rel="stylesheet"
         ></link>
       </Head>
-      <body className="bg-white">
+      <body className="bg-white font-m-plus font-[400]">
         <Main />
         <NextScript />
       </body>
