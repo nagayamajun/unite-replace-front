@@ -48,7 +48,7 @@ export const RecruitList = (): JSX.Element => {
       <div className="grid mx-12 lg:mx-20 gap-x-14 gap-y-8 sm:grid-cols-1 lg:grid-cols-2 ">
         {filteredRecruits      
           .map((recruit: RecruitCardProps) => {
-            // if (user?.id !== recruit?.recruiter?.id) {
+            if (user?.id !== recruit?.recruiter?.id) {
               return (
                 <RecruitCard
                   key={recruit.id}
@@ -60,7 +60,7 @@ export const RecruitList = (): JSX.Element => {
                   recruiter={recruit.recruiter!}
                 />
               );
-            // }
+            }
           })
         }
         {filteredRecruits.length === 0 && <p className="font-bold">条件に一致する募集はありません</p>}

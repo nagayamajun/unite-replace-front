@@ -18,11 +18,17 @@ export const FAIL_TO_DELETE_LIKE = "いいねを取り消すことに失敗し�
 export const SUCCESS_IN_UPDATE_USER = "ユーザー情報が更新されました。";
 export const FAIL_TO_UPDATE_USER = "ユーザー情報の更新に失敗しました。";
 
+export const FAIL_TO_GET_PARTICIPANT =
+  "応募参加者を取得することができませんでした。";
+
 export const SUCCESS_TO_APPROVE_PARTICIPANT = "承認に成功しました。";
 export const FAIL_TO_APPROVE_PARTICIPANT = "承認に失敗しました。";
 
 export const SUCCESS_TO_REJECT_PARTICIPANT = "拒否に成功しました。";
 export const FAIL_TO_REJECT_PARTICIPANT = "拒否に失敗しました。";
+
+export const FAIL_TO_JUDGE_WHETHER_RELATED_USER =
+  "プロダクトに関わったユーザーかどうか判断できませんでした。";
 
 export const SUCCESS_TO_UPDATE_RECRUIT = "募集情報を更新しました。";
 export const FAIL_TO_UPDATE_RECRUIT = "募集情報の更新に失敗しました。";
