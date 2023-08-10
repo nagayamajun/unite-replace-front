@@ -7,9 +7,15 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
 import { Loading } from "@/components/organisms/Loading/Loading";
+import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
 
 export const UploadProduct = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    control,
+  } = useForm();
   const router = useRouter();
   const { recruitId } = router.query;
 
@@ -33,8 +39,11 @@ export const UploadProduct = () => {
 
     const submitDate: submitProductDate = {
       recruitId: recruitId as string,
-      headline: data.headline,
-      detail: data.detail,
+      name: data.name,
+      skills: data.skills,
+      reasonForSkillSelection: data.reasonForSkillSelection,
+      developmentBackground: data.developmentBackground,
+      overview: data.overview,
       file: data.file[0]
     }
 
@@ -48,8 +57,7 @@ export const UploadProduct = () => {
 
           setTimeout(() => {
             setIsOpen(false)
-            if (!result.success) return router.reload();
-            router.push("/homeScreen")
+            if (result.success) return router.push("/homeScreen")
           }, 4000)
         }
       })
@@ -67,28 +75,60 @@ export const UploadProduct = () => {
   // if(isLoading) return <Loading message={'アップロード中です。このままお待ちください'}/>
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen">
-      <div className="flex flex-col justify-center items-center mb-16 text-lg w-1/2 font-bold">
+    <div className="flex flex-col items-center justify-center w-full min-h-screen h-full py-5">
+      <div className="flex flex-col justify-center items-center my-6 text-lg w-1/2 font-bold">
         成果物のアップロード
       </div>
       <form action="" onSubmit={handleSubmit(onSubmit)} className="flex flex-col  items-center justify-center w-1/2">
         <PlainInput
-          labelText="制作物の動画"
+          labelText="制作物の動画(必須項目)"
           inputType="file"
           registerLabel="file"
           register={register}
+          errors={errors}
+          rules={{required: "必須項目です"}}
         />
+
         <PlainInput
-          labelText="見出し"
-          registerLabel="headline"
+          labelText="プロダクト名(必須項目)"
+          registerLabel="name"
           inputType="input"
           register={register}
         />
-        <PlainTextArea
-          labelText="詳細"
-          register={register}
-          registerLabel="detail"
+
+        <SkillSelect
+          registerLabel="skills"
+          labelText="スキル(必須項目)"
+          control={control}
+          placeholder="スキルを選択してください(複数選択可)"
+          errors={errors}
+          rules={{ required: "必須項目です" }}
         />
+
+        <PlainTextArea
+          labelText="技術選定理由(必須項目/1000字以内)"
+          register={register}
+          registerLabel="reasonForSkillSelection"
+          errors={errors}
+          rules={{ required: "必須項目です", maxLength: { value: 1000, message: `1000字以下でご記入ください` } }}
+        />
+
+        <PlainTextArea
+          labelText="開発背景(必須項目/1000字以内)"
+          register={register}
+          registerLabel="developmentBackground"
+          errors={errors}
+          rules={{ required: "必須項目です", maxLength: { value: 1000, message: `1000字以下でご記入ください` } }}
+        />
+
+        <PlainTextArea
+          labelText="プロダクト概要(必須項目/2000字以内)"
+          register={register}
+          registerLabel="overview"
+          errors={errors}
+          rules={{ required: "必須項目です", maxLength: { value: 20, message: `2000字以下でご記入ください` } }}
+        />
+
         <SubmitButton
           innerText={isLoading ? 'アップロード中です' : 'アップロードする'}
           disabled={isLoading}

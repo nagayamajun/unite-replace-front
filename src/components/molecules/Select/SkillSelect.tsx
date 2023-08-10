@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
 import Select from "react-select";
-import { FormRecruitData } from "../../../../recruit/components/templates/AddRecruit";
+import { FormRecruitData } from "../../../features/recruit/components/templates/AddRecruit";
 import { ProgramingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
 
 type ValidationRulus = {
@@ -12,16 +12,16 @@ type ValidationRulus = {
 
 type Props = {
   labelText: string;
-  placepholder: string;
+  placeholder: string;
   control:Control<FieldValues, any>
   errors: FieldErrors<FieldValues>;
   rules?: ValidationRulus;
   registerLabel: string;
 }
 
-export const SkillSelect = ({ labelText, placepholder, control, rules, errors, registerLabel}: Props) => {
+export const SkillSelect = ({ labelText, placeholder, control, rules, errors, registerLabel}: Props) => {
   return (
-    <div className="flex flex-col gap-1 mb-6">
+    <div className="flex flex-col gap-1 mb-6 w-full">
       <label htmlFor="programingSkills" className="text-xs sm:text-sm">{labelText}</label>
       <Controller
         name={registerLabel}
@@ -31,7 +31,7 @@ export const SkillSelect = ({ labelText, placepholder, control, rules, errors, r
         render={({ field: {onChange, onBlur, value} }) => (
           <Select
             className="text-xs sm:text-sm text-gray-500"
-            placeholder={placepholder}
+            placeholder={placeholder}
             isMulti
             options={ProgramingSkillOptions}
             onChange={(selected) => {

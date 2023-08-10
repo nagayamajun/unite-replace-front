@@ -1,11 +1,15 @@
 import { Product } from "../../types/product";
 import { axiosInstance } from "@/libs/axios";
 import { FAIL_TO_CREATE_PRODUCT, FAIL_TO_GET_PRODUCT, FAIL_TO_UPDATE_PRODUCT, SUCCESS_TO_CREATE_PRODUCT } from "@/constants/constants";
+import { ProgramingSkill } from "@/features/user/types/programingSkill";
 
 export type submitProductDate = {
   recruitId: string;
-  headline: string;
-  detail: string;
+  name: string;
+  skills: ProgramingSkill[];
+  reasonForSkillSelection: string;
+  developmentBackground: string;
+  overview: string
   file: any;
 };
 
@@ -91,7 +95,7 @@ export const productRepository = {
     }
   },
 
-  //productの情報取得
+  //productの編集
   async editProductInfo(id: string, data: any) {
     const product = (
       await axiosInstance.put(`/product/${id}`, data).catch((err) => {
