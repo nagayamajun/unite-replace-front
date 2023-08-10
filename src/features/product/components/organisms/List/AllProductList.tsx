@@ -17,7 +17,7 @@ export const ProductList = () => {
           <ProductCard
             key={product.id}
             id={product.id}
-            headline={product.headline}
+            name={product.name}
             recruit={product.recruit!}
           />
         ))}
