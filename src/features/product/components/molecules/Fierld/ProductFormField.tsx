@@ -15,12 +15,12 @@ export const ProductFormField = ({
   return (
     <div className="w-full flex flex-col">
       <div className="flex flex-row w-full mb-3">
-        <p className="font-semibold w-1/2">{labelText}</p>
+        <p className="w-1/2">{labelText}</p>
         <button onClick={onCLick} className="w-1/2 flex items-end justify-end">
-          <AiFillEdit className="text-xl"/>
+          <AiFillEdit className="text-lg"/>
         </button>
       </div>
-      <div className="border rounded-md p-4 border-gray-300">
+      <div className="border rounded-md p-3 border-gray-300">
         {input}
       </div>
     </div>

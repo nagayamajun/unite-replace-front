@@ -2,12 +2,16 @@ import { Comment } from "./comment";
 import { EmployeeProductLike } from "./employeeToProductLike";
 import { Recruit } from "../../recruit/types/recruit";
 import { UserRecruitParticipant } from "@/features/recruit/types/UserRecruitParticipant";
+import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 
 export type Product = {
   id: string;
-  headline: string;
+  name: string;
+  skills: ProgrammingSkill[];
+  reasonForSkillSelection: string;
+  developmentBackground: string;
+  overview: string;
   url: string;
-  detail: string;
   comment?: Comment[];
   recruit?: Recruit;
   createdAt: Date;

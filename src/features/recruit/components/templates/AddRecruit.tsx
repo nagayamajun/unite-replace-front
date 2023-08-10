@@ -1,10 +1,10 @@
 import { PlainInput } from "@/components/molecules/Input/PlainInput";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
-import { SkillSelect } from "@/features/user/components/molecules/Select/SkillSelect";
+import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
 import { SubmitButton } from "@/components/molecules/Button/SubmitButton";
 import { useAuth } from "@/hooks/useAuth";
 import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
-import { ProgramingSkill } from "@/features/user/types/programingSkill";
+import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -14,7 +14,7 @@ export type FormRecruitData = {
   hackthonName: string;
   headline: string;
   details: string;
-  programingSkills: ProgramingSkill[];
+  programingSkills: ProgrammingSkill[];
   developmentPeriod: string;
   hackathonUrl: String;
   numberOfApplicants: number; //募集人数
@@ -104,7 +104,7 @@ export const AddRecruit = () => {
               registerLabel="programingSkills"
               labelText="スキル"
               control={control}
-              placepholder="スキルを選択してください(複数選択可)"
+              placeholder="スキルを選択してください(複数選択可)"
               errors={errors}
               rules={{ required: "必須項目です" }}
             />

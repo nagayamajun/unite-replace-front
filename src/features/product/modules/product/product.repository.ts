@@ -9,11 +9,15 @@ import {
   FAIL_TO_UPDATE_PRODUCT,
   SUCCESS_TO_CREATE_PRODUCT,
 } from "@/constants/constants";
+import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 
 export type submitProductDate = {
   recruitId: string;
-  headline: string;
-  detail: string;
+  name: string;
+  skills: ProgrammingSkill[];
+  reasonForSkillSelection: string;
+  developmentBackground: string;
+  overview: string;
   file: any;
 };
 
@@ -97,7 +101,7 @@ export const productRepository = {
     }
   },
 
-  //productの情報取得
+  //productの編集
   async editProductInfo(id: string, data: any) {
     const product = (
       await axiosInstance.put(`/product/${id}`, data).catch((err) => {

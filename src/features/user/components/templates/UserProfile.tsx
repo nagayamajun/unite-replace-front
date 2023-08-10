@@ -7,7 +7,7 @@ import { PlainInput } from "../../../../components/molecules/Input/PlainInput";
 import { EditProfileModal } from "../organisms/Modal/EditProfileModal";
 import { FormField } from "../../../../components/molecules/FormField/FormField";
 import { GraduationYearRadio } from "../molecules/Radio/GraduationYearRadio";
-import { ProgramingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
+import { ProgrammingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
 import { RecruitCard } from "@/features/recruit/components/organisms/Card/RecruitCard";
 import { Recruit } from "@/features/recruit/types/recruit";
 import { useRouter } from "next/router";
@@ -326,7 +326,7 @@ export const UserProfile = (): JSX.Element => {
               render={({ field }) => (
                 <Select
                   isMulti
-                  options={ProgramingSkillOptions}
+                  options={ProgrammingSkillOptions}
                   onChange={(selectedSkills) => {
                     field.onChange(selectedSkills.map((skill) => skill.value));
                   }}

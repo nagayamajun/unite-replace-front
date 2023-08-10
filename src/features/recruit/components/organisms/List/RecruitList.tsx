@@ -5,7 +5,7 @@ import { recruitAtomState } from "@/features/recruit/stores/recruitAtom";
 import Link from "next/link";
 import { User } from "@/features/user/types/user";
 import { useRouter } from "next/router";
-import { ProgramingSkill } from "@/features/user/types/programingSkill";
+import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 
 
 export const RecruitList = (): JSX.Element => {
@@ -16,7 +16,7 @@ export const RecruitList = (): JSX.Element => {
 
   const filteredRecruits = recruits.filter((recruit) => {
     const name = router.query.name as string;
-    const skills = router.query.skills as ProgramingSkill[];
+    const skills = router.query.skills as ProgrammingSkill[];
   
     switch (true) {
       case !!name && skills?.length > 0:
@@ -39,7 +39,7 @@ export const RecruitList = (): JSX.Element => {
     recruiter?: User;
     createdAt: Date;
     headline: string;
-    programingSkills: string[];
+    programingSkills: ProgrammingSkill[];
     hackthonName?: string;
   };
 
@@ -48,7 +48,7 @@ export const RecruitList = (): JSX.Element => {
       <div className="grid mx-12 lg:mx-20 gap-x-14 gap-y-8 sm:grid-cols-1 lg:grid-cols-2 ">
         {filteredRecruits      
           .map((recruit: RecruitCardProps) => {
-            if (user?.id !== recruit?.recruiter?.id) {
+            // if (user?.id !== recruit?.recruiter?.id) {
               return (
                 <RecruitCard
                   key={recruit.id}
@@ -60,7 +60,7 @@ export const RecruitList = (): JSX.Element => {
                   recruiter={recruit.recruiter!}
                 />
               );
-            }
+            // }
           })
         }
         {filteredRecruits.length === 0 && <p className="font-bold">条件に一致する募集はありません</p>}

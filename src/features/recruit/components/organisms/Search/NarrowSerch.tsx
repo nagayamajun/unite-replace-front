@@ -1,15 +1,15 @@
 import { recruitAtomState } from "@/features/recruit/stores/recruitAtom";
-import { ProgramingSkill } from "@/features/user/types/programingSkill";
+import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { useForm } from "react-hook-form"
 import { useRecoilValue } from "recoil";
 import { PlainInput } from "../../../../../components/molecules/Input/PlainInput";
-import { SkillSelect } from "../../../../user/components/molecules/Select/SkillSelect";
+import { SkillSelect } from "../../../../../components/molecules/Select/SkillSelect";
 import { SubmitButton } from "../../../../../components/molecules/Button/SubmitButton";
 import { useRouter } from "next/router";
 
 type FiltteringData = {
   hackthonName?: string;
-  programingSkills?: ProgramingSkill[]
+  programingSkills?: ProgrammingSkill[]
 }
 
 export const NarrowSearch = () => {
@@ -24,7 +24,7 @@ export const NarrowSearch = () => {
   }
 
   //条件でフィルターをかける関数
-  const filterRecruit = (name?: string, skills?: ProgramingSkill[]) => {
+  const filterRecruit = (name?: string, skills?: ProgrammingSkill[]) => {
     switch (true) {
       case name && skills?.length! > 0:
         router.push({
@@ -73,7 +73,7 @@ export const NarrowSearch = () => {
           <SkillSelect
             registerLabel="programingSkills"
             labelText="スキル"
-            placepholder="スキルを選択してください(複数選択可)"
+            placeholder="スキルを選択してください(複数選択可)"
             control={control}
             errors={errors}
           />

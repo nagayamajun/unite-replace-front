@@ -15,12 +15,14 @@ import { ProductLikeButton } from "@/features/product/components/molecules/Butto
 import { EmployeeState } from "@/stores/employeeAtom";
 import { UserCard } from "@/features/user/components/organisms/Card/UserCard";
 import { useProductWithApprovedUserRecruitParticipants } from "../../hooks/useProductWithApprovedUserRecruitParticipants";
+import { ProductFormSkillsField } from "../molecules/Fierld/ProductFormSkillsField";
+import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
 
 type Props = {
   path: PathToProductPage;
 };
 
-export const EditProduct = ({ path }: Props) => {
+export const EditProduct = ({ path }: Props): JSX.Element => {
   const router = useRouter();
   const { id } = router.query;
 
@@ -30,14 +32,24 @@ export const EditProduct = ({ path }: Props) => {
     id as string
   );
 
-  const { register, handleSubmit, control } = useForm();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [isHeadline, setIsHeadline] = useState(false);
-  const [isComment, setIsComment] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNameOpen, setIsNameOpen] = useState(false);
+  const [isSkillsOpen, setIsSkillsOpen] = useState(false);
+  const [isReasonForSkillSelectionOpen, setIsReasonForSkillSelectionOpen] =
+    useState(false);
+  const [isDevelopmentBackgroundOpen, setIsDevelopmentBackgroundOpen] =
+    useState(false);
+  const [isOverviewOpen, setIsOverviewOpen] = useState(false);
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
 
   const closeModal = () => {
-    setIsOpen(false);
+    setIsModalOpen(false);
   };
 
   //いいねをしているかしていないかの判定に利用する
@@ -48,59 +60,122 @@ export const EditProduct = ({ path }: Props) => {
   if (product === undefined || isLiked === undefined) return <Loading />;
 
   return (
-    <div className="flex flex-col w-full h-full min-h-screen justify-center items-center text-gray-600 ">
-      <div className="flex flex-col rounded-lg items-center w-4/5 sm:w-base md:w-sm gap-14 mb-10 bg-white">
-        <div className="flex justify-center items-center w-4/5 mt-10">
-          <video src={product?.url} controls className="w-full h-60"></video>
+    <div className="flex flex-col w-full min-h-screen h-full justify-center items-center text-gray-600 ">
+      <div className="flex flex-col rounded-lg items-center w-4/5 sm:w-sm md:w-md lg:w-lg gap-14  bg-white">
+        <div className="flex justify-center items-center w-full mt-10">
+          <video
+            src={product?.url}
+            controls
+            className="w-full h-auto rounded-sm"
+          ></video>
         </div>
-        <div className=" flex flex-col items-center w-4/5 gap-5">
+        <div className=" flex flex-col items-center w-full px-5 gap-6">
           {/* headline */}
           <ProductFormField
             labelText="プロダクト名"
-            input={product?.headline}
-            onCLick={() => setIsHeadline(true)}
+            input={product?.name}
+            onCLick={() => setIsNameOpen(true)}
           />
-
           <EditProductModal
-            isOpen={isHeadline}
-            setIsOpen={setIsHeadline}
+            isOpen={isNameOpen}
+            setIsOpen={setIsNameOpen}
             handleSubmit={handleSubmit}
             productId={id as string}
           >
             <PlainInput
-              labelText="headline"
-              placeholder="headlineについてまとめてください"
+              labelText="プロダクト名"
+              placeholder="プロダクト名を記述してください"
               register={register}
-              registerLabel="headline"
+              registerLabel="name"
+            />
+          </EditProductModal>
+
+          {/* skills */}
+          <ProductFormSkillsField
+            labelText="スキル"
+            skills={product?.skills}
+            onCLick={() => setIsSkillsOpen(true)}
+          />
+          <EditProductModal
+            isOpen={isSkillsOpen}
+            setIsOpen={setIsSkillsOpen}
+            handleSubmit={handleSubmit}
+            productId={id as string}
+          >
+            <SkillSelect
+              registerLabel="skills"
+              labelText="スキル"
+              control={control}
+              errors={errors}
+              placeholder="スキルを選択してください(複数選択可)"
+            />
+          </EditProductModal>
+
+          {/* 技術選定理由 */}
+          <ProductFormField
+            labelText="技術選定理由"
+            input={product.reasonForSkillSelection}
+            onCLick={() => setIsReasonForSkillSelectionOpen(true)}
+          />
+          <EditProductModal
+            isOpen={isReasonForSkillSelectionOpen}
+            setIsOpen={setIsReasonForSkillSelectionOpen}
+            handleSubmit={handleSubmit}
+            productId={id as string}
+          >
+            <PlainTextArea
+              labelText="技術選定理由"
+              placeholder="技術選定理由についてお答えください"
+              register={register}
+              registerLabel="reasonForSkillSelection"
+            />
+          </EditProductModal>
+
+          {/* 開発背景 */}
+          <ProductFormField
+            labelText="開発背景"
+            input={product.developmentBackground}
+            onCLick={() => setIsDevelopmentBackgroundOpen(true)}
+          />
+          <EditProductModal
+            isOpen={isDevelopmentBackgroundOpen}
+            setIsOpen={setIsDevelopmentBackgroundOpen}
+            handleSubmit={handleSubmit}
+            productId={id as string}
+          >
+            <PlainTextArea
+              labelText="開発背景"
+              placeholder="開発背景についてお答えください"
+              register={register}
+              registerLabel="developmentBackground"
             />
           </EditProductModal>
 
           {/* プロダクト詳細 */}
           <ProductFormField
-            labelText="プロダクト詳細"
-            input={product?.detail}
-            onCLick={() => setIsDetailOpen(true)}
+            labelText="プロダクト概要"
+            input={product?.overview}
+            onCLick={() => setIsOverviewOpen(true)}
           />
-
           <EditProductModal
-            isOpen={isDetailOpen}
-            setIsOpen={setIsDetailOpen}
+            isOpen={isOverviewOpen}
+            setIsOpen={setIsOverviewOpen}
             handleSubmit={handleSubmit}
             productId={id as string}
           >
             <PlainTextArea
-              labelText="detail"
+              labelText="プロダクト概要"
               placeholder="プロダクトについて詳細に記述してください"
               register={register}
-              registerLabel="detail"
+              registerLabel="overview"
             />
           </EditProductModal>
 
+          {/* Fix: 分岐しているコードを見やすくする */}
           {/* プロダクト参加者のアイコンを一覧表示したい。それぞれのユーザーのプロフィールに飛ぶことができる */}
-
-          <div className="flex flex-col items-start w-full gap-5 mb-10 border-t border-gray-400 pt-5">
+          <div className="flex flex-col items-start w-full gap-5 my-10 border-t border-gray-400 pt-5">
             <div className="flex flex-row justify-between w-full">
-              <div className="bg-green-500 text-white p-2 rounded-md text-left">
+              <div className="font-semibold p-2 text-left">
                 個人アピールポイント一覧
               </div>
               {/* userの時のみコメントを作成できる */}
@@ -110,7 +185,7 @@ export const EditProduct = ({ path }: Props) => {
                     (comment) => comment.userId === user?.id
                   ) ? (
                     <button
-                      onClick={() => setIsOpen(true)}
+                      onClick={() => setIsModalOpen(true)}
                       className="py-2 px-6 rounded-md text-white font-bold bg-green-500 hover:bg-green-600"
                     >
                       Comment作成
@@ -138,11 +213,11 @@ export const EditProduct = ({ path }: Props) => {
                       <ProductFormField
                         labelText={comment.user.name}
                         input={comment.content}
-                        onCLick={() => setIsComment(true)}
+                        onCLick={() => setIsCommentOpen(true)}
                       />
                       <EditCommentModal
-                        isOpen={isComment}
-                        setIsOpen={setIsComment}
+                        isOpen={isCommentOpen}
+                        setIsOpen={setIsCommentOpen}
                         commentId={comment.id}
                         handleSubmit={handleSubmit}
                       >
@@ -190,10 +265,10 @@ export const EditProduct = ({ path }: Props) => {
       </div>
 
       <AddCommentModal
-        isOpen={isOpen}
+        isOpen={isModalOpen}
         closeModal={closeModal}
         productId={product?.id!}
-        setIsOpen={setIsOpen}
+        setIsOpen={setIsModalOpen}
       />
     </div>
   );
