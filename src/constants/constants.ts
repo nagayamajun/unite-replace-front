@@ -44,3 +44,6 @@ export const FAIL_TO_CREATE_PRODUCT =
   "productの作成に失敗しました。\n再度やり直してください";
 
 export const FAIL_TO_SEND_SCOUT = "スカウトに失敗しました";
+
+export const SUCCESS_IN_UPDATE_CORPORATION = "企業の情報が更新されました。";
+export const FAIL_TO_UPDATE_CORPORATION = "企業の情報の更新に失敗しました。";

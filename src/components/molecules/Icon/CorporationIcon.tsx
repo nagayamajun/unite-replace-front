@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { MouseEventHandler } from "react";
-import { BsFillPersonFill } from "react-icons/bs";
+import { BiSolidBusiness } from "react-icons/bi";
 
-type PersonIconProps = {
+type CorporationIconProps = {
   originalIconImageSrc?: string;
   originalIconImageAlt?: string;
   defaultIconSize?: number;
@@ -12,15 +12,15 @@ type PersonIconProps = {
   onClick?: MouseEventHandler<Element>;
 };
 
-export const PersonIcon = ({
+export const CorporationIcon = ({
   originalIconImageSrc,
-  originalIconImageAlt = "人物アイコン",
+  originalIconImageAlt = "企業アイコン",
   originalIconClassName = "rounded-full border border-black",
   defaultIconSize = 36,
   defaultIconFill = "gray",
   defaultIconClassName = "rounded-full bg-white border border-black p-1 color-black-100",
   onClick,
-}: PersonIconProps): JSX.Element => (
+}: CorporationIconProps): JSX.Element => (
   <>
     {originalIconImageSrc ? (
       <Image
@@ -32,7 +32,7 @@ export const PersonIcon = ({
         onClick={onClick}
       />
     ) : (
-      <BsFillPersonFill
+      <BiSolidBusiness
         size={defaultIconSize}
         fill={defaultIconFill}
         className={defaultIconClassName}
