@@ -1,4 +1,11 @@
-import { FAIL_TO_APPROVE_PARTICIPANT, FAIL_TO_REJECT_PARTICIPANT, SUCCESS_TO_APPROVE_PARTICIPANT, SUCCESS_TO_REJECT_PARTICIPANT } from "@/constants/constants";
+import {
+  FAIL_TO_APPROVE_PARTICIPANT,
+  FAIL_TO_GET_PARTICIPANT,
+  FAIL_TO_JUDGE_WHETHER_RELATED_USER,
+  FAIL_TO_REJECT_PARTICIPANT,
+  SUCCESS_TO_APPROVE_PARTICIPANT,
+  SUCCESS_TO_REJECT_PARTICIPANT,
+} from "@/constants/constants";
 import { axiosInstance } from "@/libs/axios";
 import { ConfirmModal } from "@/types/confirmModal";
 import { type } from "os";
@@ -7,7 +14,9 @@ export const userRecruitParticipantRepository = {
   //参加依頼を送る
   async applyForJoin(userRecruitId: string) {
     try {
-      await axiosInstance.post("/user-recruit-participant/applyForJoin", { userRecruitId });
+      await axiosInstance.post("/user-recruit-participant/applyForJoin", {
+        userRecruitId,
+      });
       return { message: "募集主に申請しました。", success: true };
     } catch (error) {
       return { message: "募集主への申請に失敗しました。", success: false };
@@ -17,42 +26,88 @@ export const userRecruitParticipantRepository = {
   //一件のuserRecruitに紐ずくuserRecruitPArticipantレコードを全件取得
   async findManyByUserRecruitId(recruitId: string) {
     try {
-      const userRecruitParticipants = ( await axiosInstance.post('/user-recruit-participant/find-many-by-userRecruit', { recruitId })).data
-      return userRecruitParticipants
-
+      const userRecruitParticipants = (
+        await axiosInstance.post(
+          "/user-recruit-participant/find-many-by-userRecruit",
+          { recruitId }
+        )
+      ).data;
+      return userRecruitParticipants;
     } catch (error) {
-      throw new Error(`userRecruitparticipantsを取得することができませんでした。${error}`)
+      if (error instanceof Error) {
+        throw new Error(`${FAIL_TO_GET_PARTICIPANT}\n${error.message}`);
+      }
+      throw error;
     }
   },
 
-  async  approveParticipant(id: string): Promise<ConfirmModal> {
+  //一件のuserRecruitに紐ずく参加承認済み (isApproved = true) のuserRecruitParticipantレコードを全件取得
+  async findManyApprovedParticipantsByUserRecruitId(recruitId: string) {
     try {
-      await axiosInstance.put(`/user-recruit-participant/${id}/approve`)
+      const userRecruitParticipants = (
+        await axiosInstance.get(
+          `/user-recruit-participant/find-many-approved-by-user-recruit-id/${recruitId}`
+        )
+      ).data;
+      return userRecruitParticipants;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`${FAIL_TO_GET_PARTICIPANT}\n${error.message}`);
+      }
+      throw error;
+    }
+  },
+
+  async isRelatedUserByRecruitId(recruitId: string) {
+    try {
+      const isRelatedUser = (
+        await axiosInstance.get(
+          `/user-recruit-participant/is-related-user-by-recruit-id/${recruitId}`
+        )
+      ).data;
+      return isRelatedUser;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          `${FAIL_TO_JUDGE_WHETHER_RELATED_USER}\n${error.message}`
+        );
+      }
+      throw error;
+    }
+  },
+
+  async approveParticipant(id: string): Promise<ConfirmModal> {
+    try {
+      await axiosInstance.put(`/user-recruit-participant/${id}/approve`);
       return {
         message: `${SUCCESS_TO_APPROVE_PARTICIPANT}`,
-        success: true
-      }
+        success: true,
+      };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
       return {
         success: false,
-        message: `${FAIL_TO_APPROVE_PARTICIPANT}\n${isTypeSafeError ? error.message : ""}`
-      }
+        message: `${FAIL_TO_APPROVE_PARTICIPANT}\n${
+          isTypeSafeError ? error.message : ""
+        }`,
+      };
     }
   },
 
   async rejectParticipant(id: string): Promise<ConfirmModal> {
     try {
-      await axiosInstance.delete(`/user-recruit-participant/${id}/reject`)
+      await axiosInstance.delete(`/user-recruit-participant/${id}/reject`);
       return {
         message: `${SUCCESS_TO_REJECT_PARTICIPANT}`,
-        success: true
-      }
+        success: true,
+      };
     } catch (error) {
-      const isTypeSafeError = error instanceof Error
+      const isTypeSafeError = error instanceof Error;
       return {
-        message: `${FAIL_TO_REJECT_PARTICIPANT}\n${isTypeSafeError ? error.message : ""}`
-      }
+        message: `${FAIL_TO_REJECT_PARTICIPANT}\n${
+          isTypeSafeError ? error.message : ""
+        }`,
+      };
     }
-  }
+  },
 };
