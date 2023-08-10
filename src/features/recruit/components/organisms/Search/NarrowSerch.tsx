@@ -1,5 +1,5 @@
 import { recruitAtomState } from "@/features/recruit/stores/recruitAtom";
-import { ProgramingSkill } from "@/features/user/types/programingSkill";
+import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { useForm } from "react-hook-form"
 import { useRecoilValue } from "recoil";
 import { PlainInput } from "../../../../../components/molecules/Input/PlainInput";
@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 
 type FiltteringData = {
   hackthonName?: string;
-  programingSkills?: ProgramingSkill[]
+  programingSkills?: ProgrammingSkill[]
 }
 
 export const NarrowSearch = () => {
@@ -24,7 +24,7 @@ export const NarrowSearch = () => {
   }
 
   //条件でフィルターをかける関数
-  const filterRecruit = (name?: string, skills?: ProgramingSkill[]) => {
+  const filterRecruit = (name?: string, skills?: ProgrammingSkill[]) => {
     switch (true) {
       case name && skills?.length! > 0:
         router.push({

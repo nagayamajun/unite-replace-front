@@ -1,6 +1,6 @@
 import { UserRecruitParticipant } from "./UserRecruitParticipant";
 import { Product } from "../../product/types/product";
-import { ProgramingSkill } from "../../user/types/programingSkill";
+import { ProgrammingSkill } from "../../user/types/programingSkill";
 import { User } from "../../user/types/user";
 import { UserToRecruitLike } from "./userToRecruitLike";
 
@@ -11,7 +11,7 @@ export type Recruit = {
   updatedAt?: Date;
   headline: string;
   details: string;
-  programingSkills: ProgramingSkill[];
+  programingSkills: ProgrammingSkill[];
   developmentPeriod: string;
   hackathonUrl: string;
   hackthonName?: string;
