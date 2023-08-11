@@ -77,9 +77,9 @@ export const ChatPage = (): JSX.Element => {
   };
 
   return (
-    <div className="flex min-h-screen w-full h-full sm:flex-row justify-end sm:justify-start items-start bg-white">
+    <div className="relative flex min-h-screen w-full grow-0 h-full sm:flex-row items-start bg-white">
       {/* いろんな人とのやりとりリスト */}
-      <div className="hidden min-h-screen h-full sm:flex sm:w-[24%] flex-col overflow-y-auto border border-r-gray-700 ">
+      <div className="hidden min-h-screen h-full md:flex md:w-[24%] flex-col overflow-y-auto border border-r-gray-700 ">
         {roomList?.map((room: ChatRoom) => (
           <Link
             key={room.id}
@@ -88,15 +88,17 @@ export const ChatPage = (): JSX.Element => {
               room.id === roomId && "bg-[#0000001a]"
             }`}
           >
-            <PersonIcon
-              originalIconImageSrc={room.interlocutorImageUrl}
-              originalIconImageAlt={`${room.interlocutorName}のアイコン`}
-            />
+            <div>
+              <PersonIcon
+                originalIconImageSrc={room.interlocutorImageUrl}
+                originalIconImageAlt={`${room.interlocutorName}のアイコン`}
+              />
+            </div>
             <div className="mt-4">
               <p className="min-h-[19px] text-[16px] font-black leading-[19px]">
                 {room.interlocutorName}
               </p>
-              <p className="text-[12px] text-gray-500 h-[36px] overflow-hidden overflow-ellipsis">
+              <p className="max-w-[200px] max-h-[20px] text-ellipsis overflow-hidden text-[12px] text-gray-500 h-[36px]">
                 {room.latestMessage}
               </p>
             </div>
@@ -108,7 +110,7 @@ export const ChatPage = (): JSX.Element => {
       <button
         hidden={isRoomListOpen}
         onClick={() => setIsRoomListOpen(true)}
-        className="sm:hidden absolute left-1 top-[64px] z-10 w-[46px] h-[44px] py-[6px] border border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2"
+        className="md:hidden absolute left-1 top-[4px] z-10 w-[46px] h-[44px] py-[6px] border border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2"
       >
         <div hidden={isRoomListOpen} className="w-[25px] text-gray-600">
           →
@@ -117,7 +119,7 @@ export const ChatPage = (): JSX.Element => {
       <nav
         className={
           isRoomListOpen
-            ? "absolute left-0 top-[60px] z-20 w-1/2 h-full overflow-auto bg-gray-100 rounded-sm font-lato text-lg font-bold duration-300"
+            ? "absolute left-0 z-20 w-1/2 h-full overflow-auto bg-gray-100 rounded-sm font-lato text-lg font-bold duration-300"
             : "hidden duration-300"
         }
       >
@@ -154,7 +156,7 @@ export const ChatPage = (): JSX.Element => {
       </nav>
 
       {/* 一対一のルーム */}
-      <div className="sm:w-[76%] pb-[160px] pt-12 sm:pt-0 flex flex-col gap-[58px] overflow-y-auto">
+      <div className="md:w-[76%] pb-[160px] pt-12 md:pt-0 flex flex-col gap-[58px] overflow-y-auto">
         {chatHistories.map((chat: ChatMessage) => (
           <div
             key={`${String(chat.createdAt)}`}

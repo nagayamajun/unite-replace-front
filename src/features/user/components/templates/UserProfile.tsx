@@ -151,7 +151,7 @@ export const UserProfile = (): JSX.Element => {
 
   return (
     <div className="flex flex-col items-center justify-center gap-y-28 text-[16px] pb-20 w-full">
-      <div className="flex flex-col items-center w-4/5 sm:w-sm md:w-md lg:w-lg rounded-md">
+      <div className="flex flex-col items-center gap-24 w-4/5 sm:w-sm md:w-md lg:w-lg rounded-md">
         {/* ログアウトボタン */}
         <div className={isMyself ? "" : "hidden"}>
           <button
@@ -180,7 +180,7 @@ export const UserProfile = (): JSX.Element => {
           onSubmit={handleSubmit(onEditSubmit)}
           className="flex flex-col gap-20 w-full sm:w-4/5"
         >
-          <div className="mt-20 flex flex-col items-center gap-2">
+          <div className="mt-8 flex flex-col items-center gap-2">
             {/* アイコン */}
             <PersonIcon
               originalIconImageSrc={profileUser.imageUrl}
@@ -329,7 +329,9 @@ export const UserProfile = (): JSX.Element => {
                     isMulti
                     options={ProgrammingSkillOptions}
                     onChange={(selectedSkills) => {
-                      field.onChange(selectedSkills.map((skill) => skill.value));
+                      field.onChange(
+                        selectedSkills.map((skill) => skill.value)
+                      );
                     }}
                     placeholder="スキル名を選択してください (複数選択可)"
                   />
@@ -355,18 +357,20 @@ export const UserProfile = (): JSX.Element => {
               <p>作成した募集</p>
               <div className="flex gap-4 overflow-scroll">
                 {recruitsByRecruiterId && recruitsByRecruiterId.length > 0 ? (
-                  recruitsByRecruiterId.map((recruit: Recruit, index: number) => (
-                    //以降をcomponentに切り出したい
-                    <Fragment key={recruit.id}>
-                      <RecruitCard
-                        id={recruit.id}
-                        createdAt={recruit.createdAt}
-                        headline={recruit.headline}
-                        programingSkills={recruit.programingSkills}
-                        hackthonName={recruit.hackthonName}
-                      />
-                    </Fragment>
-                  ))
+                  recruitsByRecruiterId.map(
+                    (recruit: Recruit, index: number) => (
+                      //以降をcomponentに切り出したい
+                      <Fragment key={recruit.id}>
+                        <RecruitCard
+                          id={recruit.id}
+                          createdAt={recruit.createdAt}
+                          headline={recruit.headline}
+                          programingSkills={recruit.programingSkills}
+                          hackthonName={recruit.hackthonName}
+                        />
+                      </Fragment>
+                    )
+                  )
                 ) : (
                   <p className="text-gray-500 my-16 w-full text-center">
                     募集がありません。

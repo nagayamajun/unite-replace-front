@@ -8,7 +8,6 @@ import { MdOutlineManageAccounts } from "react-icons/md";
 import { ChatRoomListMenu } from "../../../features/chat/components/organisms/Menu/ChatRoomListMenu";
 import { PiChatCircleDotsThin } from "react-icons/pi";
 
-
 export const SideBar = (): JSX.Element => {
   const userStateVal = useRecoilValue(UserState);
 
@@ -38,14 +37,14 @@ export const SideBar = (): JSX.Element => {
     {
       href: "/product/productRanking",
       label: "ランキング",
-      icon: <AiFillFund />
-    }
+      icon: <AiFillFund />,
+    },
     // {href: '/', label: 'お問合せ'},
     // {href: '/', label: 'ログアウト'},
   ];
 
   return (
-    <div className="flex flex-col h-auto sm:w-52 md:w-64  bg-gray-800 text-white ">
+    <div className="flex flex-col min-h-screen min-w-[210px] sm:w-52 md:w-64 bg-gray-800 text-white ">
       <div className="flex justify-center items-center h-20 border-b border-white mx-2">
         <Link href={"/homeScreen"}>
           <p className="text-xl sm:text-2xl font-bold">
