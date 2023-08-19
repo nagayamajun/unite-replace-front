@@ -69,7 +69,7 @@ export const AddRecruit = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full h-screen bg-white p-2">
+    <div className="flex flex-col justify-center items-center w-full h-full bg-white p-2">
       <div className="flex flex-col  w-3/4 sm:w-base ">
         <div className="my-5 flex justify-center p-1 bg-gradient-to-r from-green-400 to-green-300 rounded-md">
           <p className="font-bold text-white">募集内容を入力</p>
