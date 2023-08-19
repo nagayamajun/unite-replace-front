@@ -13,9 +13,11 @@ const Chat = (): JSX.Element => {
   switch (true) {
     case !!user:
       return (
-        <UserLayout>
-          <ChatPage />
-        </UserLayout>
+        <div className="justify-between">
+          <UserLayout>
+            <ChatPage />
+          </UserLayout>
+        </div>
       );
     case !!employee:
       return (
