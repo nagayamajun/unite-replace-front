@@ -8,6 +8,7 @@ import { Loading } from "../../../../components/organisms/Loading/Loading";
 import { RecruitLikeButton } from "@/features/recruit/components/molecules/Button/RecruitLikeButton";
 import { useRecruit } from "../../hooks/useRecruit";
 import { SelectedSkillsList } from "@/components/molecules/SkillList/SelectedSkillsList";
+import { useUserRecruitApplicationByApplicantIdAndRecruitId } from "../../hooks/useUserRecruitApplicationByApplicantIdAndRecruitId";
 
 export const RecruitDetail: React.FC = () => {
   const router = useRouter();
@@ -31,6 +32,9 @@ export const RecruitDetail: React.FC = () => {
     );
     setIsParticipant(checkParticipant);
   }, [recruit]);
+
+  const { application: applicationFromMyself } =
+    useUserRecruitApplicationByApplicantIdAndRecruitId(recruit?.id);
 
   const applyForJoin = async () => {
     await userRecruitParticipantRepository.applyForJoin(recruit?.id as string);
@@ -135,12 +139,14 @@ export const RecruitDetail: React.FC = () => {
                 recruitId={recruit?.id as string}
                 isPropsLiked={isLiked}
               />
-              <button
-                onClick={onApplyFor}
-                className="ml-5 bg-green-500 text-white px-6 py-2 rounded"
-              >
-                話を聞く
-              </button>
+              {!applicationFromMyself && (
+                <button
+                  onClick={onApplyFor}
+                  className="ml-5 bg-green-500 text-white px-6 py-2 rounded"
+                >
+                  話を聞く
+                </button>
+              )}
             </div>
           </div>
         </div>
