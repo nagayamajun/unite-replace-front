@@ -18,10 +18,9 @@ export const ProductRanking = () => {
       <div className="grid w-4/5 mx-10 gap-x-5 gap-y-8 sm:grid-cols-1 md:grid-cols-2  mt-5">
         {topTenPeriodLikeSums.map((periodLikeSum: PeriodLikeSum) => {
           return (
-            <div>
+            <div key={periodLikeSum.id}>
               <p>いいね数 {periodLikeSum.likesCount}</p>
               <ProductCard
-                key={periodLikeSum.id}
                 id={periodLikeSum.id}
                 name={periodLikeSum.product.name}
                 recruit={periodLikeSum.product.recruit}
