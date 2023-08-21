@@ -6,7 +6,6 @@ import Select from "react-select";
 import { useRecoilState } from "recoil";
 import { SubmitButton } from "../../../../components/molecules/Button/SubmitButton";
 import { ProgrammingSkill } from "@/features/user/types/programingSkill";
-import { useAuth } from "@/hooks/useAuth";
 import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { UserRepository } from "@/features/user/modules/user/user.repository";
 
@@ -16,7 +15,6 @@ export type Option = {
 };
 
 export const SkillPage = (): JSX.Element => {
-  useAuth();
   const { handleSubmit, control } = useForm();
   const [userState, setUserState] = useRecoilState(UserState);
   const router = useRouter();

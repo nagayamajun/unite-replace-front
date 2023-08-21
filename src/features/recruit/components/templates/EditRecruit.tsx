@@ -1,47 +1,28 @@
 import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
-import { Recruit } from "@/features/recruit/types/recruit";
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Loading } from "../../../../components/organisms/Loading/Loading";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { PlainInput } from "@/components/molecules/Input/PlainInput";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
 import { PlainSelectInput } from "@/components/molecules/Input/PlainSelectInput";
-import { FormField } from "@/components/molecules/FormField/FormField";
-import { EditProfileModal } from "@/features/user/components/organisms/Modal/EditProfileModal";
-import Select from "react-select";
-import { ProgrammingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
-import { FormRecruitData } from "./AddRecruit";
-import { ConfirmModal } from "@/types/confirmModal";
 import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import Link from "next/link";
+import { useRecruit } from "../../hooks/useRecruit";
+import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
 
 export const EditRecruit = () => {
-  const router = useRouter();
-  const { id }  = router.query;
-  const { register, handleSubmit, control, reset } = useForm();
-
-  const [ isLoading, setIsLoading ] = useState<boolean>(true)
-  const [ recruit, setRecruit ] = useState<Recruit>();
-
+  const { register, handleSubmit, control, reset, formState: {errors} } = useForm();
   const [isSkillOpen, setIsSkillOpen] = useState(false);
 
-  //失敗/成功notice
+  //失敗or成功notice
   const [isNoticeOpen, setIsNoticeOpen] = useState(false);
   const [noticeMessage, setNoticeMessage] = useState("");
   const [noticeColor, setNoticeColor] = useState<boolean>();
   const closeNotice = () => setIsNoticeOpen(false);
 
+  const { recruit } = useRecruit();
 
-  useEffect(() =>{
-    (async () => {
-      const fetchedRecruit = await recruitRepository.getRecruitById(id as string);
-      setRecruit(fetchedRecruit);
-      setIsLoading(false)
-    })()
-  },[])
-
-  if(isLoading || !recruit) return <Loading />
+  if(!recruit) return <Loading />
 
   const onEditSubmit = async(input: any): Promise<void> => {
     await recruitRepository.editRecruit(recruit.id, input)
@@ -50,7 +31,6 @@ export const EditRecruit = () => {
       setIsNoticeOpen(true);
       setNoticeMessage(result.message);
       setNoticeColor(result.success);
-
       setIsSkillOpen(false)
 
       reset({});
@@ -64,8 +44,8 @@ export const EditRecruit = () => {
   }
 
   return(
-    <div className="flex flex-col items-center min-h-screen w-full space-y-6 my-12">
-      <h2 className="text-center font-bold ">募集情報編集</h2>
+    <div className="flex flex-col items-center min-h-screen h-full w-full space-y-6 ">
+      <h2 className="text-center font-bold my-6">募集情報編集</h2>
       <form
        onSubmit={handleSubmit(onEditSubmit)}
        className="flex flex-col w-96 sm:w-sm"
@@ -129,48 +109,19 @@ export const EditRecruit = () => {
           labelText="開発・ハッカソン期間"
           placeholder="2023/4/29~2023/5/14"
           register={register}
+          defaultValue={recruit.developmentPeriod}
+          onBlur={handleSubmit(onEditSubmit)}
         />
 
         {/* プログラミングスキル */}
-        <FormField
-          labelText="プログラミングスキル"
-          editable={true}
-          onCLick={() => setIsSkillOpen(true)}
-        >
-          <div className="flex flex-wrap gap-4">
-            {recruit.programingSkills.map((skill) => (
-              <div
-                key={skill}
-                className="px-8 py-2 rounded-3xl bg-gray-200 text-base"
-              >
-                {skill}
-              </div>
-            ))}
-          </div>
-        </FormField>
-        <EditProfileModal
-          isOpen={isSkillOpen}
-          setIsOpen={setIsSkillOpen}
-          onClickOk={handleSubmit(onEditSubmit)}
-        >
-          <div className="flex flex-col gap-6">
-            <div>プログラミングスキル</div>
-            <Controller
-              name="programingSkills"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  isMulti
-                  options={ProgrammingSkillOptions}
-                  onChange={(selectedSkills) => {
-                    field.onChange(selectedSkills.map((skill) => skill.value));
-                  }}
-                  placeholder="スキル名を選択してください (複数選択可)"
-                />
-              )}
-            />
-          </div>
-        </EditProfileModal>
+        <SkillSelect
+          labelText="募集スキル"
+          placeholder="募集スキルを選択してください"
+          control={control}
+          registerLabel="programingSkills"
+          errors={errors}
+          onBlur={handleSubmit(onEditSubmit)}
+        />
       </form>
       <div className="flex flex-col justify-end items-end">
         <Link href={`/recruit/${recruit.id}/ownRecruitDetail`}>戻る</Link>

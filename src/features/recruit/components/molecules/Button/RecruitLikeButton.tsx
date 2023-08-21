@@ -1,19 +1,30 @@
-
 import { userToRecruitLikeRepository } from "@/features/recruit/modules/user-recruit-like/userToRecruitLikeRepository";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FcLike } from 'react-icons/fc';
 import { HiOutlineHeart } from "react-icons/hi";
 import { SuccessOrFailureModal } from "../../../../../components/organisms/Modal/SuccessOrFailureModal";
+import { Recruit } from "@/features/recruit/types/recruit";
+import { useRecoilValue } from "recoil";
+import { UserState } from "@/stores/atoms";
+import { Loading } from "@/components/organisms/Loading/Loading";
 
 
 type LikeButtonProps = {
-  recruitId: string
-  isPropsLiked: boolean
+  recruit: Recruit
 }
 
-export const RecruitLikeButton = ({ recruitId, isPropsLiked }: LikeButtonProps) => {
+export const RecruitLikeButton = ({ recruit }: LikeButtonProps): JSX.Element => {
   const router = useRouter();
+  const user = useRecoilValue(UserState);
+
+  if (!recruit.userToRecruitLikes) return <Loading />
+
+  //いいねをしているかしていないかの判定に利用する
+  const isInitialLiked = recruit.userToRecruitLikes.some(
+    (like) => like.userId === user?.id
+  );
+  const [ isLiked, setIsLiked ] = useState<boolean>(isInitialLiked)
 
   //モーダル関係
   const [isOpen, setIsOpen] = useState(false);
@@ -21,12 +32,12 @@ export const RecruitLikeButton = ({ recruitId, isPropsLiked }: LikeButtonProps) 
   const [color, setColor] = useState<boolean>();
   const closeModal = () => setIsOpen(false);
 
-  const [ isLiked, setIsLiked ] = useState<boolean>(isPropsLiked)
   
   const handleLike = async() => {
     if (!isLiked) {
-      await userToRecruitLikeRepository.addLike(recruitId)
+      await userToRecruitLikeRepository.addLike(recruit.id)
         .then((result) => {
+          //処理が失敗した時のみ
           if (result && !result?.success) {
             setIsOpen(true);
             setModalMessage(result.message);
@@ -41,7 +52,7 @@ export const RecruitLikeButton = ({ recruitId, isPropsLiked }: LikeButtonProps) 
           }
         });
     } else {
-      await userToRecruitLikeRepository.deleteLike(recruitId)
+      await userToRecruitLikeRepository.deleteLike(recruit.id)
     }
     setIsLiked((prev) => !prev)
   }

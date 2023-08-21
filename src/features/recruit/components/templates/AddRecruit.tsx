@@ -2,13 +2,13 @@ import { PlainInput } from "@/components/molecules/Input/PlainInput";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
 import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
 import { SubmitButton } from "@/components/molecules/Button/SubmitButton";
-import { useAuth } from "@/hooks/useAuth";
 import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
 import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
+import { PlainSelectInput } from "@/components/molecules/Input/PlainSelectInput";
 
 export type FormRecruitData = {
   hackthonName: string;
@@ -17,11 +17,10 @@ export type FormRecruitData = {
   programingSkills: ProgrammingSkill[];
   developmentPeriod: string;
   hackathonUrl: String;
-  numberOfApplicants: number; //募集人数
+  numberOfApplicants: number; 
 };
 
 export const AddRecruit = () => {
-  useAuth();
   const router = useRouter();
   const {
     handleSubmit,
@@ -61,8 +60,7 @@ export const AddRecruit = () => {
 
         setTimeout(() => {
           setIsOpen(false);
-          if (!result.success) return router.reload();
-          router.push("/homeScreen");
+          if (result.success) router.push("/homeScreen");
         }, 2000);
       }
     });
@@ -110,14 +108,10 @@ export const AddRecruit = () => {
             />
 
             {/* プルダウンの背景色を白にしたい */}
-            <label htmlFor="numberOfApplicants" className="text-sm">
-              募集人数
-            </label>
-            <select
-              id="numberOfApplicants"
-              placeholder="募集人数を選択"
-              {...register("numberOfApplicants", { required: "必須項目です" })}
-              className=" text-gray-400 border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full outline-green-500 mb-6 tex-sm "
+            <PlainSelectInput
+              registerLabel="numberOfApplicants"
+              register={register}
+              labelText="募集人数を選択"
             >
               <option value="1">1人</option>
               <option value="2">2人</option>
@@ -125,7 +119,7 @@ export const AddRecruit = () => {
               <option value="4">4人</option>
               <option value="5">5人</option>
               <option value="6">6人</option>
-            </select>
+            </PlainSelectInput>
 
             <PlainInput
               registerLabel="hackathonUrl"

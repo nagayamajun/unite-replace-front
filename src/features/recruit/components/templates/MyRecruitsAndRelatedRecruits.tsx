@@ -1,12 +1,6 @@
-import { UserState } from "@/stores/atoms"
-import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository"
-import { Recruit } from "@/features/recruit/types/recruit"
-import Link from "next/link"
-import { useEffect, useState } from "react"
 import { MyRecruitsList } from "../organisms/List/MyRecruitsList"
 import { RelatedRecruitsList } from "../organisms/List/RelatedRecruitsList"
 import { ReturnToHomeButton } from "@/components/molecules/Button/ReturnToHomeButton"
-import { useMyRecruits } from "../../hooks/useMyRecruits"
 
 
 export const MyRecruitsAndRelatedRecruits = () => {
