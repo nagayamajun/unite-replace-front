@@ -1,4 +1,5 @@
 import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
+import { useUserRecruitApplicationByApplicantIdAndRecruitId } from "@/features/recruit/hooks/useUserRecruitApplicationByApplicantIdAndRecruitId";
 import { UserRecruitApplicationRepository } from "@/features/recruit/modules/user-recruit-application/userRecruitApplication.repository";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -9,6 +10,9 @@ type Props = {
 
 export const JumpToMessageButton = ({ recruitId }: Props): JSX.Element => {
   const router = useRouter();
+
+  const { application: applicationFromMyself } =
+  useUserRecruitApplicationByApplicantIdAndRecruitId(recruitId);
 
   const [isOpen, setIsOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -29,18 +33,20 @@ export const JumpToMessageButton = ({ recruitId }: Props): JSX.Element => {
         setTimeout(() => {
           setIsOpen(false);
           router.reload();
-        }, 2000);
+        }, 4000);
       });
   };
 
   return (
     <>
-      <button
-        onClick={onApplyFor}
-        className="ml-5 bg-green-500 text-white px-6 py-2 rounded"
-      >
-        話を聞く
-      </button>
+      {!applicationFromMyself && (
+        <button
+          onClick={onApplyFor}
+          className="ml-5 bg-green-500 text-white px-6 py-2 rounded"
+        >
+          話を聞く
+        </button>
+      )}
       <SuccessOrFailureModal
         isOpen={isOpen}
         closeModal={closeModal}

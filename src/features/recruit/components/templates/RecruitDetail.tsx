@@ -80,7 +80,7 @@ export const RecruitDetail: React.FC = (): JSX.Element => {
               <RecruitLikeButton
                 recruit={recruit}
               />
-              <JumpToMessageButton 
+              <JumpToMessageButton
                 recruitId={recruit.id}
               />
             </div>
