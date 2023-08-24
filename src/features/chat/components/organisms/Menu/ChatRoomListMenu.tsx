@@ -1,4 +1,4 @@
-import { useChatRoomList } from "@/hooks/useChatRoomList";
+import { useChatRoomList } from "@/features/chat/hooks/useChatRoomList";
 import { ChatRoom } from "@/features/chat/types/chatRoom";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";

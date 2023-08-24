@@ -1,20 +1,28 @@
-
-import { userToRecruitLikeRepository } from "@/features/recruit/modules/user-recruit-like/userToRecruitLikeRepository";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FcLike } from 'react-icons/fc';
 import { HiOutlineHeart } from "react-icons/hi";
 import { SuccessOrFailureModal } from "../../../../../components/organisms/Modal/SuccessOrFailureModal";
 import { employeeToProductLikeRepository } from "@/features/product/modules/employee-product-like.ts/employeeToProductLikeRepository";
+import { Product } from "@/features/product/types/product";
+import { useRecoilValue } from "recoil";
+import { EmployeeState } from "@/stores/employeeAtom";
+import { Loading } from "@/components/organisms/Loading/Loading";
 
 
 type LikeButtonProps = {
-  productId: string
-  isPropsLiked: boolean
+  product: Product
 }
 
-export const ProductLikeButton = ({ productId, isPropsLiked }: LikeButtonProps) => {
+export const ProductLikeButton = ({ product }: LikeButtonProps) => {
   const router = useRouter();
+  const employee = useRecoilValue(EmployeeState);
+  if (!product.employeeToProductLikes) return <Loading />
+
+  //いいねをしているかしていないかの判定に利用する
+  const isInitialLiked = product.employeeToProductLikes.some(
+    (like) => like.employeeId === employee?.id
+  );
 
   //モーダル関係
   const [isOpen, setIsOpen] = useState(false);
@@ -22,10 +30,10 @@ export const ProductLikeButton = ({ productId, isPropsLiked }: LikeButtonProps) 
   const [color, setColor] = useState<boolean>();
   const closeModal = () => setIsOpen(false);
 
-  const [ isLiked, setIsLiked ] = useState<boolean>(isPropsLiked)
+  const [ isLiked, setIsLiked ] = useState<boolean>(isInitialLiked)
   
   const handleLike = async() => {
-    await employeeToProductLikeRepository.addLike(productId)
+    await employeeToProductLikeRepository.addLike(product.id)
       .then((result) => {
         if (result && !result?.success) {
           setIsOpen(true);

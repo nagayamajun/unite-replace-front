@@ -24,7 +24,8 @@ export const RecruitLikeButton = ({ recruit }: LikeButtonProps): JSX.Element => 
   const isInitialLiked = recruit.userToRecruitLikes.some(
     (like) => like.userId === user?.id
   );
-  const [ isLiked, setIsLiked ] = useState<boolean>(isInitialLiked)
+
+  const [ isLiked, setIsLiked ] = useState<boolean>(isInitialLiked);
 
   //モーダル関係
   const [isOpen, setIsOpen] = useState(false);
