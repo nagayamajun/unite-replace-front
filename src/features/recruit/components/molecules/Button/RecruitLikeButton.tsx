@@ -1,6 +1,6 @@
 import { userToRecruitLikeRepository } from "@/features/recruit/modules/user-recruit-like/userToRecruitLikeRepository";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FcLike } from 'react-icons/fc';
 import { HiOutlineHeart } from "react-icons/hi";
 import { SuccessOrFailureModal } from "../../../../../components/organisms/Modal/SuccessOrFailureModal";
@@ -9,7 +9,6 @@ import { useRecoilValue } from "recoil";
 import { UserState } from "@/stores/atoms";
 import { Loading } from "@/components/organisms/Loading/Loading";
 
-
 type LikeButtonProps = {
   recruit: Recruit
 }
@@ -17,15 +16,15 @@ type LikeButtonProps = {
 export const RecruitLikeButton = ({ recruit }: LikeButtonProps): JSX.Element => {
   const router = useRouter();
   const user = useRecoilValue(UserState);
+  const [ isLiked, setIsLiked ] = useState<boolean>();
 
-  if (!recruit.userToRecruitLikes) return <Loading />
-
-  //いいねをしているかしていないかの判定に利用する
-  const isInitialLiked = recruit.userToRecruitLikes.some(
-    (like) => like.userId === user?.id
-  );
-
-  const [ isLiked, setIsLiked ] = useState<boolean>(isInitialLiked);
+  useEffect(() => {
+    //いいねをしているかしていないかの判定に利用する
+    const isInitialLiked = recruit.userToRecruitLikes?.some(
+      (like) => like.userId === user?.id
+    );
+    setIsLiked(isInitialLiked)
+  }, [])
 
   //モーダル関係
   const [isOpen, setIsOpen] = useState(false);
