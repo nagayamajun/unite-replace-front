@@ -10,3 +10,5 @@ const EmployeeChat = () => (
 )
 
 EmployeeChat.getLayout = (page: ReactElement) => <EmployeeLayout>{page}</EmployeeLayout>
+
+export default EmployeeChat
