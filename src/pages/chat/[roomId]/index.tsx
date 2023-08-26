@@ -1,33 +1,9 @@
 import { ChatPage } from "@/features/chat/components/templates/Chat";
 import { UserLayout } from "@/components/layouts/Layout/UserLayout";
-import { UserState, UserStateType } from "@/stores/atoms";
-import { useRecoilValue } from "recoil";
-import { EmployeeState, EmployeeStateType } from "@/stores/employeeAtom";
-import { EmployeeLayout } from "@/components/layouts/Layout/EmployeeLayout";
-import { Loading } from "@/components/organisms/Loading/Loading";
+import { ReactElement } from "react";
 
-const Chat = (): JSX.Element => {
-  const user = useRecoilValue<UserStateType>(UserState);
-  const employee = useRecoilValue<EmployeeStateType>(EmployeeState);
+// TODO: UserとEmployeeでページを分ける　
+const Chat = (): JSX.Element => <ChatPage />
 
-  switch (true) {
-    case !!user:
-      return (
-        <div className="justify-between">
-          <UserLayout>
-            <ChatPage />
-          </UserLayout>
-        </div>
-      );
-    case !!employee:
-      return (
-        <EmployeeLayout>
-          <ChatPage />
-        </EmployeeLayout>
-      );
-    default:
-      return <Loading />;
-  }
-};
-
+Chat.getLayout = (page: ReactElement) => <UserLayout>{page}</UserLayout>
 export default Chat;

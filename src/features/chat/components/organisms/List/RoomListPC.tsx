@@ -1,6 +1,5 @@
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
 import { ChatRoom } from "@/features/chat/types/chatRoom";
-import { useChatRoomList } from "@/features/chat/hooks/useChatRoomList";
 import Link from "next/link";
 
 type Props = {

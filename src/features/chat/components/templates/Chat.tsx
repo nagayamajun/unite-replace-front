@@ -18,8 +18,8 @@ export const ChatPage = (): JSX.Element => {
 
   const router = useRouter();
   const { roomId } = router.query;
-  //画面左に表示されるやりとりリスト
-  const roomList = useChatRoomList();
+  // //画面左に表示されるやりとりリスト
+  const { roomList } = useChatRoomList();
 
   return (
     <div className="relative flex min-h-screen w-full grow-0 h-full sm:flex-row items-start bg-white">

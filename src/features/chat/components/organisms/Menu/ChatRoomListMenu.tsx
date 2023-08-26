@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const ChatRoomListMenu = ({ children }: Props) => {
-  const roomList = useChatRoomList();
+  const { roomList } = useChatRoomList();
 
   return (
     <Menu as="div" className="relative inline-block">

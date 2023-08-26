@@ -1,10 +1,10 @@
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
-import { ChatRepository } from "@/features/chat/modules/chat/chat.repository";
-import { ChatRoomParticipantRepository } from "@/features/chat/modules/chatRoomParticipant/chatRoomParticipant.repository";
+import { Loading } from "@/components/organisms/Loading/Loading";
+import { useSpecificRoomMessages } from "@/features/chat/hooks/useSpecificRoomMessages";
+import { useUpdateChatHistories } from "@/features/chat/hooks/useUpdateChatHistories";
 import { ChatMessage } from "@/features/chat/types/chatMessage";
-import { ChatParticipant } from "@/features/chat/types/chatParticipant";
 import { isoToJstString } from "@/utils/date";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Socket } from "socket.io-client";
 
 type Props = {
@@ -14,43 +14,16 @@ type Props = {
 
 export const OneToOneChatRoom = ({ roomId, socket }: Props): JSX.Element => {
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  //チャット履歴を管理するstate
-  const [chatHistories, setChatHistories] = useState<ChatMessage[]>([]);
-  //メッセージを送る主体 (ログインユーザー)
-  const [sender, setSender] = useState<ChatParticipant>();
-  // 最新のメッセージの表示位置の直下を監視するためのref
+  //チャットの履歴を管理するステート
+  const [ chatHistories, setComponentChatHistories] = useState<ChatMessage[]>([]);
   const endMessageRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
+  const { sender } = useSpecificRoomMessages(roomId, setComponentChatHistories);
+  useUpdateChatHistories(socket, chatHistories, setComponentChatHistories);
 
-      if (typeof roomId !== "string") return;
-
-      const messages = await ChatRepository.findOneRoomHistory(roomId);
-      setChatHistories(messages);
-
-      const senderParticipant =
-        await ChatRoomParticipantRepository.findByRoomId(roomId);
-      setSender(senderParticipant);
-
-      setIsLoading(false);
-    })();
-  }, [roomId]);
-
-  useEffect(() => {
-    socket.on("toClient", (chatData) => {
-      const newHistories = [...chatHistories];
-      newHistories.push(chatData);
-
-      //メッセージ履歴を更新
-      setChatHistories(newHistories);
-
-      //最新のメッセージの位置まで自動スクロール
-      endMessageRef.current?.scrollIntoView({ behavior: "auto" });
-    });
-  }, [chatHistories]);
+  if (!chatHistories.length) return <Loading />
+  //最新のメッセージの位置まで自動スクロール
+  endMessageRef.current?.scrollIntoView({ behavior: "auto" });
 
   return (
     <div className="md:w-[76%] pb-[160px] pt-12 md:pt-0 flex flex-col gap-[58px] overflow-y-auto">
