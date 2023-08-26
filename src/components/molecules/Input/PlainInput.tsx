@@ -7,7 +7,7 @@ type ValidationRules = {
   pattern?: RegExp | { value: RegExp; message: string };
 };
 
-type InputType = 'text' | 'password' | 'search' | 'tel';
+type InputType = 'text' | 'password' | 'search' | 'tel' | 'file' | 'email' | 'input' | 'url' | 'number';
 
 type PlainInputProps = {
   registerLabel: string;
@@ -63,5 +63,5 @@ export const PlainInput = ({
       </p>
     )}
   </div>
-  
+
 );
