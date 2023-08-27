@@ -13,8 +13,8 @@ export type Product = {
   overview: string;
   url: string;
   recruitId: string;
+  recruit: Recruit;
   comment?: Comment[];
-  recruit?: Recruit;
   createdAt: Date;
   updatedAt?: Date;
   employeeToProductLikes?: EmployeeProductLike[];
