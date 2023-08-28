@@ -12,7 +12,6 @@ export const RecruitList = (): JSX.Element => {
   const user = useRecoilValue(UserState);
 
   const recruits = useRecoilValue(recruitAtomState);
-  console.log("recruitがあるかの確認", recruits)
 
   const filteredRecruits = recruits.filter((recruit) => {
     const name = router.query.name as string;

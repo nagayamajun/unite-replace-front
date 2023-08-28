@@ -8,7 +8,6 @@ export const useUpdateChatHistories = (
   prevChatHistories: ChatMessage[],
   setComponentChatHistories: Dispatch<SetStateAction<ChatMessage[]>>,
 ) => {
-  console.log("変更が走りました")
   useEffect(() => {
     socket.on("toClient", (chatData) => {
       const newHistories = [...prevChatHistories];

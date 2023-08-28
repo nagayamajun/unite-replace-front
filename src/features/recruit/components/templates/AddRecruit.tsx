@@ -112,14 +112,8 @@ export const AddRecruit = () => {
               registerLabel="numberOfApplicants"
               register={register}
               labelText="募集人数を選択"
-            >
-              <option value="1">1人</option>
-              <option value="2">2人</option>
-              <option value="3">3人</option>
-              <option value="4">4人</option>
-              <option value="5">5人</option>
-              <option value="6">6人</option>
-            </PlainSelectInput>
+              optionsNum={6}
+            />
 
             <PlainInput
               registerLabel="hackathonUrl"

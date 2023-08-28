@@ -21,7 +21,6 @@ export const UserRecruitApplicationRepository = {
       return application;
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error)
         throw new Error(`${FAIL_TO_GET_APPLICATION_INFO}\n${error.message}`);
       }
       throw error;
