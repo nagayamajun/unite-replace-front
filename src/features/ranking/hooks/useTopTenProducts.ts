@@ -1,17 +1,17 @@
-import { productRepository } from "@/features/product/modules/product/product.repository";
-import { Product } from "@/features/product/types/product";
 import { useEffect, useState } from "react";
+import { PeriodLikeSum } from "../types/PeriodlLikeSum";
+import { PeriodLikeSumRepository } from "../modules/period-like-sum/period-like-sum.repository";
 
 
-export const useTopTenProducts = () => {
-  const [topTenProducts, setTopTenProducts] = useState<Product[]>([])
+export const useTopTenPeriodLikeSums = () => {
+  const [topTenPeriodLikeSums, setTopTenPeriodLikeSums] = useState<PeriodLikeSum[]>([])
 
   useEffect(() => {
     (async () => {
-      const fetchedProducts = await productRepository.getTopTenProducts();
-      setTopTenProducts(fetchedProducts)
+      const fetchedPeriodLikeSums = await PeriodLikeSumRepository.getTopTenPeriodLikeSums();
+      setTopTenPeriodLikeSums(fetchedPeriodLikeSums)
     })()
   }, [])
 
-  return { topTenProducts }
+  return { topTenPeriodLikeSums }
 }

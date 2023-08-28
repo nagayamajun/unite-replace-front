@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { FcLike } from 'react-icons/fc';
 import { HiOutlineHeart } from "react-icons/hi";
 import { SuccessOrFailureModal } from "../../../../../components/organisms/Modal/SuccessOrFailureModal";
-import { employeeToProductLikeRepository } from "@/features/product/modules/employee-product-like.ts/employeeToProductLikeRepository";
 import { Product } from "@/features/product/types/product";
 import { useRecoilValue } from "recoil";
 import { EmployeeState } from "@/stores/employeeAtom";
+import { employeeToProductLikeRepository } from "@/features/product/modules/employee-product-like/employeeToProductLikeRepository";
 
 type LikeButtonProps = {
   product: Product
