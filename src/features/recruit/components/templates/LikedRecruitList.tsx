@@ -5,7 +5,6 @@ import { Loading } from "@/components/organisms/Loading/Loading"
 
 export const LikedRecruitList = (): JSX.Element => {
   const { likedRecruits } = useLikedRecruits();
-  if (likedRecruits === undefined) <Loading />
 
   return (
     <div className="bg-gray-100 pt-10 w-full h-screen">

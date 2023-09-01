@@ -2,27 +2,19 @@ import { PlainInput } from "@/components/molecules/Input/PlainInput";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
 import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
 import { SubmitButton } from "@/components/molecules/Button/SubmitButton";
-import { useAuth } from "@/hooks/useAuth";
 import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
-import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
-
-export type FormRecruitData = {
-  hackthonName: string;
-  headline: string;
-  details: string;
-  programingSkills: ProgrammingSkill[];
-  developmentPeriod: string;
-  hackathonUrl: String;
-  numberOfApplicants: number; //募集人数
-};
+import { useToast } from "@/hooks/useToast";
+import { useRecoilValue } from "recoil";
+import { UserState } from "@/stores/atoms";
+import { FormRecruitData } from "../../types/recruit";
 
 export const AddRecruit = () => {
-  useAuth();
+  const { showToast, hideToast } = useToast();
   const router = useRouter();
+  const user = useRecoilValue(UserState);
+
   const {
     handleSubmit,
     register,
@@ -30,19 +22,7 @@ export const AddRecruit = () => {
     control,
   } = useForm();
 
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
-  const onSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
-    let userState = localStorage.getItem("UserState");
-    if (!userState) return;
-    let userId = JSON.parse(userState)["UserState"].uid;
-
+  const onSubmit: SubmitHandler<FieldValues> = async(data: FieldValues) => {
     const recruitData: FormRecruitData = {
       hackthonName: data.hackthonName,
       headline: data.headline,
@@ -53,18 +33,13 @@ export const AddRecruit = () => {
       numberOfApplicants: data.numberOfApplicants,
     };
 
-    recruitRepository.createRecuit(recruitData, userId).then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message);
-        setColor(result.success);
+    await recruitRepository.createRecruit(recruitData, user?.id).then((result) => {
+      showToast(result.message, result.style);
 
-        setTimeout(() => {
-          setIsOpen(false);
-          if (!result.success) return router.reload();
-          router.push("/homeScreen");
-        }, 2000);
-      }
+      setTimeout(() => {
+        hideToast();
+        if (result.style === 'success') router.push("/homeScreen");
+      }, 2000);
     });
   };
 
@@ -147,13 +122,6 @@ export const AddRecruit = () => {
             <SubmitButton innerText="募集を作成する" />
           </form>
         </div>
-
-        <SuccessOrFailureModal
-          isOpen={isOpen}
-          closeModal={closeModal}
-          modalMessage={modalMessage}
-          modalBgColor={color!}
-        />
       </div>
     </div>
   );
