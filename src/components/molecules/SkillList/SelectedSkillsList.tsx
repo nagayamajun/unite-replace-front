@@ -2,7 +2,7 @@ import { ProgrammingSkill, ProgrammingSkillIcons } from "@/features/user/types/p
 import Image from "next/image";
 
 type Props = {
-  selectedSkillsDescription: string,
+  selectedSkillsDescription?: string,
   selectedSkills: ProgrammingSkill[],
   descriptionFontSize?: string,
   skillIconWSize?: number,

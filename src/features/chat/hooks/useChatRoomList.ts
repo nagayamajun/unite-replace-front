@@ -12,5 +12,5 @@ export const useChatRoomList = () => {
     })();
   }, []);
 
-  return roomList;
+  return { roomList };
 };

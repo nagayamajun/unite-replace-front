@@ -71,18 +71,6 @@ export const productRepository = {
     return product;
   },
 
-  //上位10のproductを取得
-  async getTopTenProducts() {
-    const likeSum = (
-      await axiosInstance.get(`/period-like-sum`).catch(() => {
-        throw Error(FAIL_TO_GET_PRODUCT);
-      })
-    ).data;
-    const products: Product[] = likeSum.map((res: any) => res.product);
-
-    return products;
-  },
-
   //プロダクト作成
   async createProduct(
     data: submitProductDate

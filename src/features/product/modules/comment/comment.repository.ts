@@ -1,8 +1,4 @@
-import { FormRecruitData } from "@/features/recruit/components/templates/AddRecruit";
-import { Recruit } from "@/features/recruit/types/recruit";
 import { axiosInstance } from "@/libs/axios";
-import { ConfirmModal } from "@/types/confirmModal";
-import axios from "axios";
 
 export const commentRepository = {
   async createComment(commentDate: any) {

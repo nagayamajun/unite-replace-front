@@ -6,7 +6,6 @@ import {
 } from "@/features/chat/types/userRecruilApplication";
 import {
   FAIL_TO_GET_APPLICATION_INFO,
-  FAIL_TO_GET_PARTICIPANT,
 } from "@/constants/constants";
 
 export const UserRecruitApplicationRepository = {

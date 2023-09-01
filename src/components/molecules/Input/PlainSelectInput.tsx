@@ -21,6 +21,7 @@ type PlainInputProps = {
   labelFont?: string;
   inputFont?: string;
   children?: ReactNode; // <option>要素を受け取るためにchildrenプロパティを追加
+  optionsNum: number,
 };
 
 export const PlainSelectInput = ({
@@ -35,7 +36,21 @@ export const PlainSelectInput = ({
   labelFont = "text-xs sm:text-sm",
   inputFont = "text-sm",
   children, // childrenプロパティを受け取る
+  optionsNum
 }: PlainInputProps): JSX.Element => {
+
+  const generateOptions = (count: number) => {
+    const options = [];
+    for (let i = 1; i <= count; i++) {
+      options.push(
+        <option key={i} value={i}>
+          {i}人
+        </option>
+      );
+    }
+    return options;
+  };
+
   return (
     <div className="flex flex-col gap-1 mb-4 w-full">
       <label htmlFor={registerLabel} className={labelFont}>
@@ -52,7 +67,7 @@ export const PlainSelectInput = ({
           inputFont
         }
       >
-        {children} 
+        {generateOptions(optionsNum)} 
       </select>
 
       {errors && errors[registerLabel] && (
