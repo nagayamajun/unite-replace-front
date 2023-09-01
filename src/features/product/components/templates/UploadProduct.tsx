@@ -6,7 +6,6 @@ import { productRepository, submitProductDate } from "@/features/product/modules
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
-import { Loading } from "@/components/organisms/Loading/Loading";
 import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
 
 export const UploadProduct = () => {
@@ -66,13 +65,9 @@ export const UploadProduct = () => {
   // 動画ファイルの拡張子を検証する関数
   const isVideoFile = (extension: string | undefined): boolean => {
     const allowedExtensions = ["mp4", "mov", "avi"]; // 許可する動画ファイルの拡張子
-
     if (!extension) return false;
-
     return allowedExtensions.includes(extension);
   };
-
-  // if(isLoading) return <Loading message={'アップロード中です。このままお待ちください'}/>
 
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-screen h-full py-5">
@@ -94,6 +89,7 @@ export const UploadProduct = () => {
           registerLabel="name"
           inputType="input"
           register={register}
+          rules={{required: "必須項目です"}}
         />
 
         <SkillSelect

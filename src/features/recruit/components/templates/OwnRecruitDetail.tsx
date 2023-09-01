@@ -1,17 +1,17 @@
 import Link from "next/link";
 import React, {  useState } from "react";
-import { userRecruitParticipantRepository } from "@/features/recruit/modules/user-recruit-participant/userRecruitParticipant.repository";
 import { useRouter } from "next/router";
 import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
-import { UserRecruitParticipant } from "@/features/recruit/types/UserRecruitParticipant";
 import { Loading } from "../../../../components/organisms/Loading/Loading";
 import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { AiFillDelete } from 'react-icons/ai'
 import { useRecruit } from "../../hooks/useRecruit";
 import { SelectedSkillsList } from "@/components/molecules/SkillList/SelectedSkillsList";
+import { ConfirmedParticipantsList } from "../organisms/List/ConfirmedParticipantsList";
+import { ProspectiveParticipantList } from "../organisms/List/ProspectiveParticipantList";
 
 
-export const OwnRecruitDetail: React.FC = ()  => {
+export const OwnRecruitDetail: React.FC = (): JSX.Element  => {
   const router = useRouter();
   const { recruit } = useRecruit();
   
@@ -23,40 +23,7 @@ export const OwnRecruitDetail: React.FC = ()  => {
 
   if (recruit === undefined) return <Loading />
 
-  const approveApplication = async(uid: string) => {
-    await userRecruitParticipantRepository.approveParticipant(uid)
-    .then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message)
-        setColor(result.success)
-
-        setTimeout(() => {
-          router.reload()
-        },
-        result.success ? 2000 : 4000
-        )
-      }
-    });
-  }
-
-  const rejectApplication = async(uid: string) => {
-    await userRecruitParticipantRepository.rejectParticipant(uid)
-    .then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message)
-        setColor(result.success)
-
-        setTimeout(() => {
-          router.reload()
-        },
-        result.success ? 2000 : 4000
-        )
-      }
-    });
-  }
-
+  //募集を削除する
   const deleteRecruit = async() => {
     await recruitRepository.deleteRecruit(recruit.id).then((result) => {
       if (result) {
@@ -71,14 +38,12 @@ export const OwnRecruitDetail: React.FC = ()  => {
         )
       }
     })
-    
   }
 
   return (
     <div className="h-full w-full flex justify-center items-center bg-white">
       <div className="flex flex-col items-center w-4/5 sm:w-sm md:w-md lg:w-lg bg-white rounded-md">
-      <div className="h-24 sm:h-40 w-full flex flex-col justify-center items-center bg-gradient-to-r from-green-300 to-pink-300 text-white rounded-md gap-y-4">
-          {/* ハッカソン名 */}
+        <div className="h-24 sm:h-40 w-full flex flex-col justify-center items-center bg-gradient-to-r from-green-300 to-pink-300 text-white rounded-md gap-y-4">
           <p className="text-3xl sm:text-4xl font-bold text-center">{recruit?.hackthonName}</p>
           <p className="text-xl text-center">- {recruit?.headline} -</p>
         </div>
@@ -116,68 +81,31 @@ export const OwnRecruitDetail: React.FC = ()  => {
             <p className="font-semibold mb-2">ハッカソンURL</p>
             <div className="leading-snug border border-gray-300 rounded-lg p-3" style={{ overflowWrap: 'break-word' }}>{recruit?.hackathonUrl}</div>
           </div>
-          {/* <div className="flex flex-col w-full"> */}
-          <div className="border-b pl-5 sm:pl-0 m-2 pb-5">
-            <p className="font-semibold mb-2">参加者</p>
-            {recruit.userRecruitParticipant?.length === 0 && <p>参加者はまだいません</p>}
-            {recruit.userRecruitParticipant?.map((participant: UserRecruitParticipant, index) => {
-              if (participant.isApproved) {
-                return (
-                  <div key={index}>
-                    {/* userの写真追加する */}
-                    <p>{participant.user.name}</p>
-                  </div>
-                )
-              }
-            })}
-          </div>
 
-          <div className="border-b pl-5 sm:pl-0 m-2 pb-5">
-            <p className="font-semibold mb-2">参加希望者一覧</p>
-            {/* ここは応募してくれた方を一覧表示する */}
-            {recruit.userRecruitParticipant?.length === 0 && <p>希望者はまだいません</p>}
-            {recruit.userRecruitParticipant?.map((participant: UserRecruitParticipant, index) => {
-              if (!participant.isApproved) {
-                return (
-                  <div key={index} className="flex flex-row justify-between">
-                    <p>{participant.user?.name}</p>
-                    <div>
-                      <button onClick={() => {approveApplication(participant.id)}} className="mr-2 hover:text-green-400">承認</button>
-                      <button onClick={() => {rejectApplication(participant.id)}} className="hover:text-red-400">拒否</button>
-                    </div>
-                  </div>
-                )
-              }
-            })}
-          </div>
+          <ConfirmedParticipantsList 
+            participants={recruit.userRecruitParticipant!}
+          />
+
+          <ProspectiveParticipantList
+            participants={recruit.userRecruitParticipant!}
+          />
         </div>
 
         <div className="flex items-center justify-center w-full my-10">
-          {
-            recruit?.product.length !== 0 ? (
-              <div className="w-full flex flex-row items-center justify-between">
-                <div className="flex flex-row w-1/2">
-                  <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 px-4 py-4 rounded-md text-white">募集情報を編集する</Link>
-                  {/* 削除ボタン */}
-                  <button onClick={deleteRecruit} className="ml-5 text-gray-400">
-                    <AiFillDelete size={25} />
-                  </button>
-                </div>
+          <div className="w-full flex flex-row items-center justify-between">
+            <div className="flex flex-row w-1/2">
+              <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 px-4 py-4 rounded-md text-white">募集情報を編集する</Link>
+              {/* 削除ボタン */}
+              <button onClick={deleteRecruit} className="ml-5 text-gray-400">
+                <AiFillDelete size={25} />
+              </button>
+            </div>
+            { recruit?.product.length !== 0 ? (
                 <Link href={`/product/${recruit.product[0]?.id}`} className="bg-green-400 hover:bg-green-500 px-6 py-4 rounded-md text-white">Productページへ</Link>
-              </div>
             ) : (
-              <div className="w-full flex flex-row items-center justify-between">
-                <div className="flex flex-row w-1/2">
-                  <Link href={`/recruit/editRecruit?id=${recruit.id}`} className="bg-green-400 hover:bg-green-500 p-2 rounded-md text-white  text-xs sm:text-base">募集情報を編集する</Link>
-                  {/* 削除ボタン */}
-                  <button onClick={deleteRecruit} className="ml-5 text-gray-400">
-                    <AiFillDelete size={20} />
-                  </button>
-                </div>
-                <Link href={`/product/uploadProduct?recruitId=${recruit?.id}`} className="bg-green-400 hover:bg-green-500 p-2 rounded-md text-white ">UPLOADする</Link>
-              </div>
-            )
-          }
+              <Link href={`/product/uploadProduct?recruitId=${recruit?.id}`} className="bg-green-400 hover:bg-green-500 p-2 rounded-md text-white ">UPLOADする</Link>
+            )}
+          </div>
         </div>
       </div>
 
@@ -191,5 +119,4 @@ export const OwnRecruitDetail: React.FC = ()  => {
   )
 }
 
- //リファクタ
- //募集人数を動的に変更 -> 承認したら募集人数を一人減らす
+ //TODO: 募集人数を動的に変更 -> 承認したら募集人数を一人減らす(募集人数と参加確定者が連動するようにしたい)

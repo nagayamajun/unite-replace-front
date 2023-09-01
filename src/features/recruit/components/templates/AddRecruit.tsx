@@ -8,7 +8,9 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useToast } from "@/hooks/useToast";
 import { useRecoilValue } from "recoil";
 import { UserState } from "@/stores/atoms";
+import { PlainSelectInput } from "@/components/molecules/Input/PlainSelectInput";
 import { FormRecruitData } from "../../types/recruit";
+
 
 export const AddRecruit = () => {
   const { showToast, hideToast } = useToast();
@@ -85,22 +87,12 @@ export const AddRecruit = () => {
             />
 
             {/* プルダウンの背景色を白にしたい */}
-            <label htmlFor="numberOfApplicants" className="text-sm">
-              募集人数
-            </label>
-            <select
-              id="numberOfApplicants"
-              placeholder="募集人数を選択"
-              {...register("numberOfApplicants", { required: "必須項目です" })}
-              className=" text-gray-400 border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full outline-green-500 mb-6 tex-sm "
-            >
-              <option value="1">1人</option>
-              <option value="2">2人</option>
-              <option value="3">3人</option>
-              <option value="4">4人</option>
-              <option value="5">5人</option>
-              <option value="6">6人</option>
-            </select>
+            <PlainSelectInput
+              registerLabel="numberOfApplicants"
+              register={register}
+              labelText="募集人数を選択"
+              optionsNum={6}
+            />
 
             <PlainInput
               registerLabel="hackathonUrl"
