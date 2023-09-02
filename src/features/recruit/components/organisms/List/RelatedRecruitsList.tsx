@@ -4,7 +4,6 @@ import Link from "next/link";
 
 export const RelatedRecruitsList = () => {
   const { relatedRecruits } = useRelatedRecruits();
-  if (relatedRecruits === undefined) <Loading />
 
   return (
     <div className="w-80 sm:w-sm md:w-md mt-10 sm:mt-20 p-5 sm:bg-white rounded-lg shadow-md">

@@ -5,3 +5,9 @@ export type Toast = {
   message: string;
   style: ToastStyle;
 }
+
+export type ToastResult<T = any> = {
+  message: string;
+  style: ToastStyle;
+  data?: T;
+};

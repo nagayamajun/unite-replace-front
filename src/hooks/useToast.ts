@@ -4,7 +4,7 @@ import { useRecoilState } from "recoil";
 
 export const useToast = () => {
   const [ state, setState ] = useRecoilState<Toast>(ToastState);
-  const showToast = (message: string, style: ToastStyle): void => {
+  const showToast = ({message, style}: { message: string, style: ToastStyle }): void => {
     setState({...state, ...{isShown: true, message, style}});
   };
   const hideToast = (): void => {

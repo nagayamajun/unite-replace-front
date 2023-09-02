@@ -1,11 +1,10 @@
 import { EmailAndPasswordForm } from "@/features/auth/components/organisms/Form/EmailAndPasswordForm";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { authRepository } from "@/features/auth/modules/auth/auth.repository";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { AuthButton } from "../molecules/Button/AuthButton";
-import { ConfirmModal } from "@/types/confirmModal";
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
 
 type FormData = {
   email: string;
@@ -14,56 +13,36 @@ type FormData = {
 
 export const SignUp = () => {
   const router = useRouter();
-
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
+  const { showToast, hideToast } = useToast();
 
   const onSubmit = ({ email, password }: FormData) => {
     authRepository
-      .signUpWithEmailAndPassword(email, password)
-      .then((result) => {
-        if (result) {
-          setIsOpen(true);
-          setModalMessage(result.message);
-          setColor(result.success);
-
-          setTimeout(
-            () => {
-              setIsOpen(false);
-              if (result.success) {
-                router.push("/profiles/user/otherThanTech");
-              }
-            },
-            result.success ? 2000 : 4000
-          );
-        }
+      .signUpWithEmailAndPassword({ email, password })
+      .then(({ message, style }: ToastResult) => {
+        showToast({ message, style })
+        setTimeout(
+          () => {
+            hideToast();
+            if (style === 'success') router.push("/profiles/user/otherThanTech");
+          },
+          style === 'success' ? 2000 : 4000
+        );
       });
   };
 
-  const onClickGoogleOrGithub = (promise: Promise<ConfirmModal>) => {
-    promise.then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message);
-        setColor(result.success);
-
-        setTimeout(
-          () => {
-            setIsOpen(false);
-            if (result.success && result.isCreated) {
-              router.push("/profiles/user/otherThanTech");
-              return;
-            }
-            if (result.success) {
-              router.push("/homeScreen");
-            }
-          },
-          result.success ? 2000 : 4000
-        );
-      }
+  const onClickGoogleOrGithub = (promise: Promise<ToastResult>) => {
+    promise.then(({ message, style, data }: ToastResult) => {
+      showToast({ message, style });
+      setTimeout(
+        () => {
+          hideToast();
+          if (style === 'success') {
+            const routePath = !data ? "/profiles/user/otherThanTech" : "/homeScreen";
+            router.push(routePath);
+          };
+        },
+        style === 'success' ? 2000 : 4000
+      );
     });
   };
 
@@ -110,13 +89,6 @@ export const SignUp = () => {
           ログイン
         </Link>
       </div>
-
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
     </div>
     </div>
   );

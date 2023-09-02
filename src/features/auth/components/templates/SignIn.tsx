@@ -3,10 +3,9 @@ import { useRouter } from "next/router";
 import { AuthButton } from "../molecules/Button/AuthButton";
 import Link from "next/link";
 import { EmailAndPasswordForm } from "@/features/auth/components/organisms/Form/EmailAndPasswordForm";
-import { useState } from "react";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { useAuth } from "@/hooks/useAuth";
-import { ConfirmModal } from "@/types/confirmModal";
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
 
 type FormData = {
   email: string;
@@ -15,54 +14,36 @@ type FormData = {
 
 export const SignIn: React.FC = (): JSX.Element => {
   const router = useRouter();
+  const { showToast, hideToast } = useToast();
   useAuth();
 
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
-
-  const onSubmit = ({ email, password }: FormData) => {
-    authRepository.signInWithEmail(email, password).then((result) => {
-      setIsOpen(true);
-      setModalMessage(result.message);
-      setColor(result.success);
-
+  const onSubmit = ({ email, password }: FormData): void => {
+    authRepository.signInWithEmail({ email, password }).then(({ message, style, data }: ToastResult) => {
+      showToast({ message, style });
       setTimeout(
         () => {
-          setIsOpen(false);
-          if (result.success && !result.data.name) {
-            router.push("/profiles/user/otherThanTech");
-            return;
-          }
-          if (result.success) {
-            router.push("/homeScreen");
+          hideToast();
+          if (style === 'success') {
+            const routePath = !data.name ? "/profiles/user/otherThanTech" : "/homeScreen";
+            router.push(routePath);
           }
         },
-        result.success ? 2000 : 4000
+        style === 'success' ? 2000 : 4000
       );
     });
   };
 
-  const onClickGoogleOrGithub = (promise: Promise<ConfirmModal>) => {
-    promise.then((result: ConfirmModal) => {
-      setIsOpen(true);
-      setModalMessage(result.message);
-      setColor(result.success);
-
+  const onClickGoogleOrGithub = ({promise} :{ promise: Promise<ToastResult> }): void => {
+    promise.then(({ message, style, data }: ToastResult) => {
       setTimeout(
         () => {
-          setIsOpen(false);
-          if (result.success && result.isCreated) {
-            router.push("/profiles/user/otherThanTech");
-            return;
-          }
-          if (result.success) {
-            router.push("/homeScreen");
-          }
+          showToast({ message, style });
+          if (style === 'success') {
+            const routePath = !data ? "/profiles/user/otherThanTech" : "/homeScreen";
+            router.push(routePath);
+          };
         },
-        result.success ? 2000 : 4000
+        style === 'success' ? 2000 : 4000
       );
     });
   };
@@ -88,7 +69,7 @@ export const SignIn: React.FC = (): JSX.Element => {
             <AuthButton
               src="/home.png"
               onClick={async () =>
-                onClickGoogleOrGithub(authRepository.signInWithGoogle())
+                onClickGoogleOrGithub({promise: authRepository.signInWithGoogle()})
               }
             >
               Continue with Google
@@ -96,7 +77,7 @@ export const SignIn: React.FC = (): JSX.Element => {
             <AuthButton
               src="/github-mark.png"
               onClick={async () =>
-                onClickGoogleOrGithub(authRepository.signInWithGithub())
+                onClickGoogleOrGithub({promise: authRepository.signInWithGithub()})
               }
             >
               Continue with GitHub
@@ -110,13 +91,6 @@ export const SignIn: React.FC = (): JSX.Element => {
             登録
           </Link>
         </div>
-
-        <SuccessOrFailureModal
-          isOpen={isOpen}
-          closeModal={closeModal}
-          modalMessage={modalMessage}
-          modalBgColor={color!}
-        />
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { UserState } from "@/stores/atoms";
 import { PlainSelectInput } from "@/components/molecules/Input/PlainSelectInput";
 import { FormRecruitData } from "../../types/recruit";
+import { ToastResult } from "@/types/toast";
 
 
 export const AddRecruit = () => {
@@ -35,12 +36,11 @@ export const AddRecruit = () => {
       numberOfApplicants: data.numberOfApplicants,
     };
 
-    await recruitRepository.createRecruit(recruitData, user?.id).then((result) => {
-      showToast(result.message, result.style);
-
+    await recruitRepository.createRecruit(recruitData, user?.id).then(({ message, style}: ToastResult) => {
+      showToast({message, style});
       setTimeout(() => {
         hideToast();
-        if (result.style === 'success') router.push("/homeScreen");
+        if (style === 'success') router.push("/homeScreen");
       }, 2000);
     });
   };

@@ -4,8 +4,7 @@ import { UserCard } from "../Card/UserCard";
 
 export const UserList = () => {
   const { users } = useUser();
-
-  if (!users) return <Loading />;
+  if (!users) return <></>
 
   return (
     <>

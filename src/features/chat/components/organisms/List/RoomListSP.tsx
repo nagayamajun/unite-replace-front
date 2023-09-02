@@ -42,7 +42,7 @@ export const RoomListSP = ({ roomList, roomId }: Props): JSX.Element => {
           {roomList?.map((room: ChatRoom) => (
             <Link
               key={room.id}
-              href={`/chat/${room.id}`}
+              href={`/chat/${room.id}/userChat`}
               className={`h-[60px] p-[8px] flex items-center gap-4 ${
                 room.id === roomId && "bg-[#0000001a]"
               }`}

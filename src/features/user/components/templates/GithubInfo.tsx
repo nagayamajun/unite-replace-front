@@ -5,43 +5,31 @@ import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { SubmitButton } from "../../../../components/molecules/Button/SubmitButton";
 import { PlainInput } from "../../../../components/molecules/Input/PlainInput";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
-import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
 
 export const GithubInfoPage = (): JSX.Element => {
   useAuth();
   const [userState, setUserState] = useRecoilState<UserStateType>(UserState);
   const { register, handleSubmit } = useForm();
   const router = useRouter();
-
-  //プロフィール編集失敗/成功notice
-  const [isNoticeOpen, setIsNoticeOpen] = useState(false);
-  const [noticeMessage, setNoticeMessage] = useState("");
-  const [noticeColor, setNoticeColor] = useState<boolean>();
-  const closeNotice = () => setIsNoticeOpen(false);
+  const { showToast, hideToast } = useToast();
 
   const onSubmit = async (submitData: any) => {
-    await UserRepository.updateUserInfo({ ...userState, ...submitData }).then(
-      (result) => {
+    await UserRepository.updateUserInfo({ ...userState, ...submitData })
+      .then(({ message, style }: ToastResult) => {
         setUserState({ ...userState, ...submitData });
 
-        //notice表示
-        setIsNoticeOpen(true);
-        setNoticeMessage(result.message);
-        setNoticeColor(result.success);
-
+        showToast({ message, style });
         setTimeout(
           () => {
-            setIsNoticeOpen(false);
-            if (result.success) {
-              router.push("/homeScreen");
-            }
+            hideToast();
+            if (style === 'success') router.push("/homeScreen");
           },
-          result.success ? 2000 : 4000
+          style === 'success' ? 2000 : 4000
         );
-      }
-    );
+      });
   };
 
   return (
@@ -61,14 +49,6 @@ export const GithubInfoPage = (): JSX.Element => {
           <SubmitButton innerText="完了" />
         </div>
       </form>
-
-      {/* 成功/失敗notice */}
-      <SuccessOrFailureModal
-        isOpen={isNoticeOpen}
-        closeModal={closeNotice}
-        modalMessage={noticeMessage}
-        modalBgColor={noticeColor!}
-      />
     </div>
   );
 };

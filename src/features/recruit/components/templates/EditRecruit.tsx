@@ -1,44 +1,31 @@
 import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
-import { useState } from "react";
 import { Loading } from "../../../../components/organisms/Loading/Loading";
 import { useForm } from "react-hook-form";
 import { PlainInput } from "@/components/molecules/Input/PlainInput";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
 import { PlainSelectInput } from "@/components/molecules/Input/PlainSelectInput";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import Link from "next/link";
 import { useRecruit } from "../../hooks/useRecruit";
 import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
 
 export const EditRecruit = () => {
   const { register, handleSubmit, control, reset, formState: {errors} } = useForm();
-  const [isSkillOpen, setIsSkillOpen] = useState(false);
-
-  //失敗or成功notice
-  const [isNoticeOpen, setIsNoticeOpen] = useState(false);
-  const [noticeMessage, setNoticeMessage] = useState("");
-  const [noticeColor, setNoticeColor] = useState<boolean>();
-  const closeNotice = () => setIsNoticeOpen(false);
-
+  const { showToast, hideToast } = useToast();
   const { recruit } = useRecruit();
-
-  if(!recruit) return <Loading />
-
+  if (!recruit) return <></>;
+  
   const onEditSubmit = async(input: any): Promise<void> => {
-    await recruitRepository.editRecruit(recruit.id, input)
-    .then((result) => {
-      //notice表示
-      setIsNoticeOpen(true);
-      setNoticeMessage(result.message);
-      setNoticeColor(result.success);
-      setIsSkillOpen(false)
-
+    await recruitRepository.editRecruit({id: recruit.id, input})
+    .then(({ message, style }: ToastResult) => {
+      showToast({ message, style });
       reset({});
 
       setTimeout(() => {
-        setIsNoticeOpen(false)
+        hideToast();
       },
-        result.success ? 2000 : 4000
+        style === 'success' ? 2000 : 4000
       )
     })
   }
@@ -120,13 +107,6 @@ export const EditRecruit = () => {
       <div className="flex flex-col justify-end items-end">
         <Link href={`/recruit/${recruit.id}/ownRecruitDetail`}>戻る</Link>
       </div>
-      {/* 成功/失敗notice */}
-      <SuccessOrFailureModal
-        isOpen={isNoticeOpen}
-        closeModal={closeNotice}
-        modalMessage={noticeMessage}
-        modalBgColor={noticeColor!}
-      />
     </div>
   )
 }

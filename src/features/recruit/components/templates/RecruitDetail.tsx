@@ -8,7 +8,7 @@ import { JumpToMessageButton } from "../molecules/Button/JumpToMessageButton";
 
 export const RecruitDetail: React.FC = (): JSX.Element => {
   const { recruit } = useRecruit();
-  if (!recruit) return <Loading />;
+  if (!recruit) return <></>
 
   return (
     <div className="h-full min-h-screen w-full flex justify-center items-center text-gray-600">

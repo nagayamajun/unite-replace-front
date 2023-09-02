@@ -6,23 +6,23 @@ import { ReactNode, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { Loading } from "../../organisms/Loading/Loading";
 import { SideBar } from "@/components/layouts/Sidebar/UserSidebar";
+import { useLoading } from "@/hooks/useLoading";
 
 type Props = {
   children: ReactNode;
 };
 
 export const UserLayout = ({ children }: Props) => {
+  const { showLoading, hideLoading } = useLoading();
   const user = useRecoilValue(UserState);
-  const [isLoading, setIsloading] = useState(true);
   const auth = useAuth();
 
   useEffect(() => {
+    showLoading();
     if (user && axiosInstance.defaults.headers.common["Authorization"]) {
-      setIsloading(false);
+      hideLoading();
     }
   }, [auth]);
-
-  if (isLoading) return <Loading />;
 
   return (
     <>

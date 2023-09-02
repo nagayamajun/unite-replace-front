@@ -21,18 +21,16 @@ export const ProductCard = ({
   const participantsInfo = recruit.userRecruitParticipant;
   const participants = participantsInfo?.filter((res) => res.isApproved).map((res) => res.user);
 
-  if (!skills) return <></>
-
   return (
     <Link href={`/corporation/product/${id}`} className="flex flex-col bg-white rounded-md shadow-sm p-5 space-y-4 hover:bg-blue-50">
       <div className="flex flex-col space-y-1">
         <div className="text-sm">プロダクト名</div>
         <div className="font-semibold text-lg">{productName}</div>
       </div>
-        <SelectedSkillsList
-          selectedSkillsDescription="技術スタック"
-          selectedSkills={skills}
-        />
+      <SelectedSkillsList
+        selectedSkillsDescription="技術スタック"
+        selectedSkills={skills}
+      />
       <div className="flex flex-col space-y-1">
         <div className="text-sm">関連した人</div>
         <div className="flex flex-row items-center space-x-4">

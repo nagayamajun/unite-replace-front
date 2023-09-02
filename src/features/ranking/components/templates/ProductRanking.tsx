@@ -1,5 +1,4 @@
 import { useTopTenPeriodLikeSums } from "../../hooks/useTopTenProducts"
-import { Loading } from "@/components/organisms/Loading/Loading"
 import { TopProduct } from "../organisms/TopProduct"
 import { ProductCard } from "@/features/product/components/organisms/Card/ProductCard"
 import { PeriodLikeSum } from "../../types/PeriodlLikeSum"
@@ -7,7 +6,6 @@ import { PeriodLikeSum } from "../../types/PeriodlLikeSum"
 export const ProductRanking = () => {
   const { topTenPeriodLikeSums } = useTopTenPeriodLikeSums();
 
-  if (!topTenPeriodLikeSums) return <Loading />
   //1位を取得する
   const topPeriodLikeSums = topTenPeriodLikeSums[0];
 

@@ -21,7 +21,6 @@ export const OneToOneChatRoom = ({ roomId, socket }: Props): JSX.Element => {
   const { sender } = useSpecificRoomMessages(roomId, setComponentChatHistories);
   useUpdateChatHistories(socket, chatHistories, setComponentChatHistories);
 
-  if (!chatHistories.length) return <Loading />
   //最新のメッセージの位置まで自動スクロール
   endMessageRef.current?.scrollIntoView({ behavior: "auto" });
 

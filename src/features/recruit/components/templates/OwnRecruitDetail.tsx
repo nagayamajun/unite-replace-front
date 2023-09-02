@@ -1,43 +1,34 @@
 import Link from "next/link";
-import React, {  useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
-import { Loading } from "../../../../components/organisms/Loading/Loading";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { AiFillDelete } from 'react-icons/ai'
 import { useRecruit } from "../../hooks/useRecruit";
 import { SelectedSkillsList } from "@/components/molecules/SkillList/SelectedSkillsList";
 import { ConfirmedParticipantsList } from "../organisms/List/ConfirmedParticipantsList";
 import { ProspectiveParticipantList } from "../organisms/List/ProspectiveParticipantList";
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
 
 
 export const OwnRecruitDetail: React.FC = (): JSX.Element  => {
   const router = useRouter();
+  const { showToast, hideToast } = useToast();
   const { recruit } = useRecruit();
-  
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
-
-  if (recruit === undefined) return <Loading />
+  if (!recruit) return <></>;
 
   //募集を削除する
   const deleteRecruit = async() => {
-    await recruitRepository.deleteRecruit(recruit.id).then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message)
-        setColor(result.success)
-
+    await recruitRepository.deleteRecruit(recruit.id)
+      .then(({ message, style}: ToastResult) => {
+        showToast({ message, style });
         setTimeout(() => {
+          hideToast();
           router.push('/homeScreen')
         }, 
-        result.success ? 2000 : 4000
+        style === 'success' ? 2000 : 4000
         )
-      }
-    })
+      })
   }
 
   return (
@@ -108,13 +99,6 @@ export const OwnRecruitDetail: React.FC = (): JSX.Element  => {
           </div>
         </div>
       </div>
-
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
     </div>
   )
 }

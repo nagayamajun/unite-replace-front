@@ -1,8 +1,8 @@
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { userRecruitParticipantRepository } from "@/features/recruit/modules/user-recruit-participant/userRecruitParticipant.repository";
 import { UserRecruitParticipant } from "@/features/recruit/types/UserRecruitParticipant"
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 type Props = {
   participants: UserRecruitParticipant[]
@@ -10,49 +10,39 @@ type Props = {
 
 export const ProspectiveParticipantList = ({ participants }: Props): JSX.Element => {
   const router = useRouter();
+  const { showToast, hideToast } = useToast();
   const prospectiveParticipants = participants.filter(participant => !participant.isApproved);
 
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
-
   // 参加者を承認する
-  const approveApplication = async(id: string) => {
-    await userRecruitParticipantRepository.approveParticipant(id)
-    .then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message)
-        setColor(result.success)
-
-        setTimeout(() => {
-          router.reload()
-        },
-        result.success ? 2000 : 4000
-        )
-      }
+  const approveApplication = async( id: string ) => {
+    await userRecruitParticipantRepository.approveParticipant( id )
+    .then(({ message, style }: ToastResult) => {
+      showToast({message, style});
+      
+      setTimeout(() => {
+        hideToast();
+        router.reload()
+      },
+      style === 'success' ? 2000 : 4000
+      )
     });
-  }
+  };
 
   // 参加者を拒否する
-  const rejectApplication = async(uid: string) => {
-    await userRecruitParticipantRepository.rejectParticipant(uid)
-    .then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message)
-        setColor(result.success)
+  const rejectApplication = async(id: string) => {
+    await userRecruitParticipantRepository.rejectParticipant(id)
+    .then(({ message, style }: ToastResult) => {
+      showToast({ message, style });
 
-        setTimeout(() => {
-          router.reload()
-        },
-        result.success ? 2000 : 4000
-        )
-      }
+      setTimeout(() => {
+        hideToast();
+        router.reload();
+      },
+      style === 'success' ? 2000 : 4000
+      )
+      
     });
-  }
+  };
 
   return (
     <div className="border-b pl-5 sm:pl-0 m-2 pb-5">
@@ -71,12 +61,6 @@ export const ProspectiveParticipantList = ({ participants }: Props): JSX.Element
           </div>
         ))
       )}
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
     </div>
   )
 }

@@ -2,11 +2,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FcLike } from 'react-icons/fc';
 import { HiOutlineHeart } from "react-icons/hi";
-import { SuccessOrFailureModal } from "../../../../../components/organisms/Modal/SuccessOrFailureModal";
 import { Product } from "@/features/product/types/product";
 import { useRecoilValue } from "recoil";
 import { EmployeeState } from "@/stores/employeeAtom";
 import { employeeToProductLikeRepository } from "@/features/product/modules/employee-product-like/employeeToProductLikeRepository";
+import { useToast } from "@/hooks/useToast";
+import { useLikedToProductStatus } from "@/features/product/hooks/useLikedToProductStatus";
 
 type LikeButtonProps = {
   product: Product
@@ -14,57 +15,41 @@ type LikeButtonProps = {
 
 export const ProductLikeButton = ({ product }: LikeButtonProps) => {
   const router = useRouter();
-  const employee = useRecoilValue(EmployeeState);
+  // const employee = useRecoilValue(EmployeeState);
+  const { showToast, hideToast } = useToast();
   
-  const [ isLiked, setIsLiked ] = useState<boolean>();
+  // const [ isLiked, setIsLiked ] = useState<boolean>();
 
-  useEffect(() => {
-    //いいねをしているかしていないかの判定に利用する
-    const isInitialLiked = product.employeeToProductLikes?.some(
-      (like) => like.employeeId === employee?.id
-    );
-    setIsLiked(isInitialLiked)
-  }, [])
+  // useEffect(() => {
+  //   //いいねをしているかしていないかの判定に利用する
+  //   const isInitialLiked = product.employeeToProductLikes?.some(
+  //     (like) => like.employeeId === employee?.id
+  //   );
+  //   setIsLiked(isInitialLiked)
+  // }, [])
   
+  if (!product.employeeToProductLikes) return <></>
+  const { isLiked, setIsLiked } = useLikedToProductStatus({ likedStatus: product.employeeToProductLikes })
+  const handleLike = async () => {
+    const result = await employeeToProductLikeRepository.addLike({ productId: product.id });
+    if (result && result.style === 'failed') {
+      showToast({ message: result.message, style: result.style });
 
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
-  
-  const handleLike = async() => {
-    await employeeToProductLikeRepository.addLike(product.id)
-      .then((result) => {
-        if (result && !result?.success) {
-          setIsOpen(true);
-          setModalMessage(result.message);
-          setColor(result.success);
-
-          setTimeout(
-            () => {
-              router.reload();
-            },
-            4000
-          );
-        }
-      });
-
-    setIsLiked((prev) => !prev)
-  }
+      setTimeout(() => {
+        hideToast();
+        router.reload();
+      }, 4000);
+    } else {
+      setIsLiked((prev) => !prev);
+    }
+  };
 
   return (
     <div>
       <button onClick={handleLike} className="text-2xl" disabled={isLiked}>
         { isLiked ? <FcLike /> : <HiOutlineHeart /> }
       </button>
-
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
+      {isLiked && <p>いいねを削除することはできません。</p>}
     </div>
   )
 }

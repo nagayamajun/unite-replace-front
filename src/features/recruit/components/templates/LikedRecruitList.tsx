@@ -1,7 +1,6 @@
 import { RecruitCard } from "@/features/recruit/components/organisms/Card/RecruitCard"
 import { Recruit } from "@/features/recruit/types/recruit"
 import { useLikedRecruits } from "../../hooks/useLikedRecruits"
-import { Loading } from "@/components/organisms/Loading/Loading"
 
 export const LikedRecruitList = (): JSX.Element => {
   const { likedRecruits } = useLikedRecruits();

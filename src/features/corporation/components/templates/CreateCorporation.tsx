@@ -1,18 +1,14 @@
 import { PlainInput } from "@/components/molecules/Input/PlainInput";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { CorporationRepository } from "@/features/corporation/modules/corporation/corporation.repository";
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export const CreateCorporation = () => {
   const router = useRouter();
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
+  const { showToast, hideToast } = useToast();
   const {
     register,
     handleSubmit,
@@ -20,18 +16,13 @@ export const CreateCorporation = () => {
   } = useForm();
 
   const onSubmit = (submitData: any) => {
-    CorporationRepository.create(submitData).then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message);
-        setColor(result.success);
+    CorporationRepository.create(submitData).then(({ message, style }: ToastResult) => {
+      showToast({ message, style });
 
-        setTimeout(() => {
-          setIsOpen(false);
-          if (!result.success) return router.reload();
-          router.push("/corporation/corporateSignUp");
-        }, 2000);
-      }
+      setTimeout(() => {
+        hideToast();
+        if (style === 'success') router.push("/corporation/corporateSignUp");
+      }, 2000);
     });
   };
   return (
@@ -112,13 +103,6 @@ export const CreateCorporation = () => {
           </button>
         </div>
       </form>
-
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
     </div>
   );
 };

@@ -8,59 +8,50 @@ import { GraduationYearRadio } from "../molecules/Radio/GraduationYearRadio";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
 import { useAuth } from "@/hooks/useAuth";
 import { UserRepository } from "@/features/user/modules/user/user.repository";
-import { useEffect, useState } from "react";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
-import { Loading } from "../../../../components/organisms/Loading/Loading";
+import { useEffect } from "react";
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
+import { useLoading } from "@/hooks/useLoading";
 
 export const OtherThanTechPage = (): JSX.Element => {
   useAuth();
+  const router = useRouter();
+  const { showToast, hideToast } = useToast();
+  const { showLoading, hideLoading } = useLoading();
+  
   const [userState, setUserState] = useRecoilState<UserStateType>(UserState);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (userState) {
-      setIsLoading(false);
-    }
-  }, [userState?.firebaseUID]);
-
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm();
-  const router = useRouter();
 
-  //プロフィール編集失敗/成功notice
-  const [isNoticeOpen, setIsNoticeOpen] = useState(false);
-  const [noticeMessage, setNoticeMessage] = useState("");
-  const [noticeColor, setNoticeColor] = useState<boolean>();
-  const closeNotice = () => setIsNoticeOpen(false);
+  useEffect(() => {
+    showLoading();
+    if (userState) {
+      hideLoading();
+    }
+  }, [userState?.firebaseUID]);
+
 
   const onSubmit = async (submitData: any) => {
-    await UserRepository.updateUserInfo({ ...userState, ...submitData }).then(
-      (result) => {
-        setUserState({ ...userState, ...submitData });
+    await UserRepository.updateUserInfo({ ...userState, ...submitData })
+      .then(
+        ({message, style}: ToastResult) => {
+          setUserState({ ...userState, ...submitData });
 
-        //notice表示
-        setIsNoticeOpen(true);
-        setNoticeMessage(result.message);
-        setNoticeColor(result.success);
-
-        setTimeout(
-          () => {
-            setIsNoticeOpen(false);
-            if (result.success) {
-              router.push("/profiles/user/skill");
-            }
-          },
-          result.success ? 1000 : 3000
-        );
-      }
-    );
+          showToast({ message, style });
+          setTimeout(
+            () => {
+              hideToast();
+              if (style === 'success') router.push("/profiles/user/skill");
+            },
+            style === 'success' ? 1000 : 3000
+          );
+        }
+      );
   };
-
-  if (isLoading) return <Loading />;
 
   return (
     <div className="flex flex-col justify-center items-center h-full">
@@ -141,14 +132,6 @@ export const OtherThanTechPage = (): JSX.Element => {
           <SubmitButton innerText="次へ" />
         </div>
       </form>
-
-      {/* 成功/失敗notice */}
-      <SuccessOrFailureModal
-        isOpen={isNoticeOpen}
-        closeModal={closeNotice}
-        modalMessage={noticeMessage}
-        modalBgColor={noticeColor!}
-      />
     </div>
   );
 };

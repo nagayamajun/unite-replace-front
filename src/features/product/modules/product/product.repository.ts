@@ -10,6 +10,7 @@ import {
   SUCCESS_TO_CREATE_PRODUCT,
 } from "@/constants/constants";
 import { ProgrammingSkill } from "@/features/user/types/programingSkill";
+import { ToastResult } from "@/types/toast";
 
 export type submitProductDate = {
   recruitId: string;
@@ -74,17 +75,19 @@ export const productRepository = {
   //プロダクト作成
   async createProduct(
     data: submitProductDate
-  ): Promise<{ success: boolean; message: string } | undefined> {
+  ): Promise<ToastResult> {
     try {
       await axiosInstance.post("/product/upload", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      return { success: true, message: SUCCESS_TO_CREATE_PRODUCT };
-    } catch (error) {
+      return { style: 'success', message: SUCCESS_TO_CREATE_PRODUCT }
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
       return {
-        success: false,
-        message: FAIL_TO_CREATE_PRODUCT,
+        style: 'failed',
+        message: `${FAIL_TO_CREATE_PRODUCT}\n${
+          isTypeSafeError ? error.message : ""
+        }`,
       };
     }
   },
