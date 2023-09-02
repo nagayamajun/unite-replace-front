@@ -17,8 +17,8 @@ export const useCertainCorporation = (corporationId?: string) => {
           setCertainCorporation(corporation);
         })
         .catch((error) => setError(error));
+        hideLoading();
     })();
-    hideLoading();
   }, [corporationId]);
 
   return { certainCorporation, setCertainCorporation, error };

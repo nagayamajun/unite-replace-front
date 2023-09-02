@@ -4,9 +4,10 @@ import { useRecoilValue } from "recoil";
 import { UserState } from "@/stores/atoms";
 
 export type Props = {
-  likes: UserToRecruitLike[]
+  likes?: UserToRecruitLike[]
 }
 export const useLikeToRecruitStatus = ({ likes }: Props) => {
+
   const user = useRecoilValue(UserState);
   const [ isLiked, setIsLiked ] = useState<boolean>();
 

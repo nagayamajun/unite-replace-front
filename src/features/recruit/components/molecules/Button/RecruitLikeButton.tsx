@@ -14,7 +14,6 @@ export const RecruitLikeButton = ({ recruit }: LikeButtonProps): JSX.Element => 
   const router = useRouter();
   const { showToast, hideToast } = useToast();
 
-  if  (!recruit.userToRecruitLikes) return <></>
   const { isLiked, setIsLiked } = useLikeToRecruitStatus({likes: recruit.userToRecruitLikes});
 
   const handleLike = async() => {

@@ -4,13 +4,12 @@ import { EmployeeState } from "@/stores/employeeAtom";
 import { useRecoilValue } from "recoil";
 
 type Props = {
-  likedStatus: EmployeeProductLike[];
+  likedStatus?: EmployeeProductLike[];
 }
 
 export const useLikedToProductStatus = ({ likedStatus }: Props) => {
   const [ isLiked, setIsLiked ] = useState<boolean>();
   const employee = useRecoilValue(EmployeeState);
-  
   //いいねをしているかしていないかの判定
   useEffect(() => {
     const isInitialLiked = likedStatus?.some(
