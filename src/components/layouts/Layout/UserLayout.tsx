@@ -6,23 +6,25 @@ import { ReactNode, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { Loading } from "../../organisms/Loading/Loading";
 import { SideBar } from "@/components/layouts/Sidebar/UserSidebar";
-import { useLoading } from "@/hooks/useLoading";
 
 type Props = {
   children: ReactNode;
 };
 
-export const UserLayout = ({ children }: Props) => {
-  const { showLoading, hideLoading } = useLoading();
+export const UserLayout = ({ children }: Props) => {;
+  // BUGFIX: ここでrecoilのLoadingを使うとハイドレーションエラーになる。
+  // 理由？ ここでは初期がtrueなのでLoading -> 表示になっているがrecoilを使った場合false -> true -> falseの流れになってしまう為。
   const user = useRecoilValue(UserState);
+  const [isLoading, setIsLoading] = useState(true);
   const auth = useAuth();
 
   useEffect(() => {
-    showLoading();
     if (user && axiosInstance.defaults.headers.common["Authorization"]) {
-      hideLoading();
+      setIsLoading(false);
     }
   }, [auth]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <>

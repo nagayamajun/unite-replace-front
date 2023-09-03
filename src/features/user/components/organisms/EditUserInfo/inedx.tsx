@@ -1,10 +1,8 @@
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
 import { UserRepository } from "@/features/user/modules/user/user.repository";
-import { useCertainUser } from "@/hooks/useCertainUser";
 import { useToast } from "@/hooks/useToast";
 import { UserStateType } from "@/stores/atoms";
 import { ToastResult } from "@/types/toast";
-import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import { SetterOrUpdater } from "recoil";
 import { EditProfileModal } from "../Modal/EditProfileModal";
@@ -27,8 +25,6 @@ type Props = {
 }
 
 export const EditUserInfo = ({profileUser, setProfileUser, error, setMyselfState, isMyself}: Props): JSX.Element => {
-  const router = useRouter();
-  const { id: userId } = router.query;
   const { showToast, hideToast } = useToast();
   const {
     register,
@@ -41,18 +37,6 @@ export const EditUserInfo = ({profileUser, setProfileUser, error, setMyselfState
   const [isImageOpen, setIsImageOpen] = useState(false);
   const [isGraduationYearOpen, setIsGraduationYearOpen] = useState(false);
   const [isSkillOpen, setIsSkillOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-
-  useEffect(() => {
-    setIsLoading(true);
-    if (profileUser) {
-      setIsLoading(false);
-    }
-    if (error) {
-      router.push("/404");
-    }
-  }, [profileUser]);
 
   const onEditSubmit = async (submitData: any) => {
     await UserRepository.updateUserInfo({
