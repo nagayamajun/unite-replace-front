@@ -1,11 +1,10 @@
 import { authRepository } from "@/features/auth/modules/auth/auth.repository";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { AuthInput } from "@/features/auth/components/molecules/Input/AuthInput";
-import { useState } from "react";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
 
 type FormData = {
   email: string;
@@ -16,25 +15,20 @@ type FormData = {
 export const CorporateSignUp = () => {
   const router = useRouter();
   //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage ,setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false)
   const { handleSubmit, register, formState: {errors}} = useForm();
+  const { showToast, hideToast } = useToast();
 
   const onSubmit: SubmitHandler<any> = ({email, password, sharedPassword}: FormData) => {
     authRepository.employeeSignUpWithEmail(email, password, sharedPassword)
-    .then((result) => {
-      if(result) {
-        setIsOpen(true)
-        setModalMessage(result.message)
-        setColor(result.success)
+    .then(({message, style}: ToastResult) => {
+      if(message) {
+        showToast({message, style})
 
         setTimeout(() => {
-          setIsOpen(false)
-          router.push('/corporation/corporateSignIn')
+          hideToast();
+          if (style === 'success') router.push('/corporation/corporateSignIn')
         },
-        result.success ? 2000 : 4000
+        style === 'success' ? 2000 : 4000
         )
       }
     })
@@ -89,13 +83,6 @@ export const CorporateSignUp = () => {
           </div>
         </div>
       </div>
-
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
      </div>
   )
 }

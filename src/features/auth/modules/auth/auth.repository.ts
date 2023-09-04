@@ -24,13 +24,13 @@ import { employeeRepository } from "../employee/employee.repository";
 
 import { UserRepository } from "../../../user/modules/user/user.repository";
 import { User } from "@/features/user/types/user";
+import { ToastResult } from "@/types/toast";
 
 export const authRepository = {
   //学生ユーザーのメール・パスワードでのログイン
   async signInWithEmail(
-    email: string,
-    password: string
-  ): Promise<ConfirmModal> {
+    { email, password }: { email: string, password: string }
+  ): Promise<ToastResult> {
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -44,12 +44,12 @@ export const authRepository = {
       //このメソッドの呼び出し先で現在のuserレコードにnameが登録されているかどうかを確認するために取得
       const user = await UserRepository.findUserByFirebaseUID();
 
-      return { success: true, message: SUCCESS_IN_SIGN_IN, data: user as User };
+      return { style: 'success', message: SUCCESS_IN_SIGN_IN, data: user as User };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
 
       return {
-        success: false,
+        style: 'failed',
         message: `${FAIL_TO_SIGN_IN}\n${isTypeSafeError ? error.message : ""}`,
       };
     }
@@ -57,9 +57,8 @@ export const authRepository = {
 
   //学生ユーザーのメール・パスワードでのサインアップ
   async signUpWithEmailAndPassword(
-    email: string,
-    password: string
-  ): Promise<ConfirmModal> {
+    { email, password }: {email: string, password: string}
+  ): Promise<ToastResult> {
     try {
       const customToken = (
         await axiosInstance
@@ -77,19 +76,19 @@ export const authRepository = {
       const idToken = await userCredential.user.getIdToken();
       setAuthToken(idToken);
 
-      return { success: true, message: SUCCESS_IN_SIGN_UP };
+      return { style: 'success', message: SUCCESS_IN_SIGN_UP };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
 
       return {
-        success: false,
+        style: 'failed',
         message: `${FAIL_TO_SIGN_UP}\n${isTypeSafeError ? error.message : ""}`,
       };
     }
   },
 
   //従業員のメール・パスワード・共有パスワードでのログイン
-  async employeeSignInWithEmail(email: string, password: string, sharedPassword: string): Promise<ConfirmModal  | any> {
+  async employeeSignInWithEmail(email: string, password: string, sharedPassword: string): Promise<ToastResult> {
     try {
       const userCredential = await signInWithEmailAndPassword(corporateAuth, email, password);
       const idToken = await userCredential.user.getIdToken();
@@ -99,14 +98,14 @@ export const authRepository = {
       const employee = await employeeRepository.getEmployeeByFirebaseUID();
       
       if (employee.belongToCorporation.sharedPassword !== sharedPassword) return {
-        sucess: false, message: PASSWORD_DO_NOT_MATCH
+        style: 'failed', message: PASSWORD_DO_NOT_MATCH
       }
 
-      return { success: true, message: SUCCESS_IN_SIGN_IN };
+      return { style: 'success', message: SUCCESS_IN_SIGN_IN };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
       return {
-        success: false,
+        style: 'failed',
         message: `FAIL_TO_SIGN_IN\n${
           isTypeSafeError ? error.message : ""
         }`,
@@ -119,7 +118,7 @@ export const authRepository = {
     email: string,
     password: string,
     sharedPassword: string
-  ): Promise<ConfirmModal> {
+  ): Promise<ToastResult> {
     try {
       //customTokenはサーバーサイドで発行されたトークンを返す。
       const customToken = (
@@ -140,19 +139,18 @@ export const authRepository = {
       const idToken = await userCredential.user.getIdToken();
       setAuthToken(idToken);
 
-      return { success: true, message: SUCCESS_IN_SIGN_UP };
+      return { style: 'success', message: SUCCESS_IN_SIGN_UP };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
-
       return {
-        success: false,
+        style: 'failed',
         message: `${FAIL_TO_SIGN_UP}\n${isTypeSafeError ? error.message : ""}`,
       };
     }
   },
 
   //学生ユーザーGoogle認証
-  async signInWithGoogle(): Promise<ConfirmModal> {
+  async signInWithGoogle(): Promise<ToastResult> {
     const provider = new GoogleAuthProvider();
 
     try {
@@ -172,22 +170,22 @@ export const authRepository = {
       ).data;
 
       return {
-        success: true,
+        style: 'success',
         message: SUCCESS_IN_SIGN_IN,
-        isCreated: !!createdUser,
+        data: !!createdUser,
       };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
 
       return {
-        success: false,
+        style: 'failed',
         message: `${FAIL_TO_SIGN_IN}\n${isTypeSafeError ? error.message : ""}`,
       };
     }
   },
 
   //学生ユーザーGitHub認証
-  async signInWithGithub(): Promise<ConfirmModal> {
+  async signInWithGithub(): Promise<ToastResult> {
     const provider = new GithubAuthProvider();
 
     try {
@@ -219,31 +217,32 @@ export const authRepository = {
       ).data;
 
       return {
-        success: true,
+        style: 'success',
         message: SUCCESS_IN_SIGN_IN,
-        isCreated: !!createdUser,
+        data: !!createdUser,
       };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
 
       return {
-        success: false,
+        style: 'failed',
         message: `${FAIL_TO_SIGN_IN}\n${isTypeSafeError ? error.message : ""}`,
       };
     }
   },
 
   //サインアウトする
-  async logOut(): Promise<ConfirmModal> {
+  async logOut(): Promise<ToastResult> {
     try {
       await signOut(auth);
-
-      return { success: true, message: SUCCESS_IN_SIGN_OUT };
+      return {
+        style: 'success',
+        message: SUCCESS_IN_SIGN_OUT 
+      };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
-
       return {
-        success: false,
+        style: 'failed',
         message: `${FAIL_TO_SIGN_OUT}\n${isTypeSafeError ? error.message : ""}`,
       };
     }

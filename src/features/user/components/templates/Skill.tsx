@@ -6,9 +6,9 @@ import Select from "react-select";
 import { useRecoilState } from "recoil";
 import { SubmitButton } from "../../../../components/molecules/Button/SubmitButton";
 import { ProgrammingSkill } from "@/features/user/types/programingSkill";
-import { useAuth } from "@/hooks/useAuth";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { UserRepository } from "@/features/user/modules/user/user.repository";
+import { ToastResult } from "@/types/toast";
+import { useToast } from "@/hooks/useToast";
 
 export type Option = {
   label: string;
@@ -16,17 +16,11 @@ export type Option = {
 };
 
 export const SkillPage = (): JSX.Element => {
-  useAuth();
   const { handleSubmit, control } = useForm();
   const [userState, setUserState] = useRecoilState(UserState);
   const router = useRouter();
   const [selectedSkills, setSelectedSkills] = useState<Option[]>([]);
-
-  //プロフィール編集失敗/成功notice
-  const [isNoticeOpen, setIsNoticeOpen] = useState(false);
-  const [noticeMessage, setNoticeMessage] = useState("");
-  const [noticeColor, setNoticeColor] = useState<boolean>();
-  const closeNotice = () => setIsNoticeOpen(false);
+  const { showToast, hideToast } = useToast();
 
   //enum型からスキルオブジェクト作成
   const options = Object.values(ProgrammingSkill).map((skill) => ({
@@ -36,26 +30,19 @@ export const SkillPage = (): JSX.Element => {
 
   const onSubmit = async (submitData: any) => {
     await UserRepository.updateUserInfo({ ...userState, ...submitData }).then(
-      (result) => {
+      ({message, style}: ToastResult) => {
         setUserState({ ...userState, ...submitData });
 
-        //notice表示
-        setIsNoticeOpen(true);
-        setNoticeMessage(result.message);
-        setNoticeColor(result.success);
-
+        showToast({message, style})
         setTimeout(
           () => {
-            setIsNoticeOpen(false);
-            if (result.success) {
-              router.push("/profiles/user/githubInfo");
-            }
+            hideToast();
+            if (style === 'success') router.push("/profiles/user/githubInfo");  
           },
-          result.success ? 1000 : 3000
+          style === 'success' ? 1000 : 3000
         );
       }
     );
-
     router.push("/profiles/user/githubInfo");
   };
 
@@ -94,14 +81,6 @@ export const SkillPage = (): JSX.Element => {
           <SubmitButton innerText="次へ" />
         </div>
       </form>
-
-      {/* 成功/失敗notice */}
-      <SuccessOrFailureModal
-        isOpen={isNoticeOpen}
-        closeModal={closeNotice}
-        modalMessage={noticeMessage}
-        modalBgColor={noticeColor!}
-      />
     </div>
   );
 };

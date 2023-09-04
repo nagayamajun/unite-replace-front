@@ -5,6 +5,7 @@ import { useCorporateAuth } from "@/hooks/useCorporateAuth"
 import { axiosInstance } from "@/libs/axios"
 import { Loading } from "../../organisms/Loading/Loading"
 import { EmployeeState, EmployeeStateType } from "@/stores/employeeAtom"
+import { useLoading } from "@/hooks/useLoading"
 
 
 type Props = {
@@ -12,17 +13,17 @@ type Props = {
 }
 
 export const EmployeeLayout = ({children}: Props) => {
+  const { showLoading, hideLoading } = useLoading();
   const employee = useRecoilValue<EmployeeStateType>(EmployeeState);
-  const [isLoading, setIsLoading] = useState(true);
   const auth = useCorporateAuth();
 
   useEffect(() => {
+    showLoading();
     if (employee && axiosInstance.defaults.headers.common["Authorization"]) {
-      setIsLoading(false);
+      hideLoading();
     }
   },[auth])
-  
-  if (isLoading) return <Loading />;
+
   return (
     <div className="flex flex-row w-full">
       <CorporateSideBar />

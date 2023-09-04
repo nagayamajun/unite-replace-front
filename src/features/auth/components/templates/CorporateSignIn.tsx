@@ -3,34 +3,26 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { AuthInput } from "@/features/auth/components/molecules/Input/AuthInput";
-import { useState } from "react";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
 
 export const CorporateSignIn = () => {
   const router = useRouter();
   const { handleSubmit, register, formState: {errors}} = useForm();
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
+  const { showToast, hideToast } = useToast ();
 
   const onSubmit = async(data: any) => {
     await authRepository.employeeSignInWithEmail(data.email, data.password, data.sharedPassword)
-    .then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message);
-        setColor(result.success);
+    .then(({message, style}: ToastResult) => {
+      if (message) {
+        showToast({message, style});
 
         setTimeout(
           () => {
-            setIsOpen(false);
-            if (result.success) {
-              router.push("/corporation");
-            }
+            hideToast();
+            if (style === 'success') router.push("/corporation");
           },
-          result.success ? 2000 : 4000
+          style === 'success' ? 2000 : 4000
         );
       }
     });
@@ -85,13 +77,6 @@ export const CorporateSignIn = () => {
           </div>
         </div>
       </div>
-          
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
      </div>
   )
 }

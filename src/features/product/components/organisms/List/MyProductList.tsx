@@ -1,4 +1,3 @@
-import { Loading } from "@/components/organisms/Loading/Loading";
 import { useMyProducts } from "@/features/product/hooks/useMyProducts"
 import { UserState } from "@/stores/atoms";
 import Link from "next/link";
@@ -7,8 +6,6 @@ import { useRecoilValue } from "recoil";
 export const MyProductList = (): JSX.Element => {
   const user = useRecoilValue(UserState);
   const { myProducts } = useMyProducts();
-
-  if (user === undefined && myProducts === undefined) <Loading />
 
   return (
     <div className="flex flex-col w-80 sm:w-sm md:w-md mt-10 sm:mt-20 p-5 sm:bg-white rounded-lg shadow-md">

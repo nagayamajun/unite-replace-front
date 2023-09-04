@@ -6,8 +6,8 @@ import {
 } from "@/features/chat/types/userRecruilApplication";
 import {
   FAIL_TO_GET_APPLICATION_INFO,
-  FAIL_TO_GET_PARTICIPANT,
 } from "@/constants/constants";
+import { ToastResult } from "@/types/toast";
 
 export const UserRecruitApplicationRepository = {
   async findByApplicantIdAndRecruitId(
@@ -30,16 +30,27 @@ export const UserRecruitApplicationRepository = {
 
   async applyFor(
     userRecruitId: string
-  ): Promise<UserRecruitApplicationWithRoomId> {
+  // ): Promise<UserRecruitApplicationWithRoomId> {
+  ): Promise<ToastResult<UserRecruitApplicationWithRoomId>> {
     try {
       const applicationWithRoomId = (
         await axiosInstance.post("/user-recruit-application", {
           recruitId: userRecruitId,
         })
       ).data;
-      return applicationWithRoomId;
-    } catch (error) {
-      throw error;
+      return {
+        style: 'success',
+        message: '',
+        data: applicationWithRoomId
+      };
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
+      return {
+        style: 'failed',
+        message: `ルームidの取得に失敗しました。\n${
+          isTypeSafeError ? error.message : ""
+      }`,
+    }
     }
   },
 };

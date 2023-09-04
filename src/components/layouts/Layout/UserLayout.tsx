@@ -11,14 +11,16 @@ type Props = {
   children: ReactNode;
 };
 
-export const UserLayout = ({ children }: Props) => {
+export const UserLayout = ({ children }: Props) => {;
+  // BUGFIX: ここでrecoilのLoadingを使うとハイドレーションエラーになる。
+  // 理由？ ここでは初期がtrueなのでLoading -> 表示になっているがrecoilを使った場合false -> true -> falseの流れになってしまう為。
   const user = useRecoilValue(UserState);
-  const [isLoading, setIsloading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const auth = useAuth();
 
   useEffect(() => {
     if (user && axiosInstance.defaults.headers.common["Authorization"]) {
-      setIsloading(false);
+      setIsLoading(false);
     }
   }, [auth]);
 

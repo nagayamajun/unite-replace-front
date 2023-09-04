@@ -23,7 +23,6 @@ export const UserDetailPage = (): JSX.Element => {
   //   })();
   // }, [uid]);
 
-  if (!user) return <Loading />;
 
   // const applyFor = async () => {
   //   if (!corporationStateVal?.uid || !corporationStateVal?.corporation_name)

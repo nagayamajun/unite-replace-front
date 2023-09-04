@@ -2,27 +2,22 @@ import { PlainInput } from "@/components/molecules/Input/PlainInput";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
 import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
 import { SubmitButton } from "@/components/molecules/Button/SubmitButton";
-import { useAuth } from "@/hooks/useAuth";
 import { recruitRepository } from "@/features/recruit/modules/recruit/recruit.repository";
-import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
+import { useToast } from "@/hooks/useToast";
+import { useRecoilValue } from "recoil";
+import { UserState } from "@/stores/atoms";
+import { PlainSelectInput } from "@/components/molecules/Input/PlainSelectInput";
+import { FormRecruitData } from "../../types/recruit";
+import { ToastResult } from "@/types/toast";
 
-export type FormRecruitData = {
-  hackthonName: string;
-  headline: string;
-  details: string;
-  programingSkills: ProgrammingSkill[];
-  developmentPeriod: string;
-  hackathonUrl: String;
-  numberOfApplicants: number; //募集人数
-};
 
 export const AddRecruit = () => {
-  useAuth();
+  const { showToast, hideToast } = useToast();
   const router = useRouter();
+  const user = useRecoilValue(UserState);
+
   const {
     handleSubmit,
     register,
@@ -30,19 +25,7 @@ export const AddRecruit = () => {
     control,
   } = useForm();
 
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
-  const onSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
-    let userState = localStorage.getItem("UserState");
-    if (!userState) return;
-    let userId = JSON.parse(userState)["UserState"].uid;
-
+  const onSubmit: SubmitHandler<FieldValues> = async(data: FieldValues) => {
     const recruitData: FormRecruitData = {
       hackthonName: data.hackthonName,
       headline: data.headline,
@@ -53,18 +36,12 @@ export const AddRecruit = () => {
       numberOfApplicants: data.numberOfApplicants,
     };
 
-    recruitRepository.createRecuit(recruitData, userId).then((result) => {
-      if (result) {
-        setIsOpen(true);
-        setModalMessage(result.message);
-        setColor(result.success);
-
-        setTimeout(() => {
-          setIsOpen(false);
-          if (!result.success) return router.reload();
-          router.push("/homeScreen");
-        }, 2000);
-      }
+    await recruitRepository.createRecruit(recruitData, user?.id).then(({ message, style}: ToastResult) => {
+      showToast({message, style});
+      setTimeout(() => {
+        hideToast();
+        if (style === 'success') router.push("/homeScreen");
+      }, 2000);
     });
   };
 
@@ -110,22 +87,12 @@ export const AddRecruit = () => {
             />
 
             {/* プルダウンの背景色を白にしたい */}
-            <label htmlFor="numberOfApplicants" className="text-sm">
-              募集人数
-            </label>
-            <select
-              id="numberOfApplicants"
-              placeholder="募集人数を選択"
-              {...register("numberOfApplicants", { required: "必須項目です" })}
-              className=" text-gray-400 border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full outline-green-500 mb-6 tex-sm "
-            >
-              <option value="1">1人</option>
-              <option value="2">2人</option>
-              <option value="3">3人</option>
-              <option value="4">4人</option>
-              <option value="5">5人</option>
-              <option value="6">6人</option>
-            </select>
+            <PlainSelectInput
+              registerLabel="numberOfApplicants"
+              register={register}
+              labelText="募集人数を選択"
+              optionsNum={6}
+            />
 
             <PlainInput
               registerLabel="hackathonUrl"
@@ -147,13 +114,6 @@ export const AddRecruit = () => {
             <SubmitButton innerText="募集を作成する" />
           </form>
         </div>
-
-        <SuccessOrFailureModal
-          isOpen={isOpen}
-          closeModal={closeModal}
-          modalMessage={modalMessage}
-          modalBgColor={color!}
-        />
       </div>
     </div>
   );

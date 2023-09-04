@@ -1,47 +1,48 @@
-
 import { userToRecruitLikeRepository } from "@/features/recruit/modules/user-recruit-like/userToRecruitLikeRepository";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { FcLike } from 'react-icons/fc';
 import { HiOutlineHeart } from "react-icons/hi";
-import { SuccessOrFailureModal } from "../../../../../components/organisms/Modal/SuccessOrFailureModal";
-
+import { Recruit } from "@/features/recruit/types/recruit";
+import { useToast } from "@/hooks/useToast";
+import { useLikeToRecruitStatus } from "@/features/recruit/hooks/useLikeToRecruitStatus";
 
 type LikeButtonProps = {
-  recruitId: string
-  isPropsLiked: boolean
+  recruit: Recruit
 }
 
-export const RecruitLikeButton = ({ recruitId, isPropsLiked }: LikeButtonProps) => {
+export const RecruitLikeButton = ({ recruit }: LikeButtonProps): JSX.Element => {
   const router = useRouter();
+  const { showToast, hideToast } = useToast();
 
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
+  const { isLiked, setIsLiked } = useLikeToRecruitStatus({likes: recruit.userToRecruitLikes});
 
-  const [ isLiked, setIsLiked ] = useState<boolean>(isPropsLiked)
-  
   const handleLike = async() => {
     if (!isLiked) {
-      await userToRecruitLikeRepository.addLike(recruitId)
-        .then((result) => {
-          if (result && !result?.success) {
-            setIsOpen(true);
-            setModalMessage(result.message);
-            setColor(result.success);
-
-            setTimeout(
-              () => {
-                router.reload();
-              },
-              4000
-            );
-          }
-        });
+      try {
+        await userToRecruitLikeRepository.addLike({ recruitId: recruit.id })
+      } catch (error) {
+        showToast({ message: (error as Error).message, style: 'failed'});
+        setTimeout(
+          () => {
+            hideToast();
+            router.reload();
+          },
+          4000
+        );
+      };
     } else {
-      await userToRecruitLikeRepository.deleteLike(recruitId)
+      try {
+        await userToRecruitLikeRepository.deleteLike({id: recruit.id})
+      } catch (error) {
+        showToast({ message: (error as Error).message, style: 'failed'});
+        setTimeout(
+          () => {
+            hideToast();
+            router.reload();
+          },
+          4000
+        );
+      };
     }
     setIsLiked((prev) => !prev)
   }
@@ -51,13 +52,6 @@ export const RecruitLikeButton = ({ recruitId, isPropsLiked }: LikeButtonProps) 
       <button onClick={handleLike} className="text-2xl">
         { isLiked ? <FcLike /> : <HiOutlineHeart /> }
       </button>
-
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
     </div>
   )
 }
