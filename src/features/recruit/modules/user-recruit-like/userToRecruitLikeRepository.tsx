@@ -1,31 +1,30 @@
 import { FAIL_TO_DELETE_LIKE, FAIL_TO_PUSH_LIKE } from "@/constants/constants";
 import { axiosInstance } from "@/libs/axios";
 import { ConfirmModal } from "@/types/confirmModal";
+import { ToastResult } from "@/types/toast";
 
 export const userToRecruitLikeRepository = {
   //いいねする
-  async addLike(recruitId: string): Promise<ConfirmModal | undefined> {
+  async addLike({ recruitId } :{recruitId: string}): Promise<void> {
     try {
       await axiosInstance.post('/user-to-recruit-like', { recruitId })
     } catch (error) {
-      const isTypeSafeError = error instanceof Error
-      return {
-        success: false,
-        message: `${FAIL_TO_PUSH_LIKE}\n${isTypeSafeError ? error.message : ""}`,
+      if (error instanceof Error) {
+        throw new Error(FAIL_TO_PUSH_LIKE);
       }
+      throw error;
     }
   },
 
   //いいね削除する
-  async deleteLike(id: string): Promise<ConfirmModal | undefined> {
+  async deleteLike({ id }:{ id: string }): Promise<void> {
     try {
       await axiosInstance.delete(`/user-to-recruit-like/${id}`)
-    } catch (error: unknown) {
-      const isTypeSafeError = error instanceof Error;
-      return {
-        success: false,
-        message: `${FAIL_TO_DELETE_LIKE}\n${isTypeSafeError ? error.message : ""}`,
-      };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(FAIL_TO_DELETE_LIKE);
+      }
+      throw error;
     }
-  }
+  },
 };

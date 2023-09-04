@@ -1,12 +1,13 @@
 import { PlainInput } from "@/components/molecules/Input/PlainInput"
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea"
 import { SubmitButton } from "@/components/molecules/Button/SubmitButton";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { productRepository, submitProductDate } from "@/features/product/modules/product/product.repository";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
 import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
+import { useToast } from "@/hooks/useToast";
+import { ToastResult } from "@/types/toast";
 
 export const UploadProduct = () => {
   const {
@@ -17,24 +18,11 @@ export const UploadProduct = () => {
   } = useForm();
   const router = useRouter();
   const { recruitId } = router.query;
-
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage ,setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
+  const { showToast, hideToast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: any) => {
-    setIsLoading(true)
-    const file = data.file[0];
-    const fileExtension = file.name.split(".").pop()?.toLowerCase();
-
-    if (!isVideoFile(fileExtension)) {
-      // エラー処理などを行う
-      router.reload()
-    }
 
     const submitDate: submitProductDate = {
       recruitId: recruitId as string,
@@ -47,27 +35,15 @@ export const UploadProduct = () => {
     }
 
     await productRepository.createProduct(submitDate)
-      .then(result => {
-        if(result) {
+      .then(({message, style}: ToastResult) => {
           setIsLoading(false)
-          setIsOpen(true)
-          setModalMessage(result.message)
-          setColor(result.success);
-
+          showToast({ message, style })
           setTimeout(() => {
-            setIsOpen(false)
-            if (result.success) return router.push("/homeScreen")
+            hideToast();
+            if (style === 'success') return router.push("/homeScreen")
           }, 4000)
-        }
       })
   }
-
-  // 動画ファイルの拡張子を検証する関数
-  const isVideoFile = (extension: string | undefined): boolean => {
-    const allowedExtensions = ["mp4", "mov", "avi"]; // 許可する動画ファイルの拡張子
-    if (!extension) return false;
-    return allowedExtensions.includes(extension);
-  };
 
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-screen h-full py-5">
@@ -130,13 +106,6 @@ export const UploadProduct = () => {
           disabled={isLoading}
         />
       </form>
-
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
     </div>
   )
   }

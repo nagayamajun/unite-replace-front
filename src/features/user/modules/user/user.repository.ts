@@ -6,6 +6,7 @@ import {
   SUCCESS_IN_UPDATE_USER,
 } from "@/constants/constants";
 import { ConfirmModal } from "@/types/confirmModal";
+import { ToastResult } from "@/types/toast";
 
 export const UserRepository = {
   //全件取得
@@ -56,7 +57,7 @@ export const UserRepository = {
   //更新
   async updateUserInfo(
     submitData: any
-  ): Promise<ConfirmModal & { data: User | null }> {
+  ): Promise<ToastResult<User>> {
     try {
       const user = (
         await axiosInstance.put("/user/update-by-firebase-uid", submitData, {
@@ -64,9 +65,13 @@ export const UserRepository = {
         })
       ).data;
 
-      return { data: user, success: true, message: SUCCESS_IN_UPDATE_USER };
-    } catch (error) {
-      return { data: null, success: false, message: FAIL_TO_UPDATE_USER };
+      return { data: user, style: 'success', message: SUCCESS_IN_UPDATE_USER };
+    } catch (error: unknown) {
+      const isTypeSafeError = error instanceof Error;
+      return { 
+        style: 'failed',
+        message: `${FAIL_TO_UPDATE_USER}\n${isTypeSafeError && error.message}` 
+      };
     }
   },
 };

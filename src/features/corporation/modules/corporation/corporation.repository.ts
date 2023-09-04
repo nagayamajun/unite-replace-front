@@ -2,9 +2,12 @@ import { axiosInstance } from "@/libs/axios";
 import { ConfirmModal } from "@/types/confirmModal";
 import { Corporation } from "../../types/corporation";
 import {
+  FAIL_TO_SIGN_UP,
   FAIL_TO_UPDATE_CORPORATION,
+  SUCCESS_IN_SIGN_UP,
   SUCCESS_IN_UPDATE_CORPORATION,
 } from "@/constants/constants";
+import { ToastResult } from "@/types/toast";
 
 export const CorporationRepository = {
   async getById(id: string): Promise<Corporation> {
@@ -14,19 +17,22 @@ export const CorporationRepository = {
     return res.data;
   },
 
-  async create(corporationData: any): Promise<ConfirmModal> {
+  async create({corporationData}: { corporationData: any }): Promise<ToastResult> {
     try {
-      const req = await axiosInstance.post("corporation", corporationData);
-      return { message: "企業作成に成功しました。", success: true };
-    } catch (err) {
-      return { message: "企業作成に失敗しました。", success: false };
+      await axiosInstance.post("corporation", corporationData);
+      return { message: SUCCESS_IN_SIGN_UP, style: 'success' };
+    } catch (err: unknown) {
+      const isTypeSafeError = err instanceof Error;
+      return { 
+        message: `${FAIL_TO_SIGN_UP}\n${isTypeSafeError && err}`, 
+        style: 'failed' 
+      };
     }
   },
 
   async update(
-    corporationId: string,
-    corporationData: any
-  ): Promise<ConfirmModal & { data: Corporation | null }> {
+    { corporationId, corporationData }: { corporationId: string, corporationData: any }
+  ): Promise<ToastResult> {
     try {
       const corporation = (
         await axiosInstance.put(
@@ -37,16 +43,17 @@ export const CorporationRepository = {
           }
         )
       ).data;
+
       return {
         data: corporation,
         message: SUCCESS_IN_UPDATE_CORPORATION,
-        success: true,
+        style: 'success',
       };
-    } catch (err) {
+    } catch (err: unknown) {
+      const isTypeSafeError = err instanceof Error
       return {
-        data: null,
-        message: FAIL_TO_UPDATE_CORPORATION,
-        success: false,
+        message: `${FAIL_TO_UPDATE_CORPORATION}\n${isTypeSafeError ? err.message : ""}`,
+        style: 'failed',
       };
     }
   },

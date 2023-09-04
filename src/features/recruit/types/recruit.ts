@@ -22,5 +22,12 @@ export type Recruit = {
   userToRecruitLikes?: UserToRecruitLike[]
 }
 
-//リファクタ
-//productとuserRecruitParticipantの型付けをする。
+export type FormRecruitData = {
+  hackthonName: string;
+  headline: string;
+  details: string;
+  programingSkills: ProgrammingSkill[];
+  developmentPeriod: string;
+  hackathonUrl: String;
+  numberOfApplicants: number; //募集人数
+};

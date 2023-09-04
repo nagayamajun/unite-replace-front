@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ProductFormField } from "@/features/product/components/molecules/Fierld/ProductFormField";
-import { Loading } from "../../../../components/organisms/Loading/Loading";
 import { ProductLikeButton } from "@/features/product/components/molecules/Button/ProductLikeButton";
 import { useProductWithApprovedUserRecruitParticipants } from "../../hooks/useProductWithApprovedUserRecruitParticipants";
 import { ProductFormSkillsField } from "../molecules/Fierld/ProductFormSkillsField";
@@ -17,6 +16,7 @@ import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
 import { useIsRelatedUserByRecruitId } from "../../hooks/useIsRelatedUserByRecruitId";
 import { OurOwnCommentsList } from "../organisms/List/OurOwnCommentsList";
 import { RelatedUsersList } from "../organisms/List/RelatedUsersList";
+import { useLoading } from "@/hooks/useLoading";
 
 type Props = {
   path: PathToProductPage;
@@ -46,14 +46,14 @@ export const EditProduct = ({ path }: Props): JSX.Element => {
     useState(false);
   const [isOverviewOpen, setIsOverviewOpen] = useState(false);
 
-  if (!product) return <Loading />;
 
+  if (!product) return <></>
   return (
     <div className="flex flex-col w-full min-h-screen h-full justify-center items-center text-gray-600 ">
       <div className="flex flex-col rounded-lg items-center w-4/5 sm:w-sm md:w-md lg:w-lg gap-14  bg-white">
         <div className="flex justify-center items-center w-full mt-10">
           <video
-            src={product.url}
+            src={product?.url}
             controls
             className="w-full h-auto rounded-sm"
           ></video>

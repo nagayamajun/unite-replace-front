@@ -1,4 +1,3 @@
-import { Loading } from "@/components/organisms/Loading/Loading";
 import { useRelatedProducts } from "@/features/product/hooks/useRelatedProducts"
 import { UserState } from "@/stores/atoms";
 import Link from "next/link";
@@ -8,8 +7,6 @@ export const RelatedProductList = (): JSX.Element => {
 
   const user = useRecoilValue(UserState);
   const { relatedProducts } = useRelatedProducts();
-
-  if (user === undefined && relatedProducts === undefined) <Loading />
 
   return (
     <div className="w-80 sm:w-sm md:w-md mt-10 sm:mt-20 p-5 bg-gray-100 sm:bg-white rounded-lg shadow-md">

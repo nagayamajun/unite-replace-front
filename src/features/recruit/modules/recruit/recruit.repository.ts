@@ -1,8 +1,8 @@
-import { FormRecruitData } from "@/features/recruit/components/templates/AddRecruit";
-import { Recruit } from "@/features/recruit/types/recruit";
+import { FormRecruitData, Recruit } from "@/features/recruit/types/recruit";
 import { axiosInstance } from "@/libs/axios";
 import { ConfirmModal } from "@/types/confirmModal";
 import { FAIL_TO_DELETE_RECRUIT, FAIL_TO_UPDATE_RECRUIT, SUCCESS_TO_DELETE_RECRUIT, SUCCESS_TO_UPDATE_RECRUIT } from "@/constants/constants";
+import { ToastResult, ToastStyle } from "@/types/toast";
 
 export const recruitRepository = {
   //募集の一覧取得
@@ -92,50 +92,49 @@ export const recruitRepository = {
   },
 
   //募集の作成
-  async createRecuit(
+  async createRecruit(
     recruitData: FormRecruitData,
     userId?: string
-  ): Promise<ConfirmModal> {
+  ): Promise<{message: string, style: ToastStyle}> {
     try {
-      const req = await axiosInstance.post("/user-recruit", recruitData);
-      return { message: "募集作成に成功しました。", success: true };
+      await axiosInstance.post("/user-recruit", recruitData);
+      return { message: "募集作成に成功しました。", style: 'success' };
     } catch (error) {
-      return { message: "募集作成に失敗しました。", success: false };
+      return { message: "募集作成に失敗しました。", style: 'failed' };
     }
   },
 
   //募集情報の編集
   async editRecruit(
-    id: string,
-    input: FormRecruitData,
-  ): Promise<ConfirmModal> {
+    { id, input }: {id: string, input: FormRecruitData},
+  ): Promise<ToastResult> {
     try {
       await axiosInstance.put(`/user-recruit/${id}`, input);
       return {
-        success: true,
+        style: 'success',
         message: SUCCESS_TO_UPDATE_RECRUIT
       }
-    } catch (error) {
+    } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
       return {
-        success: false,
+        style: 'failed',
         message: `${FAIL_TO_UPDATE_RECRUIT} ${isTypeSafeError ? error.message : ""}`
       }
     }
   },
 
   //募集の削除
-  async deleteRecruit(id: string): Promise<ConfirmModal> {
+  async deleteRecruit(id: string): Promise<ToastResult> {
     try {
       await axiosInstance.delete(`/user-recruit/${id}`)
       return {
-        success: true,
+        style: 'success',
         message: SUCCESS_TO_DELETE_RECRUIT
       }
-    } catch (error) {
+    } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error
       return {
-        success: false,
+        style: 'failed',
         message: `${FAIL_TO_DELETE_RECRUIT}\n${isTypeSafeError ? error.message : ""}`
       }
     }

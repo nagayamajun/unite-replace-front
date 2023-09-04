@@ -1,25 +1,27 @@
-import { userRecruitParticipantRepository } from "@/features/recruit/modules/user-recruit-participant/userRecruitParticipant.repository";
-import { UserRecruitParticipant } from "@/features/recruit/types/UserRecruitParticipant";
 import { useEffect, useState } from "react";
 import {
   Product,
   ProductWithApprovedUserRecruitParticipants,
 } from "../types/product";
 import { productRepository } from "../modules/product/product.repository";
+import { useLoading } from "@/hooks/useLoading";
 
 export const useProductWithApprovedUserRecruitParticipants = (
   productId: string
 ) => {
+  const { showLoading, hideLoading } = useLoading();
   const [product, setProduct] =
     useState<ProductWithApprovedUserRecruitParticipants>();
 
   useEffect(() => {
     (async () => {
+      showLoading();
       await productRepository
         .getProductWithApprovedUserRecruitParticipantsById(productId)
         .then((resProduct) => {
           setProduct(resProduct);
         });
+      hideLoading();
     })();
   }, []);
 

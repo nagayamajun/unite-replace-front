@@ -4,25 +4,26 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { useCertainCorporation } from "../../hooks/useCertainCorporation";
 import { useEffect, useState } from "react";
-import { Loading } from "@/components/organisms/Loading/Loading";
 import { EditProfileModal } from "@/features/user/components/organisms/Modal/EditProfileModal";
 import { PlainInput } from "@/components/molecules/Input/PlainInput";
-import { SuccessOrFailureModal } from "@/components/organisms/Modal/SuccessOrFailureModal";
 import { CorporationRepository } from "../../modules/corporation/corporation.repository";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
 import { EmployeeList } from "@/features/employee/components/organisms/List/EmployeeList";
 import { CorporationIcon } from "@/components/molecules/Icon/CorporationIcon";
+import { ToastResult } from "@/types/toast";
+import { useToast } from "@/hooks/useToast";
 
 export const CorporationProfile = (): JSX.Element => {
   const router = useRouter();
   const { id: corporationId } = router.query;
-
+  const { showToast, hideToast } = useToast();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+
 
   //操作employeeとプロフィールのcorporation情報取得
   const operatorEmployee = useRecoilValue<EmployeeStateType>(EmployeeState);
@@ -38,11 +39,6 @@ export const CorporationProfile = (): JSX.Element => {
 
   const [isImageOpen, setIsImageOpen] = useState(false);
 
-  //プロフィール編集失敗/成功notice
-  const [isProfileNoticeOpen, setIsProfileNoticeOpen] = useState(false);
-  const [profileNoticeMessage, setProfileNoticeMessage] = useState("");
-  const [profileNoticeColor, setProfileNoticeColor] = useState<boolean>();
-  const closeProfileNotice = () => setIsProfileNoticeOpen(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -55,36 +51,25 @@ export const CorporationProfile = (): JSX.Element => {
   }, [profileCorporation?.id]);
 
   const onEditSubmit = async (submitData: any) => {
-    await CorporationRepository.update(corporationId as string, {
+    await CorporationRepository.update({corporationId: corporationId as string, corporationData: {
       ...submitData,
       imageFile: submitData.imageFile && submitData.imageFile[0],
-    }).then((result) => {
-      //notice表示
-      setIsProfileNoticeOpen(true);
-      setProfileNoticeMessage(result.message);
-      setProfileNoticeColor(result.success);
-
+    }}).then(({ message, style, data }: ToastResult) => {
+    showToast({ message, style });
       //userProfileの状態と認証されている自分のrecoil stateを更新
-      if (result.data) {
-        setProfileCorporation(result.data);
-      }
-
+      if (data) setProfileCorporation(data);
       //モーダル系全部閉じる
       setIsImageOpen(false);
-
       //hook-formのregisterされてる値をリセット
       reset({});
-
       setTimeout(
         () => {
-          setIsProfileNoticeOpen(false);
+          hideToast();
         },
-        result.success ? 2000 : 4000
+        style === 'success' ? 2000 : 4000
       );
     });
   };
-
-  if (isLoading || !profileCorporation) return <Loading />;
 
   return (
     <div className="flex flex-col items-center justify-center gap-28 text-[16px] pb-20 w-full h-full">
@@ -96,8 +81,8 @@ export const CorporationProfile = (): JSX.Element => {
         <div className="mt-20 flex flex-col items-center gap-2">
           {/* アイコン */}
           <CorporationIcon
-            originalIconImageSrc={profileCorporation.imageUrl}
-            originalIconImageAlt={`${profileCorporation.name}のアイコン`}
+            originalIconImageSrc={profileCorporation?.imageUrl}
+            originalIconImageAlt={`${profileCorporation?.name}のアイコン`}
             originalIconClassName="rounded-full border border-black w-40 h-40"
             defaultIconFill="gray"
             defaultIconClassName="w-40 h-40 rounded-full bg-white border border-black p-2 color-black-100"
@@ -125,7 +110,7 @@ export const CorporationProfile = (): JSX.Element => {
             registerLabel="name"
             rules={{ required: "必須項目です" }}
             errors={errors}
-            defaultValue={profileCorporation.name}
+            defaultValue={profileCorporation?.name}
             disabled={!isBelongingToCorporation}
             labelFont="text-base"
             inputFont="text-sm sm:text-base"
@@ -140,7 +125,7 @@ export const CorporationProfile = (): JSX.Element => {
           registerLabel="location"
           rules={{ required: "必須項目です" }}
           errors={errors}
-          defaultValue={profileCorporation.location}
+          defaultValue={profileCorporation?.location}
           disabled={!isBelongingToCorporation}
           labelFont="text-base"
           inputFont="text-sm sm:text-base"
@@ -152,23 +137,15 @@ export const CorporationProfile = (): JSX.Element => {
           onBlur={handleSubmit(onEditSubmit)}
           register={register}
           registerLabel="descriptionOfBusiness"
-          defaultValue={profileCorporation.descriptionOfBusiness}
+          defaultValue={profileCorporation?.descriptionOfBusiness}
           disabled={!isBelongingToCorporation}
-        />
-
-        {/* 成功/失敗notice */}
-        <SuccessOrFailureModal
-          isOpen={isProfileNoticeOpen}
-          closeModal={closeProfileNotice}
-          modalMessage={profileNoticeMessage}
-          modalBgColor={profileNoticeColor!}
         />
       </form>
 
       {/* 企業に属している従業員 */}
       <div className="flex flex-col gap-6 w-3/4 sm:w-1/2 overflow-scroll">
         <p>従業員</p>
-        {profileCorporation.employees &&
+        {profileCorporation?.employees &&
         profileCorporation.employees.length > 0 ? (
           <EmployeeList employees={profileCorporation.employees} />
         ) : (

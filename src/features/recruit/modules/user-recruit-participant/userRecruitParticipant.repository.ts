@@ -8,6 +8,7 @@ import {
 } from "@/constants/constants";
 import { axiosInstance } from "@/libs/axios";
 import { ConfirmModal } from "@/types/confirmModal";
+import { ToastResult } from "@/types/toast";
 import { type } from "os";
 
 export const userRecruitParticipantRepository = {
@@ -76,17 +77,17 @@ export const userRecruitParticipantRepository = {
     }
   },
 
-  async approveParticipant(id: string): Promise<ConfirmModal> {
+  async approveParticipant(id: string): Promise<ToastResult> {
     try {
       await axiosInstance.put(`/user-recruit-participant/${id}/approve`);
       return {
-        message: `${SUCCESS_TO_APPROVE_PARTICIPANT}`,
-        success: true,
+        style: 'success',
+        message: SUCCESS_TO_APPROVE_PARTICIPANT,
       };
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
       return {
-        success: false,
+        style: 'failed',
         message: `${FAIL_TO_APPROVE_PARTICIPANT}\n${
           isTypeSafeError ? error.message : ""
         }`,
@@ -94,19 +95,20 @@ export const userRecruitParticipantRepository = {
     }
   },
 
-  async rejectParticipant(id: string): Promise<ConfirmModal> {
+  async rejectParticipant(id: string): Promise<ToastResult> {
     try {
       await axiosInstance.delete(`/user-recruit-participant/${id}/reject`);
       return {
         message: `${SUCCESS_TO_REJECT_PARTICIPANT}`,
-        success: true,
+        style: 'failed',
       };
-    } catch (error) {
+    } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
       return {
         message: `${FAIL_TO_REJECT_PARTICIPANT}\n${
           isTypeSafeError ? error.message : ""
         }`,
+        style: 'failed'
       };
     }
   },

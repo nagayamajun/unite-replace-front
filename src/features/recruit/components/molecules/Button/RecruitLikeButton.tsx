@@ -1,13 +1,10 @@
 import { userToRecruitLikeRepository } from "@/features/recruit/modules/user-recruit-like/userToRecruitLikeRepository";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { FcLike } from 'react-icons/fc';
 import { HiOutlineHeart } from "react-icons/hi";
-import { SuccessOrFailureModal } from "../../../../../components/organisms/Modal/SuccessOrFailureModal";
 import { Recruit } from "@/features/recruit/types/recruit";
-import { useRecoilValue } from "recoil";
-import { UserState } from "@/stores/atoms";
-import { Loading } from "@/components/organisms/Loading/Loading";
+import { useToast } from "@/hooks/useToast";
+import { useLikeToRecruitStatus } from "@/features/recruit/hooks/useLikeToRecruitStatus";
 
 type LikeButtonProps = {
   recruit: Recruit
@@ -15,44 +12,37 @@ type LikeButtonProps = {
 
 export const RecruitLikeButton = ({ recruit }: LikeButtonProps): JSX.Element => {
   const router = useRouter();
-  const user = useRecoilValue(UserState);
-  const [ isLiked, setIsLiked ] = useState<boolean>();
+  const { showToast, hideToast } = useToast();
 
-  useEffect(() => {
-    //いいねをしているかしていないかの判定に利用する
-    const isInitialLiked = recruit.userToRecruitLikes?.some(
-      (like) => like.userId === user?.id
-    );
-    setIsLiked(isInitialLiked)
-  }, [])
+  const { isLiked, setIsLiked } = useLikeToRecruitStatus({likes: recruit.userToRecruitLikes});
 
-  //モーダル関係
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [color, setColor] = useState<boolean>();
-  const closeModal = () => setIsOpen(false);
-
-  
   const handleLike = async() => {
     if (!isLiked) {
-      await userToRecruitLikeRepository.addLike(recruit.id)
-        .then((result) => {
-          //処理が失敗した時のみ
-          if (result && !result?.success) {
-            setIsOpen(true);
-            setModalMessage(result.message);
-            setColor(result.success);
-
-            setTimeout(
-              () => {
-                router.reload();
-              },
-              4000
-            );
-          }
-        });
+      try {
+        await userToRecruitLikeRepository.addLike({ recruitId: recruit.id })
+      } catch (error) {
+        showToast({ message: (error as Error).message, style: 'failed'});
+        setTimeout(
+          () => {
+            hideToast();
+            router.reload();
+          },
+          4000
+        );
+      };
     } else {
-      await userToRecruitLikeRepository.deleteLike(recruit.id)
+      try {
+        await userToRecruitLikeRepository.deleteLike({id: recruit.id})
+      } catch (error) {
+        showToast({ message: (error as Error).message, style: 'failed'});
+        setTimeout(
+          () => {
+            hideToast();
+            router.reload();
+          },
+          4000
+        );
+      };
     }
     setIsLiked((prev) => !prev)
   }
@@ -62,13 +52,6 @@ export const RecruitLikeButton = ({ recruit }: LikeButtonProps): JSX.Element => 
       <button onClick={handleLike} className="text-2xl">
         { isLiked ? <FcLike /> : <HiOutlineHeart /> }
       </button>
-
-      <SuccessOrFailureModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        modalMessage={modalMessage}
-        modalBgColor={color!}
-      />
     </div>
   )
 }

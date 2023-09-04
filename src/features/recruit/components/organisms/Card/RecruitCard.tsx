@@ -23,7 +23,7 @@ export const RecruitCard = ({
   recruiter
 }: RecruitCardProps): JSX.Element => (
   <div
-    className={`group relative px-6 py-8 mb-2 sm:mb-3 h-auto bg-white border overflow-hidden rounded-xl shadow-md sm:min-w-[400px] max-w-[560px]  flex flex-col justify-start gap-4`}
+    className={`group relative px-6 py-8 mb-2 sm:mb-3 h-auto bg-white border overflow-hidden rounded-xl shadow-md sm:min-w-[380px] max-w-[560px]  flex flex-col justify-start gap-4`}
   >
     {/* ハッカソン名 */}
     <div className="flex flex-col">

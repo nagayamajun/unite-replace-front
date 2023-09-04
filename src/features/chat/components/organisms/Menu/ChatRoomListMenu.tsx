@@ -30,7 +30,7 @@ export const ChatRoomListMenu = ({ children }: Props) => {
               <Menu.Item key={room.id} as={Fragment}>
                 {({ active }) => (
                   <Link
-                    href={`/chat/${room.id}`}
+                    href={`/chat/${room.id}/userChat`}
                     className={`h-[60px] p-[8px] flex items-center gap-4 ${
                       active && "bg-[#0000001a]"
                     }`}
