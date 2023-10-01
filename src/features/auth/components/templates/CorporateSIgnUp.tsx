@@ -2,7 +2,7 @@ import { authRepository } from "@/features/auth/modules/auth/auth.repository";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { AuthInput } from "@/features/auth/components/molecules/Input/AuthInput";
+import { AuthInput } from "@/features/auth/share-components/AuthInput";
 import { useToast } from "@/hooks/useToast";
 import { ToastResult } from "@/types/toast";
 

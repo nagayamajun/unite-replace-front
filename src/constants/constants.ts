@@ -1,6 +1,10 @@
 export const APPLY_FIRST_MESSAGE =
   "初めまして！ぜひ一度話を聞いてみたいと思い、DMさせてもらいました！";
 
+//認証関連
+export const REQUIRE_FIELD = '必須項目です。';
+export const PASSWORD_MUST_BE_AT_LEAST_8_CHARACTERS = 'パスワードは8文字以上です。'
+export const PASSWORD_MUST_CONTAIN_ALPHANUMERIC_CHARACTERS = 'パスワードは半角英数字混合で入力してください';
 export const SUCCESS_IN_SIGN_IN = "ログインに成功しました。";
 export const FAIL_TO_SIGN_IN = "ログインに失敗しました。";
 

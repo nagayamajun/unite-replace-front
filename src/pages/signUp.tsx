@@ -1,7 +1,5 @@
-import { SignUp } from "@/features/auth/components/templates/SignUp"
+import { SignUp } from "@/features/auth/components/userSignup/page"
 
-const signUp = () => {
-  return <SignUp />
-}
+const signUp = () => <SignUp />
 
 export default signUp
