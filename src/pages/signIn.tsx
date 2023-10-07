@@ -1,8 +1,7 @@
-
-import { SignIn } from "@/features/auth/components/templates/SignIn"
+import { SignIn } from "@/features/auth/components/userSignin/page"
 
 const signIn = () => {
-  return <SignIn />
+  return <SignIn/>
 }
 
 export default signIn

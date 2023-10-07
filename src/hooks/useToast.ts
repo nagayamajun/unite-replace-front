@@ -11,5 +11,6 @@ export const useToast = () => {
     setState({...state, ...{isShown:false}})
   }
 
-  return { showToast, hideToast }
+
+  return { showToast, hideToast, isShown: state.isShown }
 };

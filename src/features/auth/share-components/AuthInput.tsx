@@ -16,6 +16,8 @@ type Props = {
   rules?: ValidationRulus;
   errors: FieldErrors<FieldValues>;
 }
+
+//企業側のリファクタの際にPlainInputに統一して廃止するする。
 export const AuthInput: React.FC<Props> = ({ labelText, placeholder, buttonType, register, registerLabel, rules, errors}): JSX.Element => {
 
   return (
