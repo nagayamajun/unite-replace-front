@@ -1,16 +1,15 @@
 import { FocusEventHandler } from "react";
-import { UseFormRegister } from "react-hook-form";
+import { UseFormRegister, UseFormRegisterReturn } from "react-hook-form";
 import { ErrorText } from "../Text/ErrorText";
 
 //このPlainInputで対応できるtype
-type InputType = 'text' | 'password' | 'tel' | 'email' | 'number';
+type InputType = 'text' | 'password' | 'tel' | 'email' | 'number' | 'search';
 
 type Props = {
-  label: string;
+  label?: string;
   inputType: InputType;
   placeholder?: string;
-  registerValue?: string;
-  register?: UseFormRegister<any>;
+  register?: UseFormRegisterReturn;
   error?: string;
   defaultValue?: string;
   onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
@@ -20,7 +19,6 @@ type Props = {
 }
 
 export const PlainInput = ({
-  registerValue,
   label,
   inputType,
   placeholder = '',
@@ -33,16 +31,16 @@ export const PlainInput = ({
   inputClassName,
 }: Props): JSX.Element => (
   <div className="flex flex-col gap-1 w-full">
-    <label htmlFor={registerValue} className={labelClassName} >
+    <label htmlFor={label} className={labelClassName} >
       {label}
     </label>
     <input 
-      id={registerValue}
+      id={label}
       className={
-        "border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full focus:outline-pink-color " +
+        "border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full h-[56px] focus:outline-pink-color " +
         inputClassName
       }
-      {...(register && register(registerValue ?? ""))}
+      {...register}
       type={inputType} 
       placeholder={placeholder}
       disabled={disabled}

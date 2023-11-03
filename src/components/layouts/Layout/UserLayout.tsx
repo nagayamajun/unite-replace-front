@@ -6,6 +6,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { Loading } from "../../organisms/Loading/Loading";
 import { SideBar } from "@/components/layouts/Sidebar/UserSidebar";
+import { Header } from "../Header/Header";
 
 type Props = {
   children: ReactNode;
@@ -28,15 +29,8 @@ export const UserLayout = ({ children }: Props) => {;
 
   return (
     <>
-      <div className="sm:hidden">
-        <MobileHeader />
-        <main>{children}</main>
-      </div>
-
-      <div className="hidden sm:flex sm:flex-row">
-        <SideBar />
-        <div className="flex flex-grow w-auto bg-gray-50 ">{children}</div>
-      </div>
+      <Header />
+      <main className="flex justify-center">{children}</main>
     </>
   );
 };
