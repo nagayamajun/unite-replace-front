@@ -3,7 +3,7 @@ import { UseFormRegister, UseFormRegisterReturn } from "react-hook-form";
 import { ErrorText } from "../Text/ErrorText";
 
 //このPlainInputで対応できるtype
-type InputType = 'text' | 'password' | 'tel' | 'email' | 'number' | 'search';
+type InputType = 'text' | 'password' | 'tel' | 'email' | 'number' | 'search' | 'url' | 'date';
 
 type Props = {
   label?: string;
@@ -31,15 +31,12 @@ export const PlainInput = ({
   inputClassName,
 }: Props): JSX.Element => (
   <div className="flex flex-col gap-1 w-full">
-    <label htmlFor={label} className={labelClassName} >
+    <label htmlFor={label} className={`${labelClassName} text-sm`} >
       {label}
     </label>
     <input 
       id={label}
-      className={
-        "border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full h-[56px] focus:outline-pink-color " +
-        inputClassName
-      }
+      className="border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full h-[56px] outline-green-500 "
       {...register}
       type={inputType} 
       placeholder={placeholder}
@@ -47,11 +44,8 @@ export const PlainInput = ({
       defaultValue={defaultValue}
       onBlur={onBlur}
     />
-
-    {error && (
-      <ErrorText
-        errorText={error}
-      />
-    )}
+    <div className="h-[24px]">
+      {error && <ErrorText errorText={error} />}
+    </div>
   </div>
 )
