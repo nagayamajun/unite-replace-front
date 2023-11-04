@@ -4,10 +4,12 @@ module.exports = {
     "src/pages/**/*.{js,ts,jsx,tsx}",
     "src/components/**/*.{js,ts,jsx,tsx}",
     "src/features/**/*.{js,ts,jsx,tsx}",
+    "src/ui/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     extend: {
       colors: {
+        "plain-green": "#19B97F",
         "background-color": "#faeee7",
         "highlight-color": "#ff8ba7",
         "secondary-color": "#ffc6c7",
@@ -22,9 +24,15 @@ module.exports = {
       margin: {
         "200": "200px",
       },
+      colors: {
+        'plain-green': '19B97F'
+      },
       width: {
         "100": "100px",
-        'base': '500px',
+        "196": "196px",
+        'base': '596px',
+        'card-list': '832px',
+        'card': '400px',
         'sm': '440px',
         'md': '560px',
         'lg': '770px',
