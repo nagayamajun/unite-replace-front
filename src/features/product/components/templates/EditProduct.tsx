@@ -12,7 +12,7 @@ import { ProductFormField } from "@/features/product/components/molecules/Fierld
 import { ProductLikeButton } from "@/features/product/components/molecules/Button/ProductLikeButton";
 import { useProductWithApprovedUserRecruitParticipants } from "../../hooks/useProductWithApprovedUserRecruitParticipants";
 import { ProductFormSkillsField } from "../molecules/Fierld/ProductFormSkillsField";
-import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
+import { SkillSelect } from "@/components/Select/SkillSelect";
 import { useIsRelatedUserByRecruitId } from "../../hooks/useIsRelatedUserByRecruitId";
 import { OurOwnCommentsList } from "../organisms/List/OurOwnCommentsList";
 import { RelatedUsersList } from "../organisms/List/RelatedUsersList";

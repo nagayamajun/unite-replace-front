@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-const createRecruit = () => {
+const CreateRecruit = () => {
   const router = useRouter();
   const { createRecruit } = useCreateRecruit();
 
@@ -37,6 +37,6 @@ const createRecruit = () => {
   );
 };
 
-createRecruit.getLayout = (page: ReactElement) => <UserLayout>{page}</UserLayout>;
+CreateRecruit.getLayout = (page: ReactElement) => <UserLayout>{page}</UserLayout>;
 
-export default createRecruit;
+export default CreateRecruit;

@@ -2,15 +2,17 @@ import { SkillSelect } from "@/components/Select/SkillSelect";
 import { SubmitButton } from "@/components/molecules/Button/SubmitButton";
 import { useFormContext } from "react-hook-form";
 import { PlainInput } from "@/components/Input/PlainInput";
-import { CreateRecruitInputType } from "@/domein/recruit";
+import { CreateRecruitInputType, Recruit } from "@/domein/recruit";
 import { PlainTextArea } from "@/components/Input/PlainTextArea";
 import { PlainSelectInput } from "@/components/Select/PlainSelectInput";
 
 type Props = {
-  onSubmit: (data: CreateRecruitInputType) => Promise<void>;
+  // onSubmit: (data: CreateRecruitInputType) => Promise<void>;
+  onSubmit: any;
+  recruit?: Recruit
 }
 
-export const CreateRecruitForm = ({ onSubmit }: Props) => {
+export const CreateRecruitForm = ({ onSubmit, recruit }: Props) => {
 
   const { register, handleSubmit, control, formState: { errors } } = useFormContext<CreateRecruitInputType>();
 
@@ -23,6 +25,7 @@ export const CreateRecruitForm = ({ onSubmit }: Props) => {
           placeholder="ハッカソン名"
           register={register('hackathonName')}
           error={errors.hackathonName?.message}
+          defaultValue={recruit?.hackathonName}
         />
         <PlainInput
           inputType="text"
@@ -30,12 +33,14 @@ export const CreateRecruitForm = ({ onSubmit }: Props) => {
           placeholder="見出し"
           register={register('headline')}
           error={errors.headline?.message}
+          defaultValue={recruit?.headline}
         />
         <PlainTextArea
           label="詳細"
           placeholder="募集内容について記入"
           register={register('details')}
           error={errors.details?.message}
+          defaultValue={recruit?.details}
         />
 
         <div className="flex space-x-4">
@@ -45,6 +50,7 @@ export const CreateRecruitForm = ({ onSubmit }: Props) => {
             placeholder="開始日"
             register={register('developmentStartDate')}
             error={errors.developmentStartDate?.message}
+            defaultValue={recruit?.developmentStartDate}
           />
 
           <PlainInput
@@ -53,6 +59,7 @@ export const CreateRecruitForm = ({ onSubmit }: Props) => {
             placeholder="最終日"
             register={register('developmentEndDate')}
             error={errors.developmentEndDate?.message}
+            defaultValue={recruit?.developmentEndDate}
           />
         </div>
 
@@ -61,6 +68,7 @@ export const CreateRecruitForm = ({ onSubmit }: Props) => {
           label="募集人数"
           optionsNum={10}
           error={errors.numberOfApplicants?.message}
+          defaultValue={recruit?.numberOfApplicants}
         />
 
 
@@ -70,6 +78,7 @@ export const CreateRecruitForm = ({ onSubmit }: Props) => {
           placeholder="url"
           register={register('hackathonUrl')}
           error={errors.hackathonUrl?.message}
+          defaultValue={recruit?.hackathonUrl}
         />
 
         <SkillSelect
@@ -79,9 +88,10 @@ export const CreateRecruitForm = ({ onSubmit }: Props) => {
           placeholder="スキルを選択してください(複数選択可)"
           errors={errors}
           rules={{ required: "必須項目です" }}
+          defaultValue={recruit?.programingSkills}
         />
  
-        <div className="m-auto w-196 pt-4">
+        <div className="mx-auto w-196 pt-16">
           <SubmitButton innerText="作成" />
         </div>
         

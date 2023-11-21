@@ -20,7 +20,7 @@ type Props = {
   rules?: ValidationRules;
   registerLabel: string;
   onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
-  defaultValue?: Option
+  defaultValue?: ProgrammingSkill[]
 };
 
 const customStyles = {

@@ -7,5 +7,5 @@ export type UserRecruitParticipant = {
   userRecruitId: string;
   isApproved: boolean;
   user: User;
-  recruit: Recruit;
+  recruit?: Recruit;
 };

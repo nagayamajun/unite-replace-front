@@ -10,6 +10,8 @@ module.exports = {
     extend: {
       colors: {
         "plain-green": "#19B97F",
+        "plain-gray": '#F8F8F8',
+        "plain-red": '#F15656',
         "background-color": "#faeee7",
         "highlight-color": "#ff8ba7",
         "secondary-color": "#ffc6c7",
@@ -24,12 +26,10 @@ module.exports = {
       margin: {
         "200": "200px",
       },
-      colors: {
-        'plain-green': '19B97F'
-      },
       width: {
         "100": "100px",
         "196": "196px",
+        "56": "56px",
         'base': '596px',
         'card-list': '832px',
         'card': '400px',

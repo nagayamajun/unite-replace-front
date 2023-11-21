@@ -7,6 +7,7 @@ import { useRecoilValue } from "recoil";
 import { Loading } from "../../organisms/Loading/Loading";
 import { SideBar } from "@/components/layouts/Sidebar/UserSidebar";
 import { Header } from "../Header/Header";
+import { NavigationBar } from "../Navigation/NavigationBar";
 
 type Props = {
   children: ReactNode;
@@ -26,10 +27,13 @@ export const UserLayout = ({ children }: Props) => {;
   }, [auth]);
 
   if (isLoading) return <Loading />;
-
+  if (!user) return <></>
   return (
     <>
-      <Header />
+      <Header 
+        user={user}
+      />
+      <NavigationBar />
       <main className="flex justify-center">{children}</main>
     </>
   );

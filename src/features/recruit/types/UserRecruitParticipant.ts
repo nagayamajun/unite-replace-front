@@ -1,5 +1,7 @@
-import { User } from "../../user/types/user";
-import { Recruit } from "./recruit";
+import { Recruit } from "@/domein/recruit";
+import { User } from "@/domein/user";
+
+
 
 export type UserRecruitParticipant = {
   id: string;

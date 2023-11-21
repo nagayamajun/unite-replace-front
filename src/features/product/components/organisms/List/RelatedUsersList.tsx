@@ -9,7 +9,7 @@ export const RelatedUsersList = ({ participantsInfo }: Props): JSX.Element => (
   <div className="w-full flex gap-4 flex-wrap">
     {participantsInfo.map((participant) => (
       <div key={participant.id}>
-        <UserCard user={participant.user} />
+        {/* <UserCard user={participant.user} /> */}
       </div>
     ))}
   </div>

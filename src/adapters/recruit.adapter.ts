@@ -8,6 +8,24 @@ export const useRecruit = (): RecruitService => {
     },
     create(data) {
       return recruitRequest.create(data);
-    }
+    },
+    getByRecruitId(id) {
+      return recruitRequest.getByRecruitId(id);
+    },
+    getByOwnLiked() {
+      return recruitRequest.getByOwnLiked();
+    },
+    getOwn() {
+      return recruitRequest.getOwn();
+    },
+    getRelatedOwn() {
+      return recruitRequest.getRelatedOwn();
+    },
+    delete(id: string) {
+      return recruitRequest.delete(id)
+    },
+    edit({id, input}) {
+      return recruitRequest.edit({id, input});
+    },
   }
 }
