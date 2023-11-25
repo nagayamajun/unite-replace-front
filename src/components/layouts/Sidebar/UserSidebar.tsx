@@ -5,7 +5,7 @@ import { CiViewList } from "react-icons/ci";
 import { IoIosCreate } from "react-icons/io";
 import { AiOutlineHeart, AiFillFund } from "react-icons/ai";
 import { MdOutlineManageAccounts } from "react-icons/md";
-import { ChatRoomListMenu } from "../../../features/chat/components/organisms/Menu/ChatRoomListMenu";
+import { ChatRoomListMenu } from "../../../ui/chat/shared-components/ChatRoomListMenu";
 import { PiChatCircleDotsThin } from "react-icons/pi";
 
 export const SideBar = (): JSX.Element => {

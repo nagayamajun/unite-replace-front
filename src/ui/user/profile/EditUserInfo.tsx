@@ -1,31 +1,30 @@
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
-import { UserRepository } from "@/features/user/modules/user/user.repository";
-import { useToast } from "@/hooks/useToast";
 import { UserStateType } from "@/stores/atoms";
-import { ToastResult } from "@/types/toast";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { SetterOrUpdater } from "recoil";
-import { EditProfileModal } from "../../../../features/user/components/organisms/Modal/EditProfileModal";
+import { EditProfileModal } from "../../../features/user/components/organisms/Modal/EditProfileModal";
 import { PlainInput } from "@/components/molecules/Input/PlainInput";
 import { FormField } from "@/components/molecules/FormField/FormField";
-import { GraduationYearRadio } from "../../../../features/user/components/molecules/Radio/GraduationYearRadio";
+import { GraduationYearRadio } from "../../../features/user/components/molecules/Radio/GraduationYearRadio";
 import Link from "next/link";
 import Image from "next/image";
 import Select from "react-select";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ProgrammingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
-import { User } from "@/features/user/types/user";
+import { useEditUserProfile } from "@/application/usecases/editUserProfile";
+import { User } from "@/domein/user";
+import { SkillSelect } from "@/components/Select/SkillSelect";
+import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 
 type Props = {
   profileUser: User
   setProfileUser: Dispatch<SetStateAction<User | undefined>>
-  error: Error | undefined
   setMyselfState: SetterOrUpdater<UserStateType>
   isMyself: boolean
 }
 
-export const EditUserInfo = ({profileUser, setProfileUser, error, setMyselfState, isMyself}: Props): JSX.Element => {
-  const { showToast, hideToast } = useToast();
+export const EditUserInfo = ({profileUser, setProfileUser, setMyselfState, isMyself}: Props): JSX.Element => {
+  const { editUserProfile } = useEditUserProfile();
   const {
     register,
     handleSubmit,
@@ -39,34 +38,17 @@ export const EditUserInfo = ({profileUser, setProfileUser, error, setMyselfState
   const [isSkillOpen, setIsSkillOpen] = useState(false);
 
   const onEditSubmit = async (submitData: any) => {
-    await UserRepository.updateUserInfo({
-      ...submitData,
-      imageFile: submitData.imageFile && submitData.imageFile[0],
-    }).then(({ message, style, data }: ToastResult) => {
-      showToast({ message, style });
+    const user = await editUserProfile(submitData);
+    if (user) {
+      setProfileUser(user);
+      setMyselfState(user);
+    }
+    setIsImageOpen(false);
+    setIsGraduationYearOpen(false);
+    setIsSkillOpen(false);
 
-      //userProfileの状態と認証されている自分のrecoil stateを更新
-      if (data) {
-        setProfileUser(data);
-        setMyselfState(data);
-      }
-      //モーダル系全部閉じる
-      setIsImageOpen(false);
-      setIsGraduationYearOpen(false);
-      setIsSkillOpen(false);
-
-      //hook-formのregisterされてる値をリセット
-      reset({});
-
-      setTimeout(
-        () => {
-          hideToast();
-        },
-        style === 'success' ? 2000 : 4000
-      );
-    });
+    reset({});
   };
-
 
   return (
     <form
@@ -207,13 +189,14 @@ export const EditUserInfo = ({profileUser, setProfileUser, error, setMyselfState
           ))}
         </div>
       </FormField>
+
       <EditProfileModal
         isOpen={isSkillOpen}
         setIsOpen={setIsSkillOpen}
         onClickOk={handleSubmit(onEditSubmit)}
       >
         <div className="flex flex-col gap-6">
-          <div>プログラミングスキル</div>
+          {/* <div>プログラミングスキル</div>
           <Controller
             name="programingSkills"
             control={control}
@@ -229,6 +212,15 @@ export const EditUserInfo = ({profileUser, setProfileUser, error, setMyselfState
                 placeholder="スキル名を選択してください (複数選択可)"
               />
             )}
+          /> */}
+          <SkillSelect
+            registerLabel="programingSkills"
+            labelText="スキル"
+            control={control}
+            placeholder="スキルを選択してください(複数選択可)"
+            errors={errors}
+            rules={{ required: "必須項目です" }}
+            defaultValue={profileUser?.programingSkills as ProgrammingSkill[]}
           />
         </div>
       </EditProfileModal>

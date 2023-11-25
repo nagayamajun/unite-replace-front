@@ -1,34 +1,32 @@
 import { FAIL_TO_SIGN_IN, SUCCESS_IN_SIGN_IN } from "@/constants/constants";
 import { AuthWithEmailAndPassword } from "@/features/auth/types/auth";
-import { User } from "@/features/user/types/user";
-import { UserRepository } from "@/features/user/modules/user/user.repository";
 import { useLoading } from "@/hooks/useLoading"
-import { setAuthToken } from "@/libs/axios";
-import { auth } from "@/libs/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNotice } from "@/adapters/notice.adapter";
+import { useFirebase } from "@/adapters/firebase.adapter";
+import { useUser } from "@/adapters/user.adapter";
+import { useAxios } from "@/adapters/axios.adapter";
+
 
 export const useUserSignIn = () => {
-  const loading = useLoading()
+  const loading = useLoading();
   const notice = useNotice();
+  const firebaseService = useFirebase();
+  const userService = useUser();
+  const axiosService = useAxios();
 
   const userSignIn = async(params: AuthWithEmailAndPassword) => {
     try {
       loading.showLoading();
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        params.email,
-        params.password
-      );
 
-      const token = await userCredential.user.getIdToken();
-      setAuthToken(token);
-      //リファクタ: この層からとってはいけないのでapi層をfeature-userにも導入したら変更
-      const user = await UserRepository.findUserByFirebaseUID();
+      const userCredential = await firebaseService.signInWithEmailAndPassword(params.email, params.password);
+      const token = await firebaseService.getIdToken(userCredential);
+      axiosService.setAuthToken(token);
+      const user = await userService.findByFirebaseUid();
+
       loading.hideLoading();
       notice.success(SUCCESS_IN_SIGN_IN)
 
-      return user as User
+      return user
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
       loading.hideLoading();

@@ -1,31 +1,21 @@
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
-import { Loading } from "@/components/organisms/Loading/Loading";
-import { useSpecificRoomMessages } from "@/features/chat/hooks/useSpecificRoomMessages";
-import { useUpdateChatHistories } from "@/features/chat/hooks/useUpdateChatHistories";
-import { ChatMessage } from "@/features/chat/types/chatMessage";
+import { ChatMessage } from "@/domein/chatMessage";
 import { isoToJstString } from "@/utils/date";
-import { useRef, useState } from "react";
-import { Socket } from "socket.io-client";
+import { RefObject } from "react";
+import { ChatParticipant } from "@/domein/chatParticipant";
 
 type Props = {
-  roomId: string
-  socket: Socket;
+  chatHistories: ChatMessage[]
+  endMessageRef: RefObject<HTMLDivElement>
+  sender: ChatParticipant | undefined
 }
 
-export const OneToOneChatRoom = ({ roomId, socket }: Props): JSX.Element => {
-
-  //チャットの履歴を管理するステート
-  const [ chatHistories, setComponentChatHistories] = useState<ChatMessage[]>([]);
-  const endMessageRef = useRef<HTMLDivElement>(null);
-
-  const { sender } = useSpecificRoomMessages(roomId, setComponentChatHistories);
-  useUpdateChatHistories(socket, chatHistories, setComponentChatHistories);
-
+export const OneToOneChatRoom = ({ chatHistories, endMessageRef, sender }: Props): JSX.Element => {
   //最新のメッセージの位置まで自動スクロール
   endMessageRef.current?.scrollIntoView({ behavior: "auto" });
 
   return (
-    <div className="md:w-[76%] pb-[160px] pt-12 md:pt-0 flex flex-col gap-[58px] overflow-y-auto">
+    <div className="md:w-[76%] pb-[160px] pt-12 md:pt-0 flex flex-col gap-[58px] overflow-y-auto ">
       {chatHistories.map((chat: ChatMessage) => (
         <div
           key={`${String(chat.createdAt)}`}

@@ -1,5 +1,5 @@
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
-import { ChatRoom } from "@/features/chat/types/chatRoom";
+import { ChatRoom } from "@/domein/chatRoom";
 import Link from "next/link";
 import { useState } from "react";
 

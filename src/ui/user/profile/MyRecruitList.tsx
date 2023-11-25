@@ -1,29 +1,23 @@
 import { RecruitCard } from "@/ui/recruit/shared-components/RecruitCard";
-import { useRecruitsByRecruiterId } from "@/features/recruit/hooks/useRecruitsByRecruiterId";
-import { Recruit } from "@/features/recruit/types/recruit";
-import { User } from "@/features/user/types/user";
-import { useRelatedRecruitsByUserId } from "@/hooks/useRelatedRecruitsByUserId";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { Fragment } from "react";
+import { User } from "@/domein/user";
+import { Recruit } from "@/domein/recruit";
 
 type Props = {
   isMyself: boolean;
-  profileUser: User
+  profileUser: User;
+  recruitsByRecruiterId: Recruit[]
+  relatedRecruits: Recruit[]
 }
 
-export const MyRecruitList = ({ isMyself, profileUser }: Props): JSX.Element => {
-  const router = useRouter();
-  const { id: userId } = router.query;
-  const { relatedRecruits } = useRelatedRecruitsByUserId(userId as string);
-  const { recruitsByRecruiterId } = useRecruitsByRecruiterId(userId as string);
-
+export const MyRecruitList = ({ isMyself, profileUser, recruitsByRecruiterId, relatedRecruits }: Props): JSX.Element => {
   return (
     <>
       {isMyself && (
         <>
           {/* userが作成している募集 */}
-          <div className="flex flex-col gap-6 w-full sm:w-4/5">
+          <div className="flex flex-col gap-2 w-full sm:w-4/5">
             <p>作成した募集</p>
             <div className="flex gap-4 overflow-scroll">
               {recruitsByRecruiterId && recruitsByRecruiterId.length > 0 ? (
@@ -36,7 +30,7 @@ export const MyRecruitList = ({ isMyself, profileUser }: Props): JSX.Element => 
                         createdAt={recruit.createdAt}
                         headline={recruit.headline}
                         programingSkills={recruit.programingSkills}
-                        hackthonName={recruit.hackthonName}
+                        hackthonName={recruit.hackathonName}
                       />
                     </Fragment>
                   )
@@ -70,7 +64,7 @@ export const MyRecruitList = ({ isMyself, profileUser }: Props): JSX.Element => 
                       createdAt={recruit.createdAt}
                       headline={recruit.headline}
                       programingSkills={recruit.programingSkills}
-                      hackthonName={recruit.hackthonName}
+                      hackthonName={recruit.hackathonName}
                     />
                   </Fragment>
                 ))

@@ -1,5 +1,5 @@
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
-import { ChatRoom } from "@/features/chat/types/chatRoom";
+import { ChatRoom } from "@/domein/chatRoom";
 import Link from "next/link";
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 export const RoomListPC = ({ roomId, roomList }: Props): JSX.Element => {
 
   return (
-    <div className="hidden min-h-screen h-full md:flex md:w-[24%] flex-col overflow-y-auto border border-r-gray-700 ">
+    <div className="hidden  h-full md:flex md:w-[24%] flex-col overflow-y-auto border border-r-gray-400 ">
       {roomList?.map((room: ChatRoom) => (
         <Link
           key={room.id}

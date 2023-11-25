@@ -1,26 +1,39 @@
-import { UserState, UserStateType } from "@/stores/atoms";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { UserState } from "@/stores/atoms";
+import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
-import { useCertainUser } from "@/hooks/useCertainUser";
+import { useCertainUser } from "@/application/usecases/getCertainUser";
 
-import { LogOutButton } from "../../../features/user/components/molecules/LogOutButton";
-import { EditUserInfo } from "./EditUserInfo/inedx";
-import { MyRecruitList } from "../../../features/user/components/organisms/List/MyRecruitList";
-import { ScoutButton } from "../../../features/user/components/molecules/ScoutButton";
+import { LogOutButton } from "./LogOutButton";
+import { EditUserInfo } from "./EditUserInfo";
+import { MyRecruitList } from "./MyRecruitList";
+import { ScoutButton } from "./ScoutButton";
+import { useGetMyAndRelatedRecruits } from "@/application/usecases/getMyAndRelatedRecruits";
+import { useUserLogOut } from "@/application/usecases/userLogOut";
 
 export const UserProfile = (): JSX.Element => {
   const router = useRouter();
   const { id: userId } = router.query;
 
   //操作userとプロフィール主userの情報取得
-  const operatorUser = useRecoilValue<UserStateType>(UserState);
+  const [operatorUser, setMyselfState] = useRecoilState(UserState);
   const isMyself = operatorUser?.id === userId;
-  const setMyselfState = useSetRecoilState<UserStateType>(UserState);
+
   const {
     certainUser: profileUser,
     setCertainUser: setProfileUser,
-    error,
   } = useCertainUser(userId as string | undefined);
+  const { relatedRecruits, myRecruits } = useGetMyAndRelatedRecruits();
+
+  const { userLogOut } = useUserLogOut();
+
+  const handleLogOut = async (): Promise<void> => {
+    const isSuccess = await userLogOut();
+    if (isSuccess) {
+      setMyselfState(null);
+      router.push('/signIn')
+    };
+  }
+
   if (!profileUser) return <></>;
 
   return (
@@ -28,7 +41,7 @@ export const UserProfile = (): JSX.Element => {
       <div className="flex flex-col items-center gap-24 w-4/5 sm:w-sm md:w-md lg:w-lg rounded-md">
         {/* ログアウトボタン */}
         <LogOutButton
-          setMyselfState={setMyselfState}
+          handleLogOut={handleLogOut}
           isMyself={isMyself}
         />
         
@@ -38,13 +51,14 @@ export const UserProfile = (): JSX.Element => {
           isMyself={isMyself}
           profileUser={profileUser}
           setProfileUser={setProfileUser}
-          error={error}
         />
         
         {/* 操作ユーザーがプロフィール主の場合のみ以下を表示 */}
         <MyRecruitList
           isMyself={isMyself}
           profileUser={profileUser}
+          recruitsByRecruiterId={myRecruits}
+          relatedRecruits={relatedRecruits}
         />
 
         {/* スカウトボタン */}
