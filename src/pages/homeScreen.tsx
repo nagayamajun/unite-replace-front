@@ -1,15 +1,14 @@
 import { UserLayout } from "@/components/layouts/Layout/UserLayout";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { ReactElement } from "react";
 import { SearchRecruit } from "@/ui/recruit/searchAndList/SearchRecruit";
 import { RecruitList } from "@/ui/recruit/shared-components/recruitList";
 import { SearchRecruits } from "@/application/usecases/searchRecruit";
 import { Recruit } from "@/domein/recruit";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const { search } = context.query;
   const { getSearchRecruits } = SearchRecruits();
-
   try {
     const { recruits } = await getSearchRecruits(search as string);
     return {

@@ -3,9 +3,8 @@ import { axiosInstance } from "@/libs/axios"
 import { CreateRecruitInputType } from "@/domein/recruit";
 
 export const recruitRequest = {
-  // 置き換えるまでは全件取得
-  async search(search?: string): Promise<Recruit[]> {
-    const response = await axiosInstance.get("/user-recruit");
+  async search(search?: string): Promise<Recruit[]> { 
+    const response = await axiosInstance.get(`/user-recruit`, { params: { search } });
     return response.data;
   },
 

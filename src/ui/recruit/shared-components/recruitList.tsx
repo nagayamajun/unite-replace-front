@@ -1,6 +1,5 @@
 import { UserState } from "@/stores/atoms";
 import { useRecoilValue } from "recoil";
-import Link from "next/link";
 import { RecruitCard } from "@/ui/recruit/shared-components/RecruitCard";
 import { Recruit } from "@/domein/recruit";
 
@@ -14,7 +13,6 @@ export const RecruitList = ({ recruits }: Props): JSX.Element => {
     <div className="pt-10 min-h-screen">
       <div className="w-full flex flex-col items-center md:w-[832px] md:grid gap-x-14 gap-y-8 md:grid-cols-2">
         {recruits.map((recruit: Recruit) => {
-          // TODO: BEで自分の作成した募集は弾くようにする
           if (user?.id !== recruit?.recruiter?.id) {
             return (
               <RecruitCard
