@@ -6,6 +6,8 @@ import { ReactNode, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { Loading } from "../../organisms/Loading/Loading";
 import { SideBar } from "@/components/layouts/Sidebar/UserSidebar";
+import { Header } from "../Header/Header";
+import { NavigationBar } from "../Navigation/NavigationBar";
 
 type Props = {
   children: ReactNode;
@@ -25,18 +27,14 @@ export const UserLayout = ({ children }: Props) => {;
   }, [auth]);
 
   if (isLoading) return <Loading />;
-
+  if (!user) return <></>
   return (
     <>
-      <div className="sm:hidden">
-        <MobileHeader />
-        <main>{children}</main>
-      </div>
-
-      <div className="hidden sm:flex sm:flex-row">
-        <SideBar />
-        <div className="flex flex-grow w-auto bg-gray-50 ">{children}</div>
-      </div>
+      <Header 
+        user={user}
+      />
+      <NavigationBar />
+      <main className="flex justify-center">{children}</main>
     </>
   );
 };

@@ -1,7 +1,8 @@
 import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
 import { Socket } from "socket.io-client";
-import { ChatMessage } from "../types/chatMessage";
+
 import { useLoading } from "@/hooks/useLoading";
+import { ChatMessage } from "@/domein/chatMessage";
 
 
 export const useUpdateChatHistories = (
@@ -16,7 +17,7 @@ export const useUpdateChatHistories = (
       const newHistories = [...prevChatHistories];
       newHistories.push(chatData);
       setComponentChatHistories(newHistories)
-      hideLoading();
     });
+    hideLoading();
   }, [prevChatHistories]);
 }

@@ -6,7 +6,7 @@ import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
 import { PlainSelectInput } from "@/components/molecules/Input/PlainSelectInput";
 import Link from "next/link";
 import { useRecruit } from "../../hooks/useRecruit";
-import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
+import { SkillSelect } from "@/components/Select/SkillSelect";
 import { useToast } from "@/hooks/useToast";
 import { ToastResult } from "@/types/toast";
 

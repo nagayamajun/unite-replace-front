@@ -1,11 +1,25 @@
+import { useToast } from "@/hooks/useToast";
 import { ToastState } from "@/stores/toast";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import { useRecoilValue } from "recoil";
+import { Fragment, useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 
 export const ToastModal: React.FC = (): JSX.Element => {
   const { isShown, message, style} = useRecoilValue(ToastState);
+  const { hideToast } = useToast();
+
+  // TODO: この処理を待たずに次の処理が走ってしまう若干UIが悪い
+  // Toastを閉じる処理
+  useEffect(() => {
+    setTimeout(
+      () => {
+        hideToast();
+      },
+      style === 'success' ? 1000 : 3000
+    );
+  }, [isShown ]);
+
   return (
     <>
       <Transition appear show={isShown} as={Fragment}>

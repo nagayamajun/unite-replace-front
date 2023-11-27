@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ChatRepository } from "../modules/chat/chat.repository";
 import { ChatRoomParticipantRepository } from "../modules/chatRoomParticipant/chatRoomParticipant.repository";
-import { ChatMessage } from "../types/chatMessage";
-import { ChatParticipant } from "../types/chatParticipant";
+import { ChatMessage } from "../../../domein/chatMessage";
 import { useLoading } from "@/hooks/useLoading";
+import { ChatParticipant } from "@/domein/chatParticipant";
 
 
 export const useSpecificRoomMessages = (

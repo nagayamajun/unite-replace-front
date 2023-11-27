@@ -3,7 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { Fragment } from "react";
 import { useRecoilValue } from "recoil";
-import { ChatRoomListMenu } from "../../../features/chat/components/organisms/Menu/ChatRoomListMenu";
+import { ChatRoomListMenu } from "../../../ui/chat/shared-components/ChatRoomListMenu";
 import { PiChatCircleDotsThin } from "react-icons/pi";
 import { PersonIcon } from "../../molecules/Icon/PersonIcon";
 
