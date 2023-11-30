@@ -32,7 +32,7 @@ export const OtherThanTechPage = (): JSX.Element => {
     if (userState) {
       hideLoading();
     }
-  }, [userState?.firebaseUID]);
+  }, [userState]);
 
 
   const onSubmit = async (submitData: any) => {

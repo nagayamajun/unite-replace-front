@@ -1,6 +1,6 @@
 import { UserState } from "@/stores/atoms";
 import { useRecoilValue } from "recoil";
-import { RecruitCard } from "../Card/RecruitCard";
+import { RecruitCard } from "../../../../../ui/recruit/shared-components/RecruitCard";
 import { recruitAtomState } from "@/features/recruit/stores/recruitAtom";
 import Link from "next/link";
 import { User } from "@/features/user/types/user";

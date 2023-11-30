@@ -1,8 +1,8 @@
 import { RadioGroup } from "@headlessui/react";
-import { Control, Controller, FieldValues } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 
 type GraduationYearRadioProps = {
-  control: Control<FieldValues, any>;
+  control: Control<any, any>;
   defaultValue?: string;
   defaultChipColor?: string;
 };

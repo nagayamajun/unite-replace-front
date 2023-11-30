@@ -18,6 +18,5 @@ export const UserAuthFactory = (req?: any) => {
       const response = repository.signInWithGithub(githubAccount);
       return response
     }
-    
   }
 }

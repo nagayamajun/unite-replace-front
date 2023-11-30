@@ -5,7 +5,7 @@ import { productRepository, submitProductDate } from "@/features/product/modules
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
-import { SkillSelect } from "@/components/molecules/Select/SkillSelect";
+import { SkillSelect } from "@/components/Select/SkillSelect";
 import { useToast } from "@/hooks/useToast";
 import { ToastResult } from "@/types/toast";
 

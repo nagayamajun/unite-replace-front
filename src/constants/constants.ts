@@ -7,6 +7,7 @@ export const PASSWORD_MUST_BE_AT_LEAST_8_CHARACTERS = 'パスワードは8文字
 export const PASSWORD_MUST_CONTAIN_ALPHANUMERIC_CHARACTERS = 'パスワードは半角英数字混合で入力してください';
 export const SUCCESS_IN_SIGN_IN = "ログインに成功しました。";
 export const FAIL_TO_SIGN_IN = "ログインに失敗しました。";
+export const INVALID_DATE_MESSAGE = '有効な日付をご入力ください'
 
 export const SUCCESS_IN_SIGN_UP = "新規登録に成功しました。";
 export const FAIL_TO_SIGN_UP = "新規登録に失敗しました。";
