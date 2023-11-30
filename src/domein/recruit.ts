@@ -1,11 +1,13 @@
 import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { User } from "./user";
 import { UserRecruitParticipant } from "./recruitParticipant";
+import { UserToRecruitLike } from "./userToRecruitLike";
+
 import * as z from 'zod'
 
 // TODO: Productの設計を変更したらこちらも変える
 import { Product } from "@/features/product/types/product";
-import { UserToRecruitLike } from "@/features/recruit/types/userToRecruitLike";
+
 import { INVALID_DATE_MESSAGE, REQUIRE_FIELD } from "@/constants/constants";
 
 type DateTimeString = string;

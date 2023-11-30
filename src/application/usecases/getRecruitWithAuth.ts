@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 
 export const useGetRecruitWithAuth = (recruitId: string) => {
   const [ recruit, setRecruit ] = useState<Recruit>();
-  const notice = useNotice();
+  const noticeService = useNotice();
   const recruitService = useRecruit();
   
   useEffect(() => {
@@ -15,7 +15,7 @@ export const useGetRecruitWithAuth = (recruitId: string) => {
         setRecruit(response)
       } catch (error: unknown) {
         const isTypeSafeError = error instanceof Error;
-        notice.error(`取得に失敗しました\n${isTypeSafeError && error.message}`)
+        noticeService.error(`取得に失敗しました\n${isTypeSafeError && error.message}`)
       }
     })()
   }, [recruitId]);

@@ -1,9 +1,7 @@
-import { UserState } from "@/stores/atoms";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
-import { useRecoilState } from "recoil";
 import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { SubmitButton } from "@/components/molecules/Button/SubmitButton";
 import { useUpdateUserInfo } from "@/application/usecases/updateUserInfo";
@@ -17,7 +15,6 @@ export const SkillPage = (): JSX.Element => {
 
   const router = useRouter();
   const { handleSubmit, control } = useForm();
-  const [userState, _] = useRecoilState(UserState);
   const [selectedSkills, setSelectedSkills] = useState<Option[]>([]);
 
   const { updateUserInfo } = useUpdateUserInfo();
@@ -29,7 +26,7 @@ export const SkillPage = (): JSX.Element => {
   }));
 
   const onSubmit = async (submitData: any) => { 
-    const isSuccess = await updateUserInfo({ ...userState, ...submitData });
+    const isSuccess = await updateUserInfo(submitData);
     if (isSuccess) router.push("/profiles/user/githubInfo");
   };
 

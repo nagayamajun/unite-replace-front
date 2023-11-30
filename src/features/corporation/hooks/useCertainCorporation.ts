@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Corporation } from "../types/corporation";
 import { CorporationRepository } from "../modules/corporation/corporation.repository";
-import { useLoading } from "@/hooks/useLoading";
+import { useGlobalLoading } from "@/adapters/globalState.adapter";
 
 export const useCertainCorporation = (corporationId?: string) => {
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading } = useGlobalLoading();
   const [certainCorporation, setCertainCorporation] = useState<Corporation>();
   const [error, setError] = useState<Error>();
 

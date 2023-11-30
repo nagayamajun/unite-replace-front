@@ -8,7 +8,7 @@ import { UserLayout } from "@/components/layouts/Layout/UserLayout";
 import { Recruit } from "@/domein/recruit";
 import { ApplyForParticipationButton } from "@/ui/recruit/detail/ApplyForParticipationButton";
 import { JumpToMessageButton } from "@/ui/recruit/detail/JumpToMessageButton";
-import { RecruitLikeButton } from "@/features/recruit/components/molecules/Button/RecruitLikeButton";
+import { RecruitLikeButton } from "@/ui/recruit/detail/RecruitLikeButton";
 import { RecruitInfo } from "@/ui/recruit/detail/RecruitInfo";
 import { UserInfo } from "@/ui/recruit/detail/UserInfo";
 import { GetServerSideProps } from "next";

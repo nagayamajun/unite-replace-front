@@ -6,7 +6,7 @@ import { RecruitApplication } from "@/domein/recruitApplication";
 export const useSearchMyRecruitApplicationByRecruitId = (
   recruitId?: string
 ) => {
-  const notice = useNotice();
+  const noticeService = useNotice();
   const recruitApplicantService = useRecruitApplication();
   const [application, setApplication] = useState<RecruitApplication>();
 
@@ -18,7 +18,7 @@ export const useSearchMyRecruitApplicationByRecruitId = (
         setApplication(response);
       } catch (error) {
         const isTypeSafeError = error instanceof Error;
-        notice.error(`取得に失敗しました。\n${isTypeSafeError && error.message}`)
+        noticeService.error(`取得に失敗しました。\n${isTypeSafeError && error.message}`)
       }
     })();
   }, [recruitId]);

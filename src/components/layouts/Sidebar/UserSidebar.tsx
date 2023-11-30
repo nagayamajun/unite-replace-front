@@ -1,4 +1,3 @@
-import { UserState } from "@/stores/atoms";
 import Link from "next/link";
 import { useRecoilValue } from "recoil";
 import { CiViewList } from "react-icons/ci";
@@ -7,10 +6,11 @@ import { AiOutlineHeart, AiFillFund } from "react-icons/ai";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { ChatRoomListMenu } from "../../../ui/chat/shared-components/ChatRoomListMenu";
 import { PiChatCircleDotsThin } from "react-icons/pi";
+import { useGlobalUser } from "@/adapters/globalState.adapter";
 
 export const SideBar = (): JSX.Element => {
-  const userStateVal = useRecoilValue(UserState);
-
+  const { user: userStateVal } = useGlobalUser();
+  
   const menuLinks = [
     { href: `/homeScreen`, label: "募集一覧", icon: <CiViewList /> },
     { href: `/recruit/addRecruit`, label: "募集を作成", icon: <IoIosCreate /> },

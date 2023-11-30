@@ -1,14 +1,14 @@
 import { FAIL_TO_SIGN_IN, MAIL_USED_IN_PROVIDER_EXISTS, SUCCESS_IN_SIGN_IN } from "@/constants/constants";
-import { useLoading } from "@/hooks/useLoading";
 import { useToast } from "@/hooks/useToast";
 import { setAuthToken } from "@/libs/axios";
 import { auth } from "@/libs/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { UserAuthFactory } from "../models/user_auth_model";
+import { useGlobalLoading } from "@/adapters/globalState.adapter";
 
 
 export const useGoogleAuth = () => {
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading } = useGlobalLoading();
   const { showToast, hideToast } = useToast();
 
   const signInWithGoogle = async() => {

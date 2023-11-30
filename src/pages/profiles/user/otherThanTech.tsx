@@ -1,7 +1,5 @@
-import { UserState, UserStateType } from "@/stores/atoms";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
 import { PlainInput } from "@/components/Input/PlainInput";
 import { UserInput, UserInputType } from "@/domein/user";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,18 +7,19 @@ import { PlainTextArea } from "@/components/Input/PlainTextArea";
 import { GraduationYearRadio } from "@/features/user/components/molecules/Radio/GraduationYearRadio";
 import { SubmitButton } from "@/components/molecules/Button/SubmitButton";
 import { useUpdateUserInfo } from "@/application/usecases/updateUserInfo";
+import { useGlobalUser } from "@/adapters/globalState.adapter";
 
 export const OtherThanTechPage = (): JSX.Element => {
   const router = useRouter();
   const { updateUserInfo } = useUpdateUserInfo();
   
-  const [userState, _] = useRecoilState<UserStateType>(UserState);
+  const { user: userState } = useGlobalUser();
   const { register, handleSubmit, control, formState: { errors } } = useForm<UserInputType>({
     resolver: zodResolver(UserInput)
   });
 
   const onSubmit = async (submitData: any): Promise<void> => {
-    const isSuccess = await updateUserInfo({ ...userState, ...submitData });
+    const isSuccess = await updateUserInfo(submitData);
     if (isSuccess) router.push("/profiles/user/skill");
   };
 

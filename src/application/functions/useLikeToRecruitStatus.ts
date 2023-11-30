@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { UserToRecruitLike } from "../../features/recruit/types/userToRecruitLike";
-import { useRecoilValue } from "recoil";
-import { UserState } from "@/stores/atoms";
+import { useGlobalUser } from "@/adapters/globalState.adapter";
 
 export type Props = {
   likes?: UserToRecruitLike[]
 }
 export const useLikeToRecruitStatus = ({ likes }: Props) => {
-  const user = useRecoilValue(UserState);
+  const { user } = useGlobalUser();
   const [ isLiked, setIsLiked ] = useState<boolean>();
 
   //いいねをしているかしていないかの判定

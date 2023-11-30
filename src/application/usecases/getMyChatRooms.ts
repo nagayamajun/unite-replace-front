@@ -4,7 +4,7 @@ import { ChatRoom } from "@/domein/chatRoom";
 import { useEffect, useState } from "react";
 
 export const useMyChatRooms = () => {
-  const notice = useNotice();
+  const noticeService = useNotice();
   const [roomList, setRoomList] = useState<ChatRoom[]>([]);
   const chatRoomService = useChatRoom();
 
@@ -15,7 +15,7 @@ export const useMyChatRooms = () => {
         setRoomList(response);
       } catch (error: unknown) {
         const isTypeSafeError = error instanceof Error;
-        notice.error(`取得に失敗しました。${isTypeSafeError && error.message}`)
+        noticeService.error(`取得に失敗しました。${isTypeSafeError && error.message}`)
       }
     })();
   }, []);

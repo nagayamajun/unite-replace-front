@@ -16,12 +16,12 @@ const SignIn = (): JSX.Element => {
   const onSubmit = async({ email, password }: AuthWithEmailAndPassword) => {
     const user = await userSignIn({email, password});
     const routePath = !user?.name ? "/profiles/user/otherThanTech" : "/homeScreen";
-    router.push(routePath);
+    if (user) router.push(routePath);
   };
 
   return (
     <div className="flex flex-col justify-center items-center h-screen">
-      <div className="flex flex-col items-center w-4/5 sm:w-base space-y-2">
+      <div className="flex flex-col items-center w-4/5 sm:w-base space-y-6">
         <AuthLogo />
 
         <EmailAndPasswordForm onSubmit={onSubmit} buttonText="ログイン" />
