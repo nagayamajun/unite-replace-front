@@ -1,3 +1,4 @@
+import { useGlobalUser } from "@/adapters/globalState.adapter";
 import { useNotice } from "@/adapters/notice.adapter";
 import { useUser } from "@/adapters/user.adapter";
 import { FAIL_TO_UPDATE_USER, SUCCESS_IN_UPDATE_USER } from "@/constants/constants";
@@ -7,11 +8,12 @@ export const useUpdateUserInfo = () => {
   const notice = useNotice();
   const loading = useLoading();
   const userService = useUser();
+  const { user } = useGlobalUser();
 
   const updateUserInfo = async (submitData: any) => {
     try {
       loading.showLoading();
-      await userService.update(submitData);
+      await userService.update({...user, ...submitData});
       notice.success(SUCCESS_IN_UPDATE_USER);
       loading.hideLoading();
 

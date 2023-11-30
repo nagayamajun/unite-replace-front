@@ -1,21 +1,19 @@
-import { UserState } from "@/stores/atoms";
-import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import { useCertainUser } from "@/application/usecases/getCertainUser";
-
 import { LogOutButton } from "./LogOutButton";
 import { EditUserInfo } from "./EditUserInfo";
 import { MyRecruitList } from "./MyRecruitList";
 import { ScoutButton } from "./ScoutButton";
 import { useGetMyAndRelatedRecruits } from "@/application/usecases/getMyAndRelatedRecruits";
 import { useUserLogOut } from "@/application/usecases/userLogOut";
+import { useGlobalUser } from "@/adapters/globalState.adapter";
 
 export const UserProfile = (): JSX.Element => {
   const router = useRouter();
   const { id: userId } = router.query;
 
   //操作userとプロフィール主userの情報取得
-  const [operatorUser, setMyselfState] = useRecoilState(UserState);
+  const { user: operatorUser , setUser: setMyselfState } = useGlobalUser();
   const isMyself = operatorUser?.id === userId;
 
   const {

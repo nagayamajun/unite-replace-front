@@ -1,25 +1,22 @@
 import { PersonIcon } from "@/components/molecules/Icon/PersonIcon";
-import { UserStateType } from "@/stores/atoms";
 import { useForm } from "react-hook-form";
-import { SetterOrUpdater } from "recoil";
 import { EditProfileModal } from "../../../features/user/components/organisms/Modal/EditProfileModal";
 import { PlainInput } from "@/components/molecules/Input/PlainInput";
 import { FormField } from "@/components/molecules/FormField/FormField";
 import { GraduationYearRadio } from "../../../features/user/components/molecules/Radio/GraduationYearRadio";
 import Link from "next/link";
 import Image from "next/image";
-import Select from "react-select";
 import { Dispatch, SetStateAction, useState } from "react";
-import { ProgrammingSkillOptions } from "@/modules/programingSkill/programingSkill.repository";
 import { useEditUserProfile } from "@/application/usecases/editUserProfile";
 import { User } from "@/domein/user";
 import { SkillSelect } from "@/components/Select/SkillSelect";
 import { ProgrammingSkill } from "@/features/user/types/programingSkill";
+import { UserStateType } from "@/infrastructures/frameworks/store";
 
 type Props = {
   profileUser: User
   setProfileUser: Dispatch<SetStateAction<User | undefined>>
-  setMyselfState: SetterOrUpdater<UserStateType>
+  setMyselfState: (user: UserStateType) => void
   isMyself: boolean
 }
 
@@ -196,23 +193,6 @@ export const EditUserInfo = ({profileUser, setProfileUser, setMyselfState, isMys
         onClickOk={handleSubmit(onEditSubmit)}
       >
         <div className="flex flex-col gap-6">
-          {/* <div>プログラミングスキル</div>
-          <Controller
-            name="programingSkills"
-            control={control}
-            render={({ field }) => (
-              <Select
-                isMulti
-                options={ProgrammingSkillOptions}
-                onChange={(selectedSkills) => {
-                  field.onChange(
-                    selectedSkills.map((skill) => skill.value)
-                  );
-                }}
-                placeholder="スキル名を選択してください (複数選択可)"
-              />
-            )}
-          /> */}
           <SkillSelect
             registerLabel="programingSkills"
             labelText="スキル"

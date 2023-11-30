@@ -83,7 +83,6 @@ const OwnRecruitDetailPage = () => {
           onClick={handleDeleteRecruit}
         />
       </div>
-      {/* <OwnRecruitDetail /> */}
     </div>
   )
 }

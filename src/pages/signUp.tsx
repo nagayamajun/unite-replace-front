@@ -18,7 +18,7 @@ const SignUp = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen">
-      <div className="flex flex-col items-center w-4/5 sm:w-base">
+      <div className="flex flex-col items-center w-4/5 sm:w-base space-y-6">
         <AuthLogo />
 
         <EmailAndPasswordForm onSubmit={onSubmit} buttonText="新規登録" />

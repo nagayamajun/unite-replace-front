@@ -25,7 +25,6 @@ export const useSpecificChatHistory = (roomId: string) => {
   useEffect(() => {
     (async () => {
       if (typeof roomId !== "string") return;
-      console.log("ループ")
       try {
         loading.showLoading()
         const messages = await chatMessageService.getSpecificRoomChatHistory(roomId);

@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { UserState } from "@/stores/atoms";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/libs/firebase";
 import { useRouter } from "next/router";
-import { UserStateType } from "@/stores/atoms";
 import { UserRepository } from "@/features/user/modules/user/user.repository";
 import { setAuthToken } from "@/libs/axios";
+import { UserStateType } from "@/infrastructures/frameworks/store";
+import { useGlobalUser } from "@/adapters/globalState.adapter";
 
 export const useAuth = (): UserStateType => {
   const router = useRouter();
-  const [user, setUser] = useRecoilState<UserStateType>(UserState);
+  const { user, setUser } = useGlobalUser();
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (authUser) => {
@@ -36,6 +36,3 @@ export const useAuth = (): UserStateType => {
 
   return user;
 };
-
-//リファクタ
-//contextの形で認証が必要なページを囲う

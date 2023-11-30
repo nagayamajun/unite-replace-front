@@ -1,13 +1,12 @@
-import { MobileHeader } from "@/components/layouts/Header/MobileHeader";
-import { UserState } from "@/stores/atoms";
+
 import { useAuth } from "@/hooks/useAuth";
 import { axiosInstance } from "@/libs/axios";
 import { ReactNode, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { Loading } from "../../organisms/Loading/Loading";
-import { SideBar } from "@/components/layouts/Sidebar/UserSidebar";
 import { Header } from "../Header/Header";
 import { NavigationBar } from "../Navigation/NavigationBar";
+import { useGlobalUser } from "@/adapters/globalState.adapter";
 
 type Props = {
   children: ReactNode;
@@ -16,7 +15,7 @@ type Props = {
 export const UserLayout = ({ children }: Props) => {;
   // BUGFIX: ここでrecoilのLoadingを使うとハイドレーションエラーになる。
   // 理由？ ここでは初期がtrueなのでLoading -> 表示になっているがrecoilを使った場合false -> true -> falseの流れになってしまう為。
-  const user = useRecoilValue(UserState);
+  const { user } = useGlobalUser();
   const [isLoading, setIsLoading] = useState(true);
   const auth = useAuth();
 

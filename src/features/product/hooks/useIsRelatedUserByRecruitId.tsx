@@ -1,4 +1,4 @@
-import { userRecruitParticipantRepository } from "@/features/recruit/modules/user-recruit-participant/userRecruitParticipant.repository";
+import { userRecruitParticipantRepository } from "@/features/product/modules/user-recruit-participant/userRecruitParticipant.repository";
 import { useLoading } from "@/hooks/useLoading";
 import { useEffect, useState } from "react";
 

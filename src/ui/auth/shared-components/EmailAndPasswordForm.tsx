@@ -33,7 +33,7 @@ export const EmailAndPasswordForm: React.FC<Props> = ({ onSubmit, buttonText }):
           error={errors.password?.message as string}
         />
 
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center h-14 mt-4">
           <SubmitButton
             innerText={buttonText}
           />

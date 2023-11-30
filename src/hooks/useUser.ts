@@ -1,4 +1,3 @@
-import { UserRepository } from "@/features/user/modules/user/user.repository";
 import { useEffect, useState } from "react"
 import { User } from "../features/user/types/user"
 
