@@ -6,7 +6,6 @@ export type Props = {
   likes?: UserToRecruitLike[]
 }
 export const useLikeToRecruitStatus = ({ likes }: Props) => {
-  // const user = useRecoilValue(UserState);
   const { user } = useGlobalUser();
   const [ isLiked, setIsLiked ] = useState<boolean>();
 

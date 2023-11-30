@@ -4,7 +4,6 @@ import { UserRecruitParticipant } from "@/domein/recruitParticipant";
 import { useEffect, useState } from "react";
 
 export const useCheckParticipantStatus = (recruit: Recruit) => {
-  // const user = useRecoilValue(UserState);
   const { user } = useGlobalUser();
   const [isParticipant, setIsParticipant] = useState<boolean>();
 
