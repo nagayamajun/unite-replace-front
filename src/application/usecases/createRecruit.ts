@@ -1,27 +1,27 @@
+import { useGlobalLoading } from "@/adapters/globalState.adapter";
 import { useNotice } from "@/adapters/notice.adapter";
 import { useRecruit } from "@/adapters/recruit.adapter";
 import { CreateRecruitInputType } from "@/domein/recruit";
-import { useLoading } from "@/hooks/useLoading";
 
 export const useCreateRecruit = () => {
   const recruit = useRecruit();
-  const loading = useLoading();
-  const notice = useNotice();
+  const loadingService = useGlobalLoading();
+  const noticeService = useNotice();
 
   const createRecruit = async (data: CreateRecruitInputType) => {
 
     try {
       const { numberOfApplicants, ...rest } = data;
       
-      loading.showLoading();
+      loadingService.showLoading();
       const response = await recruit.create(data);
-      loading.hideLoading();
-      notice.success();
+      loadingService.hideLoading();
+      noticeService.success();
 
       return response?.id
     } catch (error: unknown) {
-      loading.hideLoading();
-      notice.error();
+      loadingService.hideLoading();
+      noticeService.error();
 
       return null
     }

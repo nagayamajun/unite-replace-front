@@ -1,16 +1,16 @@
 import { FAIL_TO_SIGN_IN, MAIL_USED_IN_PROVIDER_EXISTS, SUCCESS_IN_SIGN_IN } from "@/constants/constants";
-import { useLoading } from "@/hooks/useLoading";
 import { useToast } from "@/hooks/useToast";
 import { setAuthToken } from "@/libs/axios";
 import { auth } from "@/libs/firebase";
 import { GithubAuthProvider, signInWithPopup } from "firebase/auth";
 import { UserAuthFactory } from "../models/user_auth_model";
 import { GithubUtils } from "@/libs/github";
+import { useGlobalLoading } from "@/adapters/globalState.adapter";
 
 
 export const useGithubAuth = () => {
-  const { showLoading, hideLoading } = useLoading();
-  const { showToast, hideToast } = useToast();
+  const { showLoading, hideLoading } = useGlobalLoading();
+  const { showToast } = useToast();
 
   const signInWithGithub = async() => {
     const provider = new GithubAuthProvider();

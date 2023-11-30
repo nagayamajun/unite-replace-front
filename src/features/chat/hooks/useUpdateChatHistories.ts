@@ -1,8 +1,8 @@
-import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { Socket } from "socket.io-client";
 
-import { useLoading } from "@/hooks/useLoading";
 import { ChatMessage } from "@/domein/chatMessage";
+import { useGlobalLoading } from "@/adapters/globalState.adapter";
 
 
 export const useUpdateChatHistories = (
@@ -10,7 +10,7 @@ export const useUpdateChatHistories = (
   prevChatHistories: ChatMessage[],
   setComponentChatHistories: Dispatch<SetStateAction<ChatMessage[]>>,
 ) => {
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading } = useGlobalLoading();
   useEffect(() => {
     showLoading();
     socket.on("toClient", (chatData) => {

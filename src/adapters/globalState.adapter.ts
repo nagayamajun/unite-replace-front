@@ -12,8 +12,9 @@ export const useGlobalUser = (): GlobalUserService => {
 }
 
 export const useGlobalLoading = (): GlobalLoadingService => {
-  const { showLoading, hideLoading } = useRecoilLoading();
+  const { showLoading, hideLoading, loading } = useRecoilLoading();
   return {
+    loading: loading,
     showLoading() {
         return showLoading();
     },

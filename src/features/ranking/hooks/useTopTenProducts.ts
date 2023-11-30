@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { PeriodLikeSum } from "../types/PeriodlLikeSum";
 import { PeriodLikeSumRepository } from "../modules/period-like-sum/period-like-sum.repository";
-import { useLoading } from "@/hooks/useLoading";
+import { useGlobalLoading } from "@/adapters/globalState.adapter";
 
 
 export const useTopTenPeriodLikeSums = () => {
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading } = useGlobalLoading();
   const [topTenPeriodLikeSums, setTopTenPeriodLikeSums] = useState<PeriodLikeSum[]>([])
 
   useEffect(() => {

@@ -1,9 +1,9 @@
+import { useGlobalLoading } from "@/adapters/globalState.adapter";
 import { userRecruitParticipantRepository } from "@/features/product/modules/user-recruit-participant/userRecruitParticipant.repository";
-import { useLoading } from "@/hooks/useLoading";
 import { useEffect, useState } from "react";
 
 export const useIsRelatedUserByRecruitId = (recruitId?: string) => {
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading } = useGlobalLoading();
   const [isRelatedUser, setIsRelatedUser] = useState<boolean>(false);
 
   useEffect(() => {

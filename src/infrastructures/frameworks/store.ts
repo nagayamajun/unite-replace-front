@@ -37,5 +37,5 @@ export const useRecoilLoading = () => {
   const hideLoading = (): void => {
     setState({ ...state, ...{ isLoading: false } });
   };
-  return { showLoading, hideLoading };
+  return { showLoading, hideLoading, loading: state };
 };
