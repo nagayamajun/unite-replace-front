@@ -80,7 +80,7 @@ const OwnRecruitDetailPage = () => {
           innerText="募集を削除"
           type="button"
           buttonColor="red"
-          onClick={handleDeleteRecruit}
+          onClick={() => handleDeleteRecruit(recruit.id)}
         />
       </div>
     </div>

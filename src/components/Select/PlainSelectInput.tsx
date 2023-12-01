@@ -29,7 +29,7 @@ export const PlainSelectInput = ({
 
   const generateOptions = (count: number) => {
     const options = [];
-    for (let i = 1; i <= count; i++) {
+    for (let i = 0; i <= count; i++) {
       options.push(
         <option key={i} value={i}>
           {i}
