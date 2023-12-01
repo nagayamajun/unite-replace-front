@@ -36,7 +36,7 @@ export const PlainInput = ({
     </label>
     <input 
       id={label}
-      className="border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full h-[56px] outline-green-500 "
+      className="border border-gray-300 rounded-md shadow-sm p-2 sm:p-3 w-full h-[56px] focus:border-plain-green focus:outline-none"
       {...register}
       type={inputType} 
       placeholder={placeholder}

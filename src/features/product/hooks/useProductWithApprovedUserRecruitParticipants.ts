@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import {
-  Product,
   ProductWithApprovedUserRecruitParticipants,
 } from "../types/product";
 import { productRepository } from "../modules/product/product.repository";
-import { useLoading } from "@/hooks/useLoading";
+import { useGlobalLoading } from "@/adapters/globalState.adapter";
 
 export const useProductWithApprovedUserRecruitParticipants = (
   productId: string
 ) => {
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading } = useGlobalLoading();
   const [product, setProduct] =
     useState<ProductWithApprovedUserRecruitParticipants>();
 

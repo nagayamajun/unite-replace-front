@@ -1,6 +1,5 @@
 import { AiOutlineUnorderedList, AiOutlineWechat, AiFillLike } from 'react-icons/ai';
 import { LinkWithIcon } from '@/components/Link/LinkWithIcon';
-import { PiUserListBold } from 'react-icons/pi'
 import { ChatRoomListMenu } from '@/ui/chat/shared-components/ChatRoomListMenu';
 
 export const NavigationBar = () => {

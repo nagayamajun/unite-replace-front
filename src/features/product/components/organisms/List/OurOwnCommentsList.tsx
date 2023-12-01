@@ -1,6 +1,5 @@
 import { Comment } from "@/features/product/types/comment";
 import { PathToProductPage } from "@/features/product/types/product";
-import { UserState } from "@/stores/atoms";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { AddCommentModal } from "../Modal/AddCommentModal";
@@ -8,6 +7,7 @@ import { ProductFormField } from "../../molecules/Fierld/ProductFormField";
 import { EditCommentModal } from "../Modal/EditCommentModal";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
 import { useForm } from "react-hook-form";
+import { useGlobalUser } from "@/adapters/globalState.adapter";
 
 
 type Props = {
@@ -22,7 +22,7 @@ export const OurOwnCommentsList = ({ path, comments, productId }: Props): JSX.El
     handleSubmit,
   } = useForm();
   
-  const user = useRecoilValue(UserState);
+  const { user } = useGlobalUser();
   const hasMyOwnComment = comments.some(comment => comment.userId === user?.id)
 
   const [isCommentOpen, setIsCommentOpen] = useState(false);

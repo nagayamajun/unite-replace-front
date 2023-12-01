@@ -5,6 +5,7 @@ import { SearchRecruit } from "@/ui/recruit/searchAndList/SearchRecruit";
 import { RecruitList } from "@/ui/recruit/shared-components/recruitList";
 import { SearchRecruits } from "@/application/usecases/searchRecruit";
 import { Recruit } from "@/domein/recruit";
+import { UserLayoutWithoutAuth } from "@/components/layouts/Layout/UserLayoutWithoutAuth";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const { search } = context.query;
@@ -25,7 +26,7 @@ type Props = {
 
 const HomeScreenPage = ({ recruits }: Props) => {
   return (
-    <div className="flex flex-col w-card-list">
+    <div className="flex flex-col w-card-list mb-8">
       <SearchRecruit />
       <RecruitList 
         recruits={recruits}
@@ -34,7 +35,10 @@ const HomeScreenPage = ({ recruits }: Props) => {
   )
 };
 
+// HomeScreenPage.getLayout = (page: ReactElement) => (
+//   <UserLayout> {page} </UserLayout>
+// );
 HomeScreenPage.getLayout = (page: ReactElement) => (
-  <UserLayout> {page} </UserLayout>
+  <UserLayoutWithoutAuth> {page} </UserLayoutWithoutAuth>
 );
 export default HomeScreenPage;

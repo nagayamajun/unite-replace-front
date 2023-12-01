@@ -6,7 +6,6 @@ type Props = {
 }
 
 export const ApplyForParticipationButton = ({ isParticipant, handleApplyForJoin }: Props):JSX.Element => {
-  console.log("確認", isParticipant)
   return (
     <>
       <PlainButton

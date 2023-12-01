@@ -1,11 +1,10 @@
-import { ReactNode, useEffect, useState } from "react"
+import { ReactNode, useEffect } from "react"
 import { CorporateSideBar } from "@/components/layouts/Sidebar/CorporateSidebar"
 import { useRecoilValue } from "recoil"
 import { useCorporateAuth } from "@/hooks/useCorporateAuth"
 import { axiosInstance } from "@/libs/axios"
-import { Loading } from "../../organisms/Loading/Loading"
 import { EmployeeState, EmployeeStateType } from "@/stores/employeeAtom"
-import { useLoading } from "@/hooks/useLoading"
+import { useGlobalLoading } from "@/adapters/globalState.adapter"
 
 
 type Props = {
@@ -13,7 +12,7 @@ type Props = {
 }
 
 export const EmployeeLayout = ({children}: Props) => {
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading } = useGlobalLoading();
   const employee = useRecoilValue<EmployeeStateType>(EmployeeState);
   const auth = useCorporateAuth();
 

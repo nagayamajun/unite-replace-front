@@ -1,25 +1,25 @@
+import { useGlobalLoading } from "@/adapters/globalState.adapter";
 import { useNotice } from "@/adapters/notice.adapter"
 import { useUser } from "@/adapters/user.adapter";
 import { FAIL_TO_UPDATE_USER, SUCCESS_IN_UPDATE_USER } from "@/constants/constants";
 import { User } from "@/domein/user";
-import { useLoading } from "@/hooks/useLoading";
 
 export const useEditUserProfile = () => {
-  const notice = useNotice();
-  const loading = useLoading();
+  const noticeService = useNotice();
+  const loadingService = useGlobalLoading();
   const userService = useUser();
 
   const editUserProfile = async (submitData: any): Promise<User | undefined> => { 
     try {
-      loading.showLoading();
+      loadingService.showLoading();
       const user = await userService.update(submitData);
-      notice.success(SUCCESS_IN_UPDATE_USER);
-      loading.hideLoading();
+      noticeService.success(SUCCESS_IN_UPDATE_USER);
+      loadingService.hideLoading();
       return user;
     } catch (error: unknown) {
-      loading.hideLoading();
+      loadingService.hideLoading();
       const isTypeSafeError = error instanceof Error;
-      notice.error(`${FAIL_TO_UPDATE_USER}\n${isTypeSafeError && error.message}`);
+      noticeService.error(`${FAIL_TO_UPDATE_USER}\n${isTypeSafeError && error.message}`);
     }
   };
 

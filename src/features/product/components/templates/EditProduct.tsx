@@ -1,9 +1,6 @@
 import { PlainInput } from "@/components/molecules/Input/PlainInput";
 import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
-import { AddCommentModal } from "@/features/product/components/organisms/Modal/AddCommentModal";
-import { EditCommentModal } from "@/features/product/components/organisms/Modal/EditCommentModal";
 import { EditProductModal } from "@/features/product/components/organisms/Modal/EditProductModal";
-import { UserState } from "@/stores/atoms";
 import { PathToProductPage } from "@/features/product/types/product";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -16,8 +13,6 @@ import { SkillSelect } from "@/components/Select/SkillSelect";
 import { useIsRelatedUserByRecruitId } from "../../hooks/useIsRelatedUserByRecruitId";
 import { OurOwnCommentsList } from "../organisms/List/OurOwnCommentsList";
 import { RelatedUsersList } from "../organisms/List/RelatedUsersList";
-import { useLoading } from "@/hooks/useLoading";
-
 type Props = {
   path: PathToProductPage;
 };

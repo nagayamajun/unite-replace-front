@@ -1,10 +1,9 @@
+import { useGlobalUser } from "@/adapters/globalState.adapter";
 import { useMyProducts } from "@/features/product/hooks/useMyProducts"
-import { UserState } from "@/stores/atoms";
 import Link from "next/link";
-import { useRecoilValue } from "recoil";
 
 export const MyProductList = (): JSX.Element => {
-  const user = useRecoilValue(UserState);
+  const { user } = useGlobalUser();
   const { myProducts } = useMyProducts();
 
   return (

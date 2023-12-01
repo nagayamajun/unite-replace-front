@@ -1,13 +1,13 @@
-import { UserState } from "@/stores/atoms";
 import { useRecoilValue } from "recoil";
 import { RecruitCard } from "@/ui/recruit/shared-components/RecruitCard";
 import { Recruit } from "@/domein/recruit";
+import { useGlobalUser } from "@/adapters/globalState.adapter";
 
 type Props = {
   recruits: Recruit[]
 }
 export const RecruitList = ({ recruits }: Props): JSX.Element => {
-  const user = useRecoilValue(UserState);
+  const { user } = useGlobalUser();
 
   return (
     <div className="pt-10 min-h-screen">

@@ -2,8 +2,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ChatRepository } from "../modules/chat/chat.repository";
 import { ChatRoomParticipantRepository } from "../modules/chatRoomParticipant/chatRoomParticipant.repository";
 import { ChatMessage } from "../../../domein/chatMessage";
-import { useLoading } from "@/hooks/useLoading";
 import { ChatParticipant } from "@/domein/chatParticipant";
+import { useGlobalLoading } from "@/adapters/globalState.adapter";
 
 
 export const useSpecificRoomMessages = (
@@ -12,7 +12,7 @@ export const useSpecificRoomMessages = (
 ) => {
   //メッセージを送る主体 (ログインユーザー)
   const [sender, setSender] = useState<ChatParticipant>();
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading } = useGlobalLoading();
 
   useEffect(() => {
     (async () => {
