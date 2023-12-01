@@ -12,6 +12,7 @@ import { User } from "@/domein/user";
 import { SkillSelect } from "@/components/Select/SkillSelect";
 import { ProgrammingSkill } from "@/features/user/types/programingSkill";
 import { UserStateType } from "@/infrastructures/frameworks/store";
+import { PlainTextArea } from "@/components/molecules/Textarea/PlainTextarea";
 
 type Props = {
   profileUser: User
@@ -35,6 +36,7 @@ export const EditUserInfo = ({profileUser, setProfileUser, setMyselfState, isMys
   const [isSkillOpen, setIsSkillOpen] = useState(false);
 
   const onEditSubmit = async (submitData: any) => {
+    console.log("data", submitData)
     const user = await editUserProfile(submitData);
     if (user) {
       setProfileUser(user);
@@ -101,6 +103,16 @@ export const EditUserInfo = ({profileUser, setProfileUser, setMyselfState, isMys
         disabled={!isMyself}
         labelFont="text-base"
         inputFont="text-sm sm:text-base"
+      />
+      {/* 自己紹介 */}
+      <PlainTextArea
+        labelText="自己紹介"
+        placeholder="自己紹介をお願いします"
+        onBlur={handleSubmit(onEditSubmit)}
+        register={register}
+        registerLabel="selfPublicity"
+        defaultValue={profileUser?.selfPublicity}
+        disabled={!isMyself}
       />
       {/* 卒業予定年度 */}
       <FormField

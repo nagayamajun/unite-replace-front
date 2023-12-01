@@ -8,6 +8,7 @@ export const useDeleteRecruit = () => {
   const deleteRecruit = async(id: string) => {
     try {
       await recruitService.delete(id);
+      noticeService.success("削除に成功しました。")
       return true
     } catch (error: unknown) {
       const isTypeSafeError = error instanceof Error;
